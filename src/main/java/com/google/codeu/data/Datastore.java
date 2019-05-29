@@ -49,7 +49,7 @@ public class Datastore {
   }
 
   /**
-   * Gets messages posted by a specific user.
+   * Get List of messages posted by a specific user.
    *
    * @return a list of messages posted by the user, or empty list if user has never posted a
    *     message. List is sorted by time descending.

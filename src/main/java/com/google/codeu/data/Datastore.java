@@ -83,16 +83,15 @@ public class Datastore {
   }
 
   /**
-   *Gets list of all users
+   * Gather a list of all users that have entered something into the community chat. 
    *
-   *@return a Set of users, no order to this list, empty list if there are no users that have posted
+   * @return a Set of users, no order to this list, empty list if there are no users that have posted
    */
-
   public Set<String> getUsers(){
     Set<String> users = new HashSet<>();
     Query query = new Query("Message");
     PreparedQuery results = datastore.prepare(query);
-    for(Entity entity : results.asIterable()) {
+    for (Entity entity : results.asIterable()) {
       users.add((String) entity.getProperty("user"));
     }
     return users;

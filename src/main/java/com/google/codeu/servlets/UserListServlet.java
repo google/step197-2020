@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Handle fetching all users for the community page.
+ * Handles fetching all users for the community page.
  */
  @WebServlet("/user-list")
  public class UserListServlet extends HttpServlet {

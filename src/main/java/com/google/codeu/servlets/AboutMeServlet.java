@@ -11,7 +11,10 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
 
-import com.google.codeu.data.User;
+import com.google.codeu.data.Datastore.User;
+
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 
 /**
@@ -20,42 +23,38 @@ import com.google.codeu.data.User;
 @WebServlet("/about")
 public class AboutMeServlet extends HttpServlet{
 
-    private Datastore datastore;
+  private Datastore datastore;
 
-    @Override
-    public void init() {
-        datastore = new Datastore();
-    }
+  @Override
+  public void init() {
+      datastore = new Datastore();
+  }
 
-    /**
-     * Responds with the "about me" section for a particular user.
-     */
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+  /**
+   * Responds with the "about me" section for a particular user.
+   */
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException {
+      response.setContentType("text/html");
 
-        response.setContentType("text/html");
+      String user = request.getParameter("user");
+      if (user.isEmpty() || user.equals("")) {
+          // Request is invalid, return empty response
+          return;
+      }
 
-        String user = request.getParameter("user");
+      User userData = datastore.getUser(user);
+      if (userData == null || userData.getAboutMe() == null) {
+          return;
+      }
 
-        if(user == null || user.equals("")) {
-            // Request is invalid, return empty response
-            return;
-        }
+      response.getOutputStream().println(userData.getAboutMe());
+  }
 
-        User userData = datastore.getUser(user);
-
-        if(userData == null || userData.getAboutMe() == null) {
-            return;
-        }
-
-        response.getOutputStream().println(userData.getAboutMe());
-    }
-
-    @Override
+  @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-
+      throws IOException {
         UserService userService = UserServiceFactory.getUserService();
         if (!userService.isUserLoggedIn()) {
             response.sendRedirect("/index.html");
@@ -64,6 +63,7 @@ public class AboutMeServlet extends HttpServlet{
 
         String userEmail = userService.getCurrentUser().getEmail();
         String aboutMe = request.getParameter("about-me");
+        aboutMe = Jsoup.clean(request.getParameter("about-me"), Whitelist.none());
 
         User user = new User(userEmail, aboutMe);
         datastore.storeUser(user);

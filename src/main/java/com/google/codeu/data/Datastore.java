@@ -74,7 +74,7 @@ public class Datastore {
   }
 
   /**
-   * Gets messages posted by a specific user.
+   * Get List of messages posted by a specific user.
    *
    * @return a list of messages posted by the user, or empty list if user has
    *         never posted a message. List is sorted by time descending.
@@ -106,12 +106,12 @@ public class Datastore {
   }
 
   /**
+   * PublicFeed
    * Gets list of all users
    *
    * @return a Set of users, no order to this list, empty list if there are no
    *         users that have posted
    */
-
   public Set<String> getUsers() {
     Set<String> users = new HashSet<>();
     Query query = new Query("Message");

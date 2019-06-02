@@ -18,25 +18,24 @@ import com.google.gson.Gson;
  */
 
 @WebServlet("/feed")
-public class MessageFeedServlet extends HttpServlet{
- private Datastore datastore;
- @Override
- public void init() {
-  datastore = new Datastore();
- }
+public class MessageFeedServlet extends HttpServlet {
+  private Datastore datastore;
+  @Override
+  public void init() {
+    datastore = new Datastore();
+  }
 
- /**
-  * Responds with a JSON representation of Message data for all users.
-  */
+  /**
+    * Responds with a JSON representation of Message data for all users.
+    */
 
  @Override
  public void doGet(HttpServletRequest request, HttpServletResponse response)
-   throws IOException {
-  response.setContentType("application/json");
-  List<Message> messages = datastore.getAllMessages();
-  Gson gson = new Gson();
-  String json = gson.toJson(messages);
-  response.getOutputStream().println(json);
- }
-
+  throws IOException {
+    response.setContentType("application/json");
+    List<Message> messages = datastore.getAllMessages();
+    Gson gson = new Gson();
+    String json = gson.toJson(messages);
+    response.getOutputStream().println(json);
+  }
 }

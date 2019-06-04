@@ -38,7 +38,9 @@ public class Datastore {
     datastore = DatastoreServiceFactory.getDatastoreService();
   }
 
-  /** Stores the Message in Datastore. */
+  /**
+   * Stores the Message in Datastore.
+   */
   public void storeMessage(Message message) {
     Entity messageEntity = new Entity("Message", message.getId().toString());
     messageEntity.setProperty("user", message.getUser());
@@ -76,8 +78,8 @@ public class Datastore {
   /**
    * Get List of messages posted by a specific user.
    *
-   * @return a list of messages posted by the user, or empty list if user has
-   *         never posted a message. List is sorted by time descending.
+   * @return a list of messages posted by the user, or empty list if user has never posted a
+   * message. List is sorted by time descending.
    */
   public List<Message> getMessages(String user) {
     List<Message> messages = new ArrayList<>();
@@ -105,20 +107,70 @@ public class Datastore {
     return messages;
   }
 
-  /**
-   * PublicFeed
-   * Gets list of all users
-   *
-   * @return a Set of users, no order to this list, empty list if there are no
-   *         users that have posted
-   */
-  public Set<String> getUsers() {
-    Set<String> users = new HashSet<>();
-    Query query = new Query("Message");
-    PreparedQuery results = datastore.prepare(query);
-    for (Entity entity : results.asIterable()) {
-      users.add((String) entity.getProperty("user"));
+  public static class User {
+
+    private String email;
+    private String aboutMe;
+
+    public User(String email, String aboutMe) {
+      this.email = email;
+      this.aboutMe = aboutMe;
     }
-    return users;
+
+    public String getEmail(){
+      return email;
+    }
+
+    public String getAboutMe() {
+      return aboutMe;
+    }
   }
-}
+
+  /**
+   * Stores the User in Datastore.
+   */
+  public void storeUser(User user) {
+    Entity userEntity = new Entity("User", user.getEmail());
+    userEntity.setProperty("email", user.getEmail());
+    userEntity.setProperty("aboutMe", user.getAboutMe());
+    datastore.put(userEntity);
+  }
+
+  /**
+   * Returns the User owned by the email address, or
+   * null if no matching User was found.
+   */
+  public User getUser(String email) {
+    Query query =  new Query("User")
+      .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
+    PreparedQuery results = datastore.prepare(query);
+    Entity userEntity = results.asSingleEntity();
+    if (userEntity == null) {
+      return null;
+    }
+
+    String aboutMe = (String) userEntity.getProperty("aboutMe");
+    User user = new User(email, aboutMe);
+
+    return user;
+  }
+
+    /**
+     * Gather a list of all users that have entered something into the community chat.
+     *
+     * @return a Set of users, no order to this list, empty list if there are no users that have posted
+     */
+    public Set<String> getUsers () {
+      Set<String> users = new HashSet<>();
+      Query query = new Query("Message");
+      PreparedQuery results = datastore.prepare(query);
+      for (Entity entity : results.asIterable()) {
+        users.add((String) entity.getProperty("user"));
+      }
+      return users;
+
+    }
+  }
+
+
+

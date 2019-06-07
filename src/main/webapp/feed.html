@@ -6,61 +6,62 @@
   <title>Message Feed</title>
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/user-page.css">
+  <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+</head>
 
+<body>
+  <div id="content">
+    <h1>Message Feed</h1>
+    <hr />
+    <div id="message-container">Loading...</div>
+  </div>
   <script>
-    // Fetch messages and add them to the page.
-    function fetchMessages() {
-      const url = '/feed';
-      fetch(url)
-      .then((response) => { return response.json() })
-      .then((messages) => {
-        const messageContainer = document.getElementById('message-container');
-        messageContainer.innerHTML = (messages.length == 0) 
-          ? '<p>There are no posts yet.</p>' : messageContainer.innerHTML = '';
-        messages.forEach((message) => {
-          const messageDiv = buildMessageDiv(message);
-          messageContainer.appendChild(messageDiv);
-        });
-      })
-      .catch((error) => {
-        console.log(error.message)
-      });
-    }
+    const React = window.React;
+    const ReactDOM = window.ReactDOM;
+    const h = React.createElement;
+
+    function MessageFeed() {
+      const [allMessages, setMessages] = React.useState([])
+
+      React.useEffect(fetchMessages, []);
+
+      // Fetch messages and add them to the page.
+      function fetchMessages() {
+        const fetchedMessages = []
+        const url = '/feed';
+        fetch(url)
+          .then(response => response.json())
+          .then(messages => {
+            messages.forEach(message => {
+              fetchedMessages.push(buildMessageDiv(message));
+            });
+            setMessages(fetchedMessages);
+          })
+          .catch(error => console.log(error.message));
+      };
+      return allMessages;
+    };
 
     function buildMessageDiv(message) {
-      const usernameDiv = document.createElement('div');
-      usernameDiv.classList.add("left-align");
-      usernameDiv.appendChild(document.createTextNode(message.user));
-      const timeDiv = document.createElement('div');
-      timeDiv.classList.add('right-align');
-      timeDiv.appendChild(document.createTextNode(new Date(message.timestamp)));
-
-      const headerDiv = document.createElement('div');
-      headerDiv.classList.add('message-header');
-      headerDiv.appendChild(usernameDiv);
-      headerDiv.appendChild(timeDiv);
-
-      const bodyDiv = document.createElement('div');
-      bodyDiv.classList.add('message-body');
-      bodyDiv.appendChild(document.createTextNode(message.text));
-
-      const messageDiv = document.createElement('div');
-      messageDiv.classList.add("message-div");
-      messageDiv.appendChild(headerDiv);
-      messageDiv.appendChild(bodyDiv);
-
-      return messageDiv;
-    }
+      const { user, text } = message;
+      const date = new Date(message.timestamp);
+      return (
+        h('div', {className: "message-div"},
+          h('div', {className: "message-header"},
+            h('div', {className: "left-align"}, user),
+            h('div', {className: "right-align"}, date.toString())
+          ),
+          h('div', {className: "message-body"}, text)
+        )
+      );
+    };
 
     // Fetch data and populate the UI of the page.
-    function buildUI() {  fetchMessages();  }
+    const root = document.getElementById('message-container');
+    ReactDOM.render(h(MessageFeed), root);
   </script>
-</head>
-  <body onload="buildUI()">
-    <div id="content">
-      <h1>Message Feed</h1>
-      <hr />
-      <div id="message-container">Loading...</div>
-    </div>
-  </body>
+
+</body>
+
 </html>

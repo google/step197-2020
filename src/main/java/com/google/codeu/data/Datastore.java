@@ -50,7 +50,7 @@ public class Datastore {
     datastore.put(messageEntity);
   }
 
-  /** Get all the messages currently in the Datastore */
+  /** Get all the messages currently in the Datastore. */
   public List<Message> getAllMessages() {
     List<Message> messages = new ArrayList<>();
     Query query = new Query("Message")

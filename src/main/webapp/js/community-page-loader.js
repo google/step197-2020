@@ -9,7 +9,7 @@ class Community extends React.Component {
     this.state = {};
     this.fetchUserList = this.fetchUserList.bind(this);
   }
-
+  /** Adds list of community users to community.html as a list element */
   render() {
     const { Users } = this.state;
     if (Users == null) {
@@ -22,6 +22,7 @@ class Community extends React.Component {
     return h("li", null, children);
   }
 
+  /** Fetches users from /user-list */
   fetchUserList() {
     const url = "/user-list";
     fetch(url)
@@ -30,7 +31,6 @@ class Community extends React.Component {
       })
       .then(users => {
         this.setState({ Users: users });
-        console.log(users);
       });
   }
 
@@ -55,27 +55,3 @@ class CommunityUser extends React.Component {
 }
 
 ReactDOM.render(h(Community), root);
-
-/*
-<li>
-  <a href={"/user-page.html?user="+ email}> {name} {email}
-  </a>
-</li>
-*/
-/** Fetches users and adds them to the page. */
-
-/*
- * Builds a list element that contains a link to a user page, e.g.
- * <li><a href="/user-page.html?user=test@example.com">test@example.com</a></li>
- */
-/*function buildUserListItem(user) {
-  const userLink = document.createElement("a");
-  userLink.setAttribute("href", "/user-page.html?user=" + user);
-  userLink.appendChild(document.createTextNode(user));
-  const userListItem = document.createElement("li");
-  userListItem.appendChild(userLink);
-  return userListItem;
-}
-
-*/
-/** Fetches data and populates the UI of the page. */

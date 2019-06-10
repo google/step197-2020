@@ -105,12 +105,12 @@ function fetchAboutMe(){
   fetch(url).then((response) => {
     return response.text();
   }).then((aboutMe) => {
-    const aboutMeContainer = document.getElementById('about-me-container'); //finds tag with id about me container
+    const aboutMeContainer = document.getElementById('about-me-container');
     if(aboutMe == ''){
       aboutMe = 'This user has not entered any information yet.';
     }
 
-    aboutMeContainer.innerHTML = aboutMe; //sets reference to the html DOM note
+    aboutMeContainer.innerHTML = aboutMe;
 
   });
 }

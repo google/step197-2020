@@ -16,38 +16,42 @@ limitations under the License.
 
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>User Page</title>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/user-page.css">
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/user-page.css" />
 
-    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-</head>
-<body onload="buildUI();">
-<nav>
-    <ul id="navigation">
+    <script
+      crossorigin
+      src="https://unpkg.com/react@16/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+    ></script>
+  </head>
+  <body>
+    <nav>
+      <ul id="navigation">
         <li><a href="/">Home</a></li>
         <li><a href="/aboutus.html">About Our Team</a></li>
-    </ul>
-</nav>
-<h1 id="page-title">User Page</h1>
+      </ul>
+    </nav>
+    <h1 id="page-title">User Page</h1>
 
-<div id="root"></div>
+    <div id="root"></div>
 
-<form id="message-form" action="/messages" method="POST" class="hidden">
-    Enter a new message:
-    <br/>
-    <textarea name="text" id="message-input"></textarea>
-    <br/>
-    <input type="submit" value="Submit">
-</form>
-<hr/>
-<div id="message-container">Loading...</div>
+    <form id="message-form" action="/messages" method="POST" class="hidden">
+      Enter a new message:
+      <br />
+      <textarea name="text" id="message-input"></textarea>
+      <br />
+      <input type="submit" value="Submit" />
+    </form>
+    <hr />
+    <div id="message-container">Loading...</div>
 
-<script src="/js/userPage.js"></script>
-
-
-</body>
+    <script src="/js/userPage.js"></script>
+  </body>
 </html>

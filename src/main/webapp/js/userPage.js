@@ -50,17 +50,19 @@ class UserPage extends React.Component {
             method: "POST",
             credentials: "same-origin",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `about-me=${this.state.input}`
+            body: `about-me=${encodeURIComponent(this.state.input)}`
           }).then(() => window.location.reload())
       },
       "Submit"
     );
-    console.log(this.state);
-    const text = h("div", { id: "user-text" }, this.state.currentValue);
+
     return h(
       "div",
       { id: "about-me" },
-      text,
+      h("div", {
+        id: "user-text",
+        dangerouslySetInnerHTML: { __html: this.state.currentValue }
+      }),
       h("textarea", {
         name: "about-me",
         placeholder: "about me",
@@ -77,9 +79,6 @@ class UserPage extends React.Component {
 }
 
 console.log(UserPage);
-
-//const root = document.getElementById('root');
-//ReactDOM.render(React.createElement(UserPage), root);
 
 // Get ?user=XYZ parameter value
 const urlParams = new URLSearchParams(window.location.search);

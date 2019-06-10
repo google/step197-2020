@@ -9,18 +9,6 @@ class Community extends React.Component {
     this.state = {};
     this.fetchUserList = this.fetchUserList.bind(this);
   }
-  /** Adds list of community users to community.html as a list element */
-  render() {
-    const { Users } = this.state;
-    if (Users == null) {
-      return h("li", null, "loading...");
-    }
-    const children = [];
-    for (const user of Users) {
-      children.push(h(CommunityUser, { email: user }));
-    }
-    return h("li", null, children);
-  }
 
   /** Fetches users from /user-list */
   fetchUserList() {
@@ -30,16 +18,25 @@ class Community extends React.Component {
         return response.json();
       })
       .then(users => {
-        this.setState({ Users: users });
+        this.setState({ users: users });
       });
   }
 
   componentDidMount() {
     this.fetchUserList();
-    this.timer = window.setInterval(this.fetchUserList, 500);
   }
-  componentWillUnmount() {
-    window.clearInterval(this.timer);
+
+  /** Adds list of community users to community.html as a list element */
+  render() {
+    const { users } = this.state;
+    if (users == null) {
+      return h("div", null, "No Users Have Posted Anything");
+    }
+    const children = [];
+    for (const user of users) {
+      children.push(h(CommunityUser, { email: user, key: user }));
+    }
+    return h("ul", null, children);
   }
 }
 

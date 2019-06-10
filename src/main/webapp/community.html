@@ -2,15 +2,25 @@
 <html>
   <head>
     <title>Community Page</title>
-    <link rel="stylesheet" href="/css/main.css">
-    <script src="/js/community-page-loader.js"></script>
+    <link rel="stylesheet" href="/css/main.css" />
+    <script
+      crossorigin
+      src="https://unpkg.com/react@16/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+    ></script>
   </head>
-  <body onload="buildUI()">
+  <body>
     <div id="content">
       <h1>Community Page</h1>
       <p>Here is a list of every user who has posted a message:</p>
-      <hr/>
-      <ul id="list">Loading...</ul>
+      <hr />
+      <div id="list">
+      </div>
     </div>
+
+    <script src="/js/community-page-loader.js"></script>
   </body>
 </html>

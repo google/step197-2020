@@ -16,24 +16,21 @@ limitations under the License.
 
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>CodeU 2019 Starter Project</title>
-    <link rel="stylesheet" href="/css/main.css">
-    <script src="/js/navigation-loader.js"></script>
-  </head>
-  <body onload="addLoginOrLogoutLinkToNavigation();">
-    <nav>
-      <ul id="navigation">
-        <li><a href="/">Home</a></li>
-        <li><a href="/aboutus.html">About Our Team</a></li>
-      </ul>
-    </nav>
-    <h1>CodeU Starter Project</h1>
-    <p>This is the CodeU starter project. Click the links above to login and visit your page.
-    You can post messages on your page, and you can visit other user pages if you have
-    their URL.</p>
-    <p>This is your code now! Feel free to make changes, and don't be afraid to get creative!
-    You could start by modifying this page to tell the world more about your team.</p>
-  </body>
+<head>
+  <title>CodeU Team 08 Project</title>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8qFRVjUKlhJERpMDx9RIzjqiOsl4tIMM"></script>
+  <script src="/js/index.js"></script>
+  <style>
+    #map {
+      width: 500px;
+      height: 500px;
+      border: thin solid black;
+    }
+  </style>
+</head>
+<body onload="createMap();">
+  <h1>Hello Google Maps</h1>
+  <div id="map"></div>
+  <p>This page shows a Google Map!</p>
+</body>
 </html>

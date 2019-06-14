@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package com.google.codeu.servlets;
 
 import com.google.appengine.api.users.UserService;
@@ -26,13 +25,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Redirects the user to the Google login page or their page if they're already logged in.
+ * Redirects the user to the Google login page or their page if they're already
+ * logged in.
  */
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws IOException {
 
     UserService userService = UserServiceFactory.getUserService();
 
@@ -43,8 +44,8 @@ public class LoginServlet extends HttpServlet {
       return;
     }
 
-    // Redirect to Google login page. That page will then redirect back to /login,
-    // which will be handled by the above if statement.
+    // Redirect to Google login page. That page will then redirect back to
+    // /login, which will be handled by the above if statement.
     String googleLoginUrl = userService.createLoginURL("/login");
     response.sendRedirect(googleLoginUrl);
   }

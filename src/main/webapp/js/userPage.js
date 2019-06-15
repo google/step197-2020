@@ -21,7 +21,7 @@ const h = React.createElement;
 class UserPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { input: "" }; //user's input in about me container
+    this.state = { input: "" };
     this.fetchData = this.fetchData.bind(this);
   }
 
@@ -41,7 +41,7 @@ class UserPage extends React.Component {
   }
 
   render() {
-    // pure function
+    // Pure function
     const button = h(
       "button",
       {
@@ -78,15 +78,12 @@ class UserPage extends React.Component {
   }
 }
 
-console.log(UserPage);
-
 // Get ?user=XYZ parameter value
 const urlParams = new URLSearchParams(window.location.search);
 const parameterUsername = urlParams.get("user");
-console.log(urlParams, parameterUsername);
 
 ReactDOM.render(
-  h(UserPage, { userEmail: parameterUsername }), //in future, implement email
+  h(UserPage, { userEmail: parameterUsername }),
   document.getElementById("root")
 );
 

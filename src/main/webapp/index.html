@@ -16,10 +16,25 @@ limitations under the License.
 
 <!DOCTYPE html>
 <html>
-<head>
-  <title>CodeU Team 08 Project</title>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8qFRVjUKlhJERpMDx9RIzjqiOsl4tIMM"></script>
-  <script src="/js/index.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <title>CodeU 2019 Team 8 Project</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <script src="/js/navigation-loader.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8qFRVjUKlhJERpMDx9RIzjqiOsl4tIMM"></script>
+    <script src="/js/index.js"></script>
+  </head>
+  <body onload="addLoginOrLogoutLinkToNavigation(), createMap();">
+    <nav>
+      <ul id="navigation">
+        <li><a href="/">Home</a></li>
+        <li><a href="/aboutus.html">About Our Team</a></li>
+      </ul>
+    </nav>
+    <h1>Hello Google Maps</h1>
+    <div id="map"></div>
+    <p>This page shows a Google Map!</p>
+  </body>
   <style>
     #map {
       width: 500px;
@@ -27,10 +42,4 @@ limitations under the License.
       border: thin solid black;
     }
   </style>
-</head>
-<body onload="createMap();">
-  <h1>Hello Google Maps</h1>
-  <div id="map"></div>
-  <p>This page shows a Google Map!</p>
-</body>
 </html>

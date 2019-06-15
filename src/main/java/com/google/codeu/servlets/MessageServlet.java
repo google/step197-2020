@@ -37,6 +37,7 @@ import org.jsoup.safety.Whitelist;
 public class MessageServlet extends HttpServlet {
 
   private Datastore datastore;
+  private static final String REGEX = "(https?://\\S+\\.(png|jpg))";
 
   @Override
   public void init() {
@@ -82,19 +83,17 @@ public class MessageServlet extends HttpServlet {
     String user = userService.getCurrentUser().getEmail();
     String userText =
         Jsoup.clean(request.getParameter("text"), Whitelist.none());
-
-    String regex = "(https?://\\S+\\.(png|jpg))";
     String replacement = "<img src=\"$1\" />";
-    String textWithImagesReplaced = userText.replaceAll(regex, replacement);
+    String textWithImagesReplaced = userText.replaceAll(REGEX, replacement);
 
-    if (isValid(userText)) {
+    if (isValidURL(userText)) {
       Message message = new Message(user, textWithImagesReplaced);
       datastore.storeMessage(message);
     }
     response.sendRedirect("/user-page.html?user=" + user);
   }
 
-  public static boolean isValid(String url) {
+  public static boolean isValidURL(String url) {
     try {
       new URL(url).toURI();
       return true;

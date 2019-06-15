@@ -22,6 +22,8 @@ import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
 import com.google.gson.Gson;
 import java.io.IOException;
+import java.io.Serializable;
+import java.net.URL;
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,6 +37,7 @@ import org.jsoup.safety.Whitelist;
 public class MessageServlet extends HttpServlet {
 
   private Datastore datastore;
+  private static final String REGEX = "(https?://\\S+\\.(png|jpg))";
 
   @Override
   public void init() {
@@ -42,11 +45,12 @@ public class MessageServlet extends HttpServlet {
   }
 
   /**
-   * Responds with a JSON representation of {@link Message} data for a specific user. Responds with
-   * an empty array if the user is not provided.
+   * Responds with a JSON representation of {@link Message} data for a specific
+   * user. Responds with an empty array if the user is not provided.
    */
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws IOException {
 
     response.setContentType("application/json");
 
@@ -67,7 +71,8 @@ public class MessageServlet extends HttpServlet {
 
   /** Stores a new {@link Message}. */
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws IOException {
 
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
@@ -76,11 +81,25 @@ public class MessageServlet extends HttpServlet {
     }
 
     String user = userService.getCurrentUser().getEmail();
-    String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
+    String userText =
+        Jsoup.clean(request.getParameter("text"), Whitelist.none());
+    String replacement = "<img src=\"$1\" />";
+    String textWithImagesReplaced = userText.replaceAll(REGEX, replacement);
 
-    Message message = new Message(user, text);
-    datastore.storeMessage(message);
-
+    if (isValidURL(userText)) {
+      Message message = new Message(user, textWithImagesReplaced);
+      datastore.storeMessage(message);
+    }
     response.sendRedirect("/user-page.html?user=" + user);
+  }
+
+  public static boolean isValidURL(String url) {
+    try {
+      new URL(url).toURI();
+      return true;
+
+    } catch (Exception e) {
+      return false;
+    }
   }
 }

@@ -22,37 +22,59 @@
     const h = React.createElement;
 
     function MessageFeed() {
-      const [allMessages, setMessages] = React.useState([])
-
+      const [messages, setMessages] = React.useState([]);
       React.useEffect(fetchMessages, []);
 
       // Fetch messages and add them to the page.
       function fetchMessages() {
-        const fetchedMessages = []
         const url = '/feed';
         fetch(url)
           .then(response => response.json())
-          .then(messages => {
-            messages.forEach(message => {
-              fetchedMessages.push(buildMessageDiv(message));
-            });
-            setMessages(fetchedMessages);
-          })
+          .then(messages => setMessages(messages))
           .catch(error => console.log(error.message));
-      };
-      return allMessages;
+      }
+
+      // Store message counts in JS Map with emails as the key
+      const messageCount = new Map();
+      for (const message of messages) {
+        const { user } = message;
+        if (!messageCount.has(user)) {
+          messageCount.set(user, 0);
+        }
+
+        messageCount.set(user, messageCount.get(user) + 1);
+      }
+
+      return (
+        h('div', null,
+          Array.from(messageCount.entries()).map(([user, count]) => {
+            return h(NumUserMessages, { user, count });
+          }),
+          Array.from(messages)
+            .map(message => {
+              return h(MessageDiv, { ...message, key: message.id });
+            })
+        ));
     };
 
-    function buildMessageDiv(message) {
-      const { user, text } = message;
-      const date = new Date(message.timestamp);
+    function MessageDiv({ user, text, timestamp }) {
+      const date = (new Date(timestamp)).toString();
       return (
-        h('div', {className: "message-div"},
-          h('div', {className: "message-header"},
-            h('div', {className: "left-align"}, user),
-            h('div', {className: "right-align"}, date.toString())
+        h('div', { className: "message-div" },
+          h('div', { className: "message-header" },
+            h('div', { className: "left-align" }, user),
+            h('div', { className: "right-align" }, date)
           ),
-          h('div', {className: "message-body"}, text)
+          h('div', { className: "message-body" }, text)
+        )
+      );
+    };
+
+    function NumUserMessages({ user, count }) {
+      return (
+        h('div',
+          {},
+          user + " has posted " + count + " messages: ",
         )
       );
     };

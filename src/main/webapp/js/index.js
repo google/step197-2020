@@ -1,5 +1,3 @@
-src =
-  "https://maps.googleapis.com/maps/api/js?key=AIzaSyB8qFRVjUKlhJERpMDx9RIzjqiOsl4tIMM";
 
 function createMap() {
   const map = new google.maps.Map(document.getElementById("map"), {

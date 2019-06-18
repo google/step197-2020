@@ -22,8 +22,6 @@ import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
 import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.Serializable;
-import java.net.URL;
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -86,20 +84,8 @@ public class MessageServlet extends HttpServlet {
     String replacement = "<img src=\"$1\" />";
     String textWithImagesReplaced = userText.replaceAll(REGEX, replacement);
 
-    if (isValidURL(userText)) {
-      Message message = new Message(user, textWithImagesReplaced);
-      datastore.storeMessage(message);
-    }
+    Message message = new Message(user, textWithImagesReplaced);
+    datastore.storeMessage(message);
     response.sendRedirect("/user-page.html?user=" + user);
-  }
-
-  public static boolean isValidURL(String url) {
-    try {
-      new URL(url).toURI();
-      return true;
-
-    } catch (Exception e) {
-      return false;
-    }
   }
 }

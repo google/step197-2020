@@ -21,7 +21,7 @@ limitations under the License.
     <title>CodeU 2019 Team 8 Project</title>
     <link rel="stylesheet" href="/css/main.css" />
     <script src="/js/navigation-loader.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8qFRVjUKlhJERpMDx9RIzjqiOsl4tIMM"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%= request.getAttribute("MAPS_API_KEY") %>"></script>
     <script src="/js/index.js"></script>
   </head>
   <body onload="addLoginOrLogoutLinkToNavigation(), createMap();">

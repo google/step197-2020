@@ -1,3 +1,3 @@
 [submodule "src/main/webapp/WEB-INF/secrets"]
 	path = src/main/webapp/WEB-INF/secrets
-	url = git@github.com:tylerhou/codeu-s19-8-keys.git
+	url = https://github.com/tylerhou/codeu-s19-8-keys

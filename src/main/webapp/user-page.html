@@ -18,9 +18,9 @@ limitations under the License.
 <html>
   <head>
     <title>User Page</title>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/user-page.css">
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/user-page.css" />
     <script src="/js/user-page-loader.js"></script>
   </head>
   <body onload="buildUI();">
@@ -35,23 +35,33 @@ limitations under the License.
     <div id="about-me-container">Loading...</div>
     <div id="about-me-form" class="hidden">
       <form action="/about" method="POST">
-        <textarea name="about-me" placeholder="about me" rows=4 required></textarea>
-        <br/>
-        <input type="submit" value="Submit">
+        <textarea
+          name="about-me"
+          placeholder="about me"
+          rows="4"
+          required
+        ></textarea>
+        <br />
+        <input type="submit" value="Submit" />
       </form>
     </div>
 
-    <form id="message-form" method="POST" class="hidden" enctype="multipart/form-data">
+    <form
+      id="message-form"
+      method="POST"
+      class="hidden"
+      enctype="multipart/form-data"
+    >
       Enter a new message:
-      <br/>
+      <br />
       <textarea name="message" id="message-input"></textarea>
-      <br/>
+      <br />
       <p>Upload an image:</p>
-      <input type="file" name="image">
-      <br/><br/>
-      <input type="submit" value="Submit"/>
+      <input type="file" name="image" />
+      <br /><br />
+      <input type="submit" value="Submit" />
     </form>
-    <hr/>
+    <hr />
     <div id="message-container">Loading...</div>
   </body>
 </html>

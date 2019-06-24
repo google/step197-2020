@@ -6,11 +6,17 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class ServletUtils {
+  static boolean IsProduction() {
+    return SystemProperty.environment.value() ==
+        SystemProperty.Environment.Value.Production;
+  }
   static Properties GetProperties() throws IOException {
-    if (SystemProperty.environment.value() ==
-        SystemProperty.Environment.Value.Production) {
+    if (IsProduction()) {
       return GetProductionProperties();
     }
 
@@ -33,5 +39,20 @@ public class ServletUtils {
     Properties props = new Properties();
     props.load(input);
     return props;
+  }
+
+  // Set attribute TITLE before calling RenderReact to add a custom page title.
+  // Set attribute HEAD_HTML to add aribtrary HTML to the end of head.
+  static void RenderReact(String module, HttpServletRequest request,
+                          HttpServletResponse response)
+      throws IOException, ServletException {
+
+    request.setAttribute("SERVER_ROOT", IsProduction()
+                                            ? "/build/js/"
+                                            : "http://localhost:9000/");
+
+    request.setAttribute("REACT_MODULE", module);
+    request.getRequestDispatcher("/WEB-INF/react.jsp")
+        .forward(request, response);
   }
 }

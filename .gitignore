@@ -7,3 +7,4 @@ target
 .DS_Store
 .factorypath
 *.swp
+src/main/webapp/build

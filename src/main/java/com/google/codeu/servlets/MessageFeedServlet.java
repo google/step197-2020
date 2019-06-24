@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
  * Handles fetching all messages for the public feed.
  */
 
-@WebServlet("/feed")
+@WebServlet("/api/feed")
 public class MessageFeedServlet extends HttpServlet {
   private Datastore datastore;
   @Override

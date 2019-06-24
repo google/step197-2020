@@ -31,9 +31,8 @@ limitations under the License.
         <li><a href="/aboutus.html">About Our Team</a></li>
       </ul>
     </nav>
-    <h1>Hello Google Maps</h1>
+    <h1>PlaceHolder Map of EV Charging Stations</h1>
     <div id="map"></div>
-    <p>This page shows a Google Map!</p>
   </body>
   <style>
     #map {

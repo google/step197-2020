@@ -97,6 +97,7 @@ function buildUI() {
   showMessageFormIfViewingSelf();
   fetchMessages();
   fetchAboutMe();
+  fetchBlobstoreUrlAndShowForm();
 }
 
 function fetchAboutMe() {
@@ -121,7 +122,7 @@ function fetchBlobstoreUrlAndShowForm() {
       return response.text();
     })
     .then((imageUploadUrl) => {
-      const messageForm = document.getElementById('my-form');
+      const messageForm = document.getElementById('message-form');
       messageForm.action = imageUploadUrl;
       messageForm.classList.remove('hidden');
     });

@@ -52,7 +52,7 @@ public class AboutMeServlet extends HttpServlet {
       throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      response.sendRedirect("/index.html");
+      response.sendRedirect("/");
       return;
     }
 

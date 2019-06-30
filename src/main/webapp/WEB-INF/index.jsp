@@ -33,6 +33,21 @@ limitations under the License.
     </nav>
     <h1>PlaceHolder Map of EV Charging Stations</h1>
     <div id="map"></div>
+    <div id = "overview">
+      <h1>
+      Project Overview: 
+      </h1>
+      <p>
+      The user will be able to pin a specific location, search for other users pinned destinations on the map, 
+      add new locations, 
+      react to other users pinned locations, 
+      and view information about a destination.
+      </p>
+      <p>Sophia: About Me, Images I, Images II, converting About Me to react</p>
+      <p>Janet: Public Feed, convert public Feed to React, Style Text</p>
+      <p>Thomas: Community Page, convert community page to react, Maps I, Maps II</p>
+      </div>
+    </div>
   </body>
   <style>
     #map {

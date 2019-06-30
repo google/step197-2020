@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+<%@ page import="java.util.com.google.codeu.servlets.ServletUtils" %>
 
 <!DOCTYPE html>
 <html>
@@ -22,9 +23,9 @@ limitations under the License.
     <link rel="stylesheet" href="/css/main.css" />
     <script src="/js/navigation-loader.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=<%= request.getAttribute("MAPS_API_KEY") %>"></script>
-    <script src="/js/index.js"></script>
+    <script src="<%= ServletUtils.BuildReactRoot() %>home.js"></script>
   </head>
-  <body onload="addLoginOrLogoutLinkToNavigation(), createMap();">
+  <body onload="addLoginOrLogoutLinkToNavigation(), initialize();">
     <nav>
       <ul id="navigation">
         <li><a href="/">Home</a></li>
@@ -48,6 +49,7 @@ limitations under the License.
       <p>Thomas: Community Page, convert community page to react, Maps I, Maps II</p>
       </div>
     </div>
+    <div id = "PinList"></div>
   </body>
   <style>
     #map {

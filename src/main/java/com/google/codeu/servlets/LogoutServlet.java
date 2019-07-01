@@ -35,7 +35,7 @@ public class LogoutServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException {
     UserService userService = UserServiceFactory.getUserService();
-    String googleLogoutUrl = userService.createLogoutURL("/index.html");
+    String googleLogoutUrl = userService.createLogoutURL("/");
     response.sendRedirect(googleLogoutUrl);
   }
 }

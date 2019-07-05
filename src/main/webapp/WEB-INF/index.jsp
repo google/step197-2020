@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<%@ page import="java.util.com.google.codeu.servlets.ServletUtils" %>
+<%@ page import="com.google.codeu.servlets.ServletUtils" %>
 
 <!DOCTYPE html>
 <html>
@@ -25,7 +25,7 @@ limitations under the License.
     <script src="https://maps.googleapis.com/maps/api/js?key=<%= request.getAttribute("MAPS_API_KEY") %>"></script>
     <script src="<%= ServletUtils.BuildReactRoot() %>home.js"></script>
   </head>
-  <body onload="addLoginOrLogoutLinkToNavigation(), initialize();">
+  <body onload="addLoginOrLogoutLinkToNavigation(), window.initialize();">
     <nav>
       <ul id="navigation">
         <li><a href="/">Home</a></li>

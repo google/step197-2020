@@ -1,5 +1,5 @@
-const React = window.React;
-const ReactDOM = window.ReactDOM;
+import React from "react";
+import ReactDOM from "react-dom";
 
 function createMap() {
   fetch("/charging-station-data")
@@ -127,7 +127,7 @@ function PinList(props) {
   );
 }
 
-function initialize() {
+window["initialize"] = function initialize() {
   createMap();
   const rootElement = document.getElementById("PinList");
   ReactDOM.render(<PinList rows={rows} />, rootElement);

@@ -41,15 +41,17 @@ public class ServletUtils {
     return props;
   }
 
+  public static String BuildReactRoot() {
+    return IsProduction() ? "/build/js/" : "http://localhost:9000/";
+  }
+
   // Set attribute TITLE before calling RenderReact to add a custom page title.
   // Set attribute HEAD_HTML to add aribtrary HTML to the end of head.
   static void RenderReact(String module, HttpServletRequest request,
                           HttpServletResponse response)
       throws IOException, ServletException {
 
-    request.setAttribute("SERVER_ROOT", IsProduction()
-                                            ? "/build/js/"
-                                            : "http://localhost:9000/");
+    request.setAttribute("SERVER_ROOT", BuildReactRoot());
 
     request.setAttribute("REACT_MODULE", module);
     request.getRequestDispatcher("/WEB-INF/react.jsp")

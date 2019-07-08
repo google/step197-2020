@@ -34,7 +34,7 @@ public class Location {
    * random ID and uses the current system time for the creation time.
    */
   public Location(String owner, String title, String description, long latitude, long longitude) {
-    this(UUID.randomUUID(), owner, title, latitude, longitude, System.currentTimeMillis());
+    this(UUID.randomUUID(), owner, title, description, latitude, longitude, System.currentTimeMillis());
   }
 
   public Location(UUID id, String owner, String title, String description, long latitude, long longitude, long timestamp) {

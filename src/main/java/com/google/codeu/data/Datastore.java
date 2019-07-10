@@ -184,7 +184,7 @@ public class Datastore {
     datastore.put(placeEntity);
   }
 
-  /** Get all the messages currently in the Datastore. */
+  /** Get all the places currently in the Datastore. */
   public List<Place> getAllPlaces() {
     List<Place> places = new ArrayList<>();
     Query query = new Query("Place")
@@ -213,10 +213,10 @@ public class Datastore {
   } 
 
   /**
-   * Get List of locations created by a specific user.
+   * Get List of places created by a specific user.
    *
-   * @return a list of locations posted by the user, or empty list if user has never posted a
-   * location. List is sorted by time descending.
+   * @return a list of plcaes posted by the user, or empty list if user has never posted a
+   * places. List is sorted by time descending.
    */
   public List<Place> getPlaces(User user) {
     String userEmail = user.getEmail();

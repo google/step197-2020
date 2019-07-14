@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 
 const rows = [
   createData(
-    12345,
+    23422345,
     "ThomasWeathers",
     "Oregon State University",
     "My university! The campus is very pretty, built mostly of brick and new modern metal-framed buildings. Check out the lounge in the Memorial Union for a great study spot, or the coffee shop within Weatherford Hall.",
@@ -109,18 +109,22 @@ function addLandmark(map, lat, lng, title, description, owner, timestamp) {
     map: map,
     title: title
   });
+
+  /** Creates DOM nodes to append to root div inside Google Maps info window */
+  const contentRoot = document.createElement("div");
+  const contentHeader = document.createElement("h1");
+  const contentDescription = document.createElement("p");
+  const lineBreak = "\n";
+  const colonSpace = ": ";
+
+  contentHeader.innerText = title;
+  contentDescription.innerText = description + lineBreak + owner + colonSpace + timestamp;
+
+  contentRoot.appendChild(contentHeader);
+  contentRoot.appendChild(contentDescription);
+
   const infoWindow = new google.maps.InfoWindow({
-    content:
-      "<h1>" +
-      title +
-      "</h1>" +
-      "<p>" +
-      description +
-      "</p><i>" +
-      owner +
-      " : " +
-      timestamp +
-      "</i><p>"
+    content: contentRoot
   });
   marker.addListener("click", function() {
     infoWindow.open(map, marker);

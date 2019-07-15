@@ -32,8 +32,9 @@ limitations under the License.
         <li><a href="/aboutus.html">About Our Team</a></li>
       </ul>
     </nav>
-    <h1>PlaceHolder Map of EV Charging Stations</h1>
+    <h1>Pin By Location</h1>
     <div id="map"></div>
+    <div id = "PinList"></div>
     <div id = "overview">
       <h1>
       Project Overview: 
@@ -49,7 +50,6 @@ limitations under the License.
       <p>Thomas: Community Page, convert community page to react, Maps I, Maps II</p>
       </div>
     </div>
-    <div id = "PinList"></div>
   </body>
   <style>
     #map {

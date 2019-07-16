@@ -13,12 +13,13 @@ class AddPlace extends React.Component {
 
     return (
       <div>
-        <h1> Add Place </h1>
-        <textarea>Enter a location name</textarea>
+        <h1>Add Place</h1>
+        <textarea value={this.state.value} onChange={e => {this.setState({ name: e.target.value})}}>
+        Enter a location name</textarea>
         <br />
-        <textarea>Enter a X coord</textarea>
+        <textarea value={this.state.value} onChange={e => {this.setState({ x_coord: e.target.value })}}>Enter a X coord</textarea>
         <br />
-        <textarea>Enter a Y coord</textarea>
+        <textarea value={this.state.value} onChange={e => {this.setState({ y_coord: e.target.value })}}>Enter a Y coord</textarea>
         <br />
         <button
           onClick={() =>

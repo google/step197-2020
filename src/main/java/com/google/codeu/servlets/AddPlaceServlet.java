@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Properties;
 
-@WebServlet("/addPlace")
+@WebServlet("/place/add")
 public class AddPlaceServlet extends HttpServlet{
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -16,8 +16,7 @@ public class AddPlaceServlet extends HttpServlet{
         Properties props = ServletUtils.GetProperties();
         request.setAttribute("TITLE", "Add Place");
         request.setAttribute(
-                "HEAD_HTML", "<link rel='stylesheet' href='/css/main.css'>"
-                        + "<link rel='stylesheet' href='/css/user-page.css'>");
+                "HEAD_HTML", "");
 
         ServletUtils.RenderReact("addPlace", request, response);
     }

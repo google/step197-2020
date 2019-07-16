@@ -19,9 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
-@WebServlet(("/api/blobstore_url"))
+@WebServlet("/api/blobstore_url")
 public class BlobstoreServlet extends HttpServlet {
-
   private Datastore datastore;
 
   @Override
@@ -63,11 +62,7 @@ public class BlobstoreServlet extends HttpServlet {
    * Returns a URL that points to the uploaded file, or null if the user didn't
    * upload a file.
    */
-<<<<<<< HEAD
-  private String getUploadedFileUrl(HttpServletRequest request,
-=======
   public static String getUploadedFileUrl(HttpServletRequest request,
->>>>>>> 9d9e3571ca9958ec03ad478ea3ab971584ed306b
                                     String formInputElementName) {
     BlobstoreService blobstoreService =
         BlobstoreServiceFactory.getBlobstoreService();

@@ -19,7 +19,7 @@ package com.google.codeu.data;
 import java.util.UUID;
 
 /** A single message posted by a user. */
-public class Location {
+public class Place {
 
   private UUID id;
   private String owner;
@@ -30,14 +30,14 @@ public class Location {
   private long timestamp;
 
   /**
-   * Constructs a new {@link Message} posted by {@code user} with {@code text} content. Generates a
+   * Constructs a new {@link Place} posted by {@code user} with {@code text} content. Generates a
    * random ID and uses the current system time for the creation time.
    */
-  public Location(String owner, String title, String description, long latitude, long longitude) {
+  public Place(String owner, String title, String description, long latitude, long longitude) {
     this(UUID.randomUUID(), owner, title, description, latitude, longitude, System.currentTimeMillis());
   }
 
-  public Location(UUID id, String owner, String title, String description, long latitude, long longitude, long timestamp) {
+  public Place(UUID id, String owner, String title, String description, long latitude, long longitude, long timestamp) {
     this.id = id;
     this.owner = owner;
     this.title = title;
@@ -74,4 +74,6 @@ public class Location {
   public long getTimestamp() {
     return timestamp;
   }
+
+  
 }

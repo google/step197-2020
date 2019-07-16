@@ -117,7 +117,11 @@ function fetchAboutMe() {
 }
 
 function fetchBlobstoreUrlAndShowForm() {
+<<<<<<< HEAD
   fetch("/blobstore-upload-url")
+=======
+  fetch("/api/blobstore-upload-url")
+>>>>>>> 9d9e3571ca9958ec03ad478ea3ab971584ed306b
     .then(response => {
       return response.text();
     })
@@ -126,4 +130,8 @@ function fetchBlobstoreUrlAndShowForm() {
       messageForm.action = imageUploadUrl;
       messageForm.classList.remove("hidden");
     });
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 9d9e3571ca9958ec03ad478ea3ab971584ed306b

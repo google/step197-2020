@@ -92,18 +92,25 @@ public class MessageServlet extends HttpServlet {
     // Get the message entered by the user.
     String userText =
         Jsoup.clean(request.getParameter("text"), Whitelist.none());
+<<<<<<< HEAD
     /*   String replacement = "<img src=\"$1\" />";
        String textWithImagesReplaced = userText.replaceAll(REGEX, replacement);
      */
 
     // Get the URL of the image that the user uploaded to Blobstore.
     String imageUrl = getUploadedFileUrl(request, "image");
+=======
+
+    // Get the URL of the image that the user uploaded to Blobstore.
+    String imageUrl = BlobstoreServlet.getUploadedFileUrl(request, "image");
+>>>>>>> 9d9e3571ca9958ec03ad478ea3ab971584ed306b
     if (imageUrl != null) {
       imageUrl = "<a href=\"" + imageUrl + "\">"
                  + "<img src=\"" + imageUrl + "\"";
       userText = userText + imageUrl;
     }
 
+<<<<<<< HEAD
     // Output some HTML that shows the data the user entered.
     // A real codebase would probably store these in Datastore.
     ServletOutputStream out = response.getOutputStream();
@@ -114,10 +121,13 @@ public class MessageServlet extends HttpServlet {
     out.println("<p>Here's the text you entered:</p>");
     out.println(userText);
 
+=======
+>>>>>>> 9d9e3571ca9958ec03ad478ea3ab971584ed306b
     Message message = new Message(user, userText);
     datastore.storeMessage(message);
     response.sendRedirect("/user-page.html?user=" + user);
   }
+<<<<<<< HEAD
 
   /**
    * Returns a URL that points to the uploaded file, or null if the user didn't
@@ -156,3 +166,6 @@ public class MessageServlet extends HttpServlet {
     return imagesService.getServingUrl(options);
   }
 }
+=======
+}
+>>>>>>> 9d9e3571ca9958ec03ad478ea3ab971584ed306b

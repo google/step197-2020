@@ -97,11 +97,8 @@ public class Datastore {
 
         Message message = new Message(id, user, text, timestamp);
         messages.add(message);
-      } catch (Exception e) {
-        System.err.println("Error reading message.");
-        System.err.println(entity.toString());
-        e.printStackTrace();
       }
+      finally {}
     }
 
     return messages;
@@ -187,28 +184,16 @@ public class Datastore {
   /** Get all the places currently in the Datastore. */
   public List<Place> getAllPlaces() {
     List<Place> places = new ArrayList<>();
-    Query query = new Query("Place")
-        .addSort("timestamp", SortDirection.DESCENDING);
-
-    PreparedQuery results = datastore.prepare(query);
-    for (Entity entity : results.asIterable()) {
-      try {
-        String idString = entity.getKey().getName();
-        UUID id = UUID.fromString(idString);
-        String owner = (String) entity.getProperty("owner");
-        String title = (String) entity.getProperty("title");
-        String description = (String) entity.getProperty("description");
-        long latitude = (long) entity.getProperty("latitude");
-        long longitude = (long) entity.getProperty("longitude");
-        long timestamp = (long) entity.getProperty("timestamp");
-        Place place = new Place(id, owner, title, description, latitude, longitude, timestamp);
+    Set<String> users = getUsers();
+  
+    for (String userString : users) {
+      User user = getUser(userString);
+      List<Place> usersPlaces = getPlaces(user);
+      for (Place place : usersPlaces) {
         places.add(place);
-      } catch (Exception e) {
-        System.err.println("Error reading message.");
-        System.err.println(entity.toString());
-        e.printStackTrace();
       }
     }
+    
     return places;
   } 
 

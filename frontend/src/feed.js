@@ -46,7 +46,7 @@ function MessageDiv({ user, text, timestamp }) {
         <div className="left-align">{user}</div>
         <div className="right-align">{date}</div>
       </div>
-      <div className="message-body">{text}<div/>
+      <div className="message-body">{text}</div>
     </div>
   );
 }

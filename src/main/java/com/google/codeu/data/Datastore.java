@@ -53,8 +53,7 @@ public class Datastore {
   /** Get all the messages currently in the Datastore. */
   public List<Message> getAllMessages() {
     List<Message> messages = new ArrayList<>();
-    Query query = new Query("Message")
-        .addSort("timestamp", SortDirection.DESCENDING);
+    Query query = new Query("Message").addSort("timestamp", SortDirection.DESCENDING);
 
     PreparedQuery results = datastore.prepare(query);
     for (Entity entity : results.asIterable()) {
@@ -78,8 +77,8 @@ public class Datastore {
   /**
    * Get List of messages posted by a specific user.
    *
-   * @return a list of messages posted by the user, or empty list if user has never posted a
-   * message. List is sorted by time descending.
+   * @return a list of messages posted by the user, or empty list if user has
+   *         never posted a message. List is sorted by time descending.
    */
   public List<Message> getMessages(String user) {
     List<Message> messages = new ArrayList<>();
@@ -97,8 +96,8 @@ public class Datastore {
 
         Message message = new Message(id, user, text, timestamp);
         messages.add(message);
+      } finally {
       }
-      finally {}
     }
 
     return messages;
@@ -114,7 +113,7 @@ public class Datastore {
       this.aboutMe = aboutMe;
     }
 
-    public String getEmail(){
+    public String getEmail() {
       return email;
     }
 
@@ -134,12 +133,11 @@ public class Datastore {
   }
 
   /**
-   * Returns the User owned by the email address, or
-   * null if no matching User was found.
+   * Returns the User owned by the email address, or null if no matching User was
+   * found.
    */
   public User getUser(String email) {
-    Query query =  new Query("User")
-      .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
+    Query query = new Query("User").setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
     PreparedQuery results = datastore.prepare(query);
     Entity userEntity = results.asSingleEntity();
     if (userEntity == null) {
@@ -153,11 +151,13 @@ public class Datastore {
   }
 
   /**
-   * Gather a list of all users that have entered something into the community chat.
+   * Gather a list of all users that have entered something into the community
+   * chat.
    *
-   * @return a Set of users, no order to this list, empty list if there are no users that have posted
+   * @return a Set of users, no order to this list, empty list if there are no
+   *         users that have posted
    */
-  public Set<String> getUsers () {
+  public Set<String> getUsers() {
     Set<String> users = new HashSet<>();
     Query query = new Query("Message");
     PreparedQuery results = datastore.prepare(query);
@@ -165,10 +165,9 @@ public class Datastore {
       users.add((String) entity.getProperty("user"));
     }
     return users;
-
   }
 
-  /** Stores a new  Place in Datastore. */
+  /** Stores a new Place in Datastore. */
   public void storePlace(Place place) {
     Entity placeEntity = new Entity("Place", place.getId().toString());
     placeEntity.setProperty("owner", place.getOwner());
@@ -181,57 +180,48 @@ public class Datastore {
     datastore.put(placeEntity);
   }
 
+  /** Return Place data using based on entity from search query. */
+  public Place(Entity entity) {
+    this.idString = entity.getKey().getName();
+    this.id = UUID.fromString(idString);
+    this.owner = (String)entity.getProperty("owner");
+    this.title = (String)entity.getProperty("title");
+    this.description = (String)entity.getProperty("description");
+    this.latitude = (long)entity.getProperty("latitude");
+    this.longitude = (long)entity.getProperty("longitude");
+    this.timestamp = (long)entity.getProperty("timestamp");
+  }
+
   /** Get all the places currently in the Datastore. */
   public List<Place> getAllPlaces() {
     List<Place> places = new ArrayList<>();
-    Set<String> users = getUsers();
-  
-    for (String userString : users) {
-      User user = getUser(userString);
-      List<Place> usersPlaces = getPlaces(user);
-      for (Place place : usersPlaces) {
-        places.add(place);
-      }
+    Query query = new Query("Place").addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+    for (Entity entity : results.asIterable()) {
+      places.add(new Place(entity));
     }
-    
     return places;
-  } 
+  }
 
   /**
    * Get List of places created by a specific user.
    *
-   * @return a list of plcaes posted by the user, or empty list if user has never posted a
-   * places. List is sorted by time descending.
+   * @return a list of plcaes posted by the user, or empty list if user has never
+   *         posted a places. List is sorted by time descending.
    */
   public List<Place> getPlaces(User user) {
     String userEmail = user.getEmail();
     List<Place> places = new ArrayList<>();
-
-    Query query = new Query("Place").setFilter(new Query.FilterPredicate("owner", FilterOperator.EQUAL, userEmail))
-        .addSort("timestamp", SortDirection.DESCENDING);
+    Query query = new Query("Place")
+      .setFilter(new Query.FilterPredicate("owner", FilterOperator.EQUAL, userEmail))
+      .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
-      try {
-        String idString = entity.getKey().getName();
-        UUID id = UUID.fromString(idString);
-        String owner = (String) entity.getProperty("owner");
-        String title = (String) entity.getProperty("title");
-        String description = (String) entity.getProperty("description");
-        long latitude = (long) entity.getProperty("latitude");
-        long longitude = (long) entity.getProperty("longitude");
-        long timestamp = (long) entity.getProperty("timestamp");
-        Place place = new Place(id, owner, title, description, latitude, longitude, timestamp);
-        places.add(place);
-      } catch (Exception e) {
-        System.err.println("Error reading message.");
-        System.err.println(entity.toString());
-        e.printStackTrace();
-      }
+      places.add(new Place(entity));
     }
 
     return places;
   }
 
 }
-

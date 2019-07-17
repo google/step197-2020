@@ -16,6 +16,7 @@
 
 package com.google.codeu.data;
 
+import com.google.appengine.api.datastore.Entity;
 import java.util.UUID;
 
 /** A single message posted by a user. */
@@ -30,8 +31,9 @@ public class Place {
   private long timestamp;
 
   /**
-   * Constructs a new {@link Place} posted by {@code user} with {@code text} content. Generates a
-   * random ID and uses the current system time for the creation time.
+   * Constructs a new {@link Place} posted by {@code user} with {@code text}
+   * content. Generates a random ID and uses the current system time for the
+   * creation time.
    */
   public Place(String owner, String title, String description, long latitude, long longitude) {
     this(UUID.randomUUID(), owner, title, description, latitude, longitude, System.currentTimeMillis());
@@ -45,6 +47,18 @@ public class Place {
     this.latitude = latitude;
     this.longitude = longitude;
     this.timestamp = timestamp;
+  }
+
+  
+  /** Return Place data using based on entity from search query. */
+  public Place(Entity entity) {
+    this.id = (String)entity.getProperty("id");
+    this.owner = (String)entity.getProperty("owner");
+    this.title = (String)entity.getProperty("title");
+    this.description = (String)entity.getProperty("description");
+    this.latitude = (long)entity.getProperty("latitude");
+    this.longitude = (long)entity.getProperty("longitude");
+    this.timestamp = (long)entity.getProperty("timestamp");
   }
 
   public UUID getId() {
@@ -62,11 +76,11 @@ public class Place {
   public String getDescription() {
     return description;
   }
-  
+
   public long getLatitude() {
     return latitude;
   }
-  
+
   public long getLongitude() {
     return longitude;
   }
@@ -75,5 +89,4 @@ public class Place {
     return timestamp;
   }
 
-  
 }

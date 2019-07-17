@@ -180,17 +180,6 @@ public class Datastore {
     datastore.put(placeEntity);
   }
 
-  /** Return Place data using based on entity from search query. */
-  public Place(Entity entity) {
-    this.idString = entity.getKey().getName();
-    this.id = UUID.fromString(idString);
-    this.owner = (String)entity.getProperty("owner");
-    this.title = (String)entity.getProperty("title");
-    this.description = (String)entity.getProperty("description");
-    this.latitude = (long)entity.getProperty("latitude");
-    this.longitude = (long)entity.getProperty("longitude");
-    this.timestamp = (long)entity.getProperty("timestamp");
-  }
 
   /** Get all the places currently in the Datastore. */
   public List<Place> getAllPlaces() {

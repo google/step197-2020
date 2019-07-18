@@ -52,7 +52,7 @@ public class Place {
   
   /** Return Place data using based on entity from search query. */
   public Place(Entity entity) {
-    this.id = (String)entity.getProperty("id");
+    this.id = UUID.fromString((String)entity.getProperty("id"));
     this.owner = (String)entity.getProperty("owner");
     this.title = (String)entity.getProperty("title");
     this.description = (String)entity.getProperty("description");

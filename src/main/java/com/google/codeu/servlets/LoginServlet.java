@@ -18,29 +18,34 @@ package com.google.codeu.servlets;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.codeu.data.User;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Redirects the user to the Google login page or their page if they're already
- * logged in.
- */
+/** Redirects the user to the Google login page or their page if they're already logged in. */
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws IOException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     UserService userService = UserServiceFactory.getUserService();
 
-    // If the user is already logged in, redirect to their page
+    // If the user is already logged in, redirect to their page + add them to
+    // datastore if they don't exist.
     if (userService.isUserLoggedIn()) {
-      String user = userService.getCurrentUser().getEmail();
-      response.sendRedirect("/user-page.html?user=" + user);
+      com.google.appengine.api.users.User aeUser = userService.getCurrentUser();
+      User user = User.getByEmail(aeUser.getEmail());
+
+      if (user == null) {
+        user = new User(aeUser);
+        User.store(user);
+      }
+
+      response.sendRedirect("/user-page.html?user=" + user.getEmail());
       return;
     }
 

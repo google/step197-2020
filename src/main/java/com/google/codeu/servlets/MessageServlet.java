@@ -58,7 +58,7 @@ public class MessageServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws IOException {
+          throws IOException {
 
     response.setContentType("application/json");
 
@@ -77,10 +77,12 @@ public class MessageServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
-  /** Stores a new {@link Message}. */
+  /**
+   * Stores a new {@link Message}.
+   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws IOException {
+          throws IOException {
 
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
@@ -91,18 +93,8 @@ public class MessageServlet extends HttpServlet {
     String user = userService.getCurrentUser().getEmail();
     // Get the message entered by the user.
     String userText =
-        Jsoup.clean(request.getParameter("text"), Whitelist.none());
-
+            Jsoup.clean(request.getParameter("text"), Whitelist.none());
     // Get the URL of the image that the user uploaded to Blobstore.
     String imageUrl = BlobstoreServlet.getUploadedFileUrl(request, "image");
-    if (imageUrl != null) {
-      imageUrl = "<a href=\"" + imageUrl + "\">"
-                 + "<img src=\"" + imageUrl + "\"";
-      userText = userText + imageUrl;
-    }
-
-    Message message = new Message(user, userText);
-    datastore.storeMessage(message);
-    response.sendRedirect("/user-page.html?user=" + user);
   }
 }

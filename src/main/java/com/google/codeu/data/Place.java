@@ -17,6 +17,15 @@
 package com.google.codeu.data;
 
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /** A single message posted by a user. */
@@ -49,16 +58,63 @@ public class Place {
     this.timestamp = timestamp;
   }
 
-  
   /** Return Place data using based on entity from search query. */
   public Place(Entity entity) {
-    this.id = (String)entity.getProperty("id");
-    this.owner = (String)entity.getProperty("owner");
-    this.title = (String)entity.getProperty("title");
-    this.description = (String)entity.getProperty("description");
-    this.latitude = (long)entity.getProperty("latitude");
-    this.longitude = (long)entity.getProperty("longitude");
-    this.timestamp = (long)entity.getProperty("timestamp");
+    this.id = (UUID) entity.getProperty("id");
+    this.owner = (String) entity.getProperty("owner");
+    this.title = (String) entity.getProperty("title");
+    this.description = (String) entity.getProperty("description");
+    this.latitude = (long) entity.getProperty("latitude");
+    this.longitude = (long) entity.getProperty("longitude");
+    this.timestamp = (long) entity.getProperty("timestamp");
+  }
+
+
+  /** Stores a new Place in Datastore. */
+  public void storePlace(Place place) {
+    DatastoreService datastore = Datastore.GetSingletonService();
+    Entity placeEntity = new Entity("Place", place.getId().toString());
+    placeEntity.setProperty("owner", place.getOwner());
+    placeEntity.setProperty("title", place.getTitle());
+    placeEntity.setProperty("description", place.getDescription());
+    placeEntity.setProperty("latitude", place.getLatitude());
+    placeEntity.setProperty("longitude", place.getLongitude());
+    placeEntity.setProperty("timestamp", place.getTimestamp());
+
+    datastore.put(placeEntity);
+  }
+
+  /** Get all the places currently in the Datastore. */
+  public List<Place> getAllPlaces() {
+    DatastoreService datastore = Datastore.GetSingletonService();
+    List<Place> places = new ArrayList<>();
+    Query query = new Query("Place").addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+    for (Entity entity : results.asIterable()) {
+      places.add(new Place(entity));
+    }
+    return places;
+  }
+
+  /**
+   * Get List of places created by a specific user.
+   *
+   * @return a list of plcaes posted by the user, or empty list if user has never
+   *         posted a places. List is sorted by time descending.
+   */
+  public List<Place> getPlaces(User user) {
+    DatastoreService datastore = Datastore.GetSingletonService();
+    String userEmail = user.getEmail();
+    List<Place> places = new ArrayList<>();
+    Query query = new Query("Place").setFilter(new Query.FilterPredicate("owner", FilterOperator.EQUAL, userEmail))
+        .addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      places.add(new Place(entity));
+    }
+
+    return places;
   }
 
   public UUID getId() {

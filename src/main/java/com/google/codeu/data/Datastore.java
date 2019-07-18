@@ -77,13 +77,8 @@ public class Datastore {
   /**
    * Get List of messages posted by a specific user.
    *
-<<<<<<< HEAD
    * @return a list of messages posted by the user, or empty list if user has
    *         never posted a message. List is sorted by time descending.
-=======
-   * @return a list of messages posted by the user, or empty list if user has never posted a
-   *     message. List is sorted by time descending.
->>>>>>> origin
    */
   public List<Message> getMessages(String user) {
     List<Message> messages = new ArrayList<>();
@@ -148,7 +143,7 @@ public class Datastore {
       .setFilter(new Query.FilterPredicate("owner", FilterOperator.EQUAL, userEmail))
       .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
-
+    System.out.println("user email: " + userEmail);
     for (Entity entity : results.asIterable()) {
       places.add(new Place(entity));
     }

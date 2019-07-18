@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
-@WebServlet("/places")
+@WebServlet("/api/place")
 public class UserMapServlet extends HttpServlet {
 
   private Datastore datastore;
@@ -34,7 +34,11 @@ public class UserMapServlet extends HttpServlet {
   @Override
   public void init() {
     datastore = new Datastore();
+    Place place = new Place("text@example.com","placetest","place description",-123,123);
+    datastore.storePlace(place);
   }
+
+
 
   /**
    * Responds with a JSON representation of {@link Message} data for a specific
@@ -47,14 +51,16 @@ public class UserMapServlet extends HttpServlet {
     response.setContentType("application/json");
 
     String email = request.getParameter("user");
-
+    List <Place> places;
     if (email == null || email.equals("")) {
       // Request is invalid, return empty array
-      response.getWriter().println("[]");
-      return;
+      //esponse.getWriter().println("[]");
+      places = datastore.getAllPlaces();
+    }
+    else{
+        places = datastore.getPlaces(User.getByEmail(email));
     }
 
-    List<Place> places = datastore.getPlaces(User.getByEmail(email));
     Gson gson = new Gson();
     String json = gson.toJson(places);
 

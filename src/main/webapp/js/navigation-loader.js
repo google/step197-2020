@@ -40,7 +40,7 @@ function addLoginOrLogoutLinkToNavigation() {
           )
         );
         navigationElement.appendChild(
-          createListItem(createLink("/community.html", "Community"))
+          createListItem(createLink("/community", "Community"))
         );
         navigationElement.appendChild(
           createListItem(createLink("/feed", "Public Feed"))

@@ -15,12 +15,12 @@ class AddPlace extends React.Component {
       <div>
         <h1>Add Place</h1>
         <textarea
-          placeholder={"Enter a name"}
+          placeholder={"Enter a location name"}
           value={this.state.name}
           onChange={e => {
             this.setState({ name: e.target.value });
           }}
-        ></textarea>
+        />
         <br />
         <textarea
           placeholder={"Enter a X-coord"}
@@ -28,7 +28,7 @@ class AddPlace extends React.Component {
           onChange={e => {
             this.setState({ x_coord: e.target.value });
           }}
-        ></textarea>
+        />
         <br />
         <textarea
           placeholder={"Enter a Y-coord"}
@@ -36,7 +36,7 @@ class AddPlace extends React.Component {
           onChange={e => {
             this.setState({ y_coord: e.target.value });
           }}
-        ></textarea>
+        />
         <br />
         Select image to upload:
         <input

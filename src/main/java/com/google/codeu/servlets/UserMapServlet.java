@@ -34,8 +34,6 @@ public class UserMapServlet extends HttpServlet {
   @Override
   public void init() {
     datastore = new Datastore();
-    Place place = new Place("text@example.com","placetest","place description",-123,123);
-    datastore.storePlace(place);
   }
 
 

@@ -26,8 +26,6 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.Set;
-import java.util.HashSet;
 
 /** Provides access to the data stored in Datastore. */
 public class Datastore {
@@ -38,9 +36,11 @@ public class Datastore {
     datastore = DatastoreServiceFactory.getDatastoreService();
   }
 
-  /**
-   * Stores the Message in Datastore.
-   */
+  public static DatastoreService GetSingletonService() {
+    return DatastoreServiceFactory.getDatastoreService();
+  }
+
+  /** Stores the Message in Datastore. */
   public void storeMessage(Message message) {
     Entity messageEntity = new Entity("Message", message.getId().toString());
     messageEntity.setProperty("user", message.getUser());
@@ -53,8 +53,7 @@ public class Datastore {
   /** Get all the messages currently in the Datastore. */
   public List<Message> getAllMessages() {
     List<Message> messages = new ArrayList<>();
-    Query query = new Query("Message")
-        .addSort("timestamp", SortDirection.DESCENDING);
+    Query query = new Query("Message").addSort("timestamp", SortDirection.DESCENDING);
 
     PreparedQuery results = datastore.prepare(query);
     for (Entity entity : results.asIterable()) {
@@ -79,13 +78,15 @@ public class Datastore {
    * Get List of messages posted by a specific user.
    *
    * @return a list of messages posted by the user, or empty list if user has never posted a
-   * message. List is sorted by time descending.
+   *     message. List is sorted by time descending.
    */
   public List<Message> getMessages(String user) {
     List<Message> messages = new ArrayList<>();
 
-    Query query = new Query("Message").setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
-        .addSort("timestamp", SortDirection.DESCENDING);
+    Query query =
+        new Query("Message")
+            .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
+            .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
@@ -106,69 +107,4 @@ public class Datastore {
 
     return messages;
   }
-
-  public static class User {
-
-    private String email;
-    private String aboutMe;
-
-    public User(String email, String aboutMe) {
-      this.email = email;
-      this.aboutMe = aboutMe;
-    }
-
-    public String getEmail(){
-      return email;
-    }
-
-    public String getAboutMe() {
-      return aboutMe;
-    }
-  }
-
-  /**
-   * Stores the User in Datastore.
-   */
-  public void storeUser(User user) {
-    Entity userEntity = new Entity("User", user.getEmail());
-    userEntity.setProperty("email", user.getEmail());
-    userEntity.setProperty("aboutMe", user.getAboutMe());
-    datastore.put(userEntity);
-  }
-
-  /**
-   * Returns the User owned by the email address, or
-   * null if no matching User was found.
-   */
-  public User getUser(String email) {
-    Query query =  new Query("User")
-      .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
-    PreparedQuery results = datastore.prepare(query);
-    Entity userEntity = results.asSingleEntity();
-    if (userEntity == null) {
-      return null;
-    }
-
-    String aboutMe = (String) userEntity.getProperty("aboutMe");
-    User user = new User(email, aboutMe);
-
-    return user;
-  }
-
-    /**
-     * Gather a list of all users that have entered something into the community chat.
-     *
-     * @return a Set of users, no order to this list, empty list if there are no users that have posted
-     */
-    public Set<String> getUsers () {
-      Set<String> users = new HashSet<>();
-      Query query = new Query("Message");
-      PreparedQuery results = datastore.prepare(query);
-      for (Entity entity : results.asIterable()) {
-        users.add((String) entity.getProperty("user"));
-      }
-      return users;
-
-    }
-  }
-
+}

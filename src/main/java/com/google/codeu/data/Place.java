@@ -18,7 +18,6 @@ package com.google.codeu.data;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
@@ -60,13 +59,13 @@ public class Place {
 
   /** Return Place data using based on entity from search query. */
   public Place(Entity entity) {
-    this.id = (UUID) entity.getProperty("id");
-    this.owner = (String) entity.getProperty("owner");
-    this.title = (String) entity.getProperty("title");
-    this.description = (String) entity.getProperty("description");
-    this.latitude = (long) entity.getProperty("latitude");
-    this.longitude = (long) entity.getProperty("longitude");
-    this.timestamp = (long) entity.getProperty("timestamp");
+    this.id = (UUID)entity.getProperty("id");
+    this.owner = (String)entity.getProperty("owner");
+    this.title = (String)entity.getProperty("title");
+    this.description = (String)entity.getProperty("description");
+    this.latitude = (long)entity.getProperty("latitude");
+    this.longitude = (long)entity.getProperty("longitude");
+    this.timestamp = (long)entity.getProperty("timestamp");
   }
 
 

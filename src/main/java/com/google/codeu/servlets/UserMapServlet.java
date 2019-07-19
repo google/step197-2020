@@ -34,8 +34,6 @@ public class UserMapServlet extends HttpServlet {
   @Override
   public void init() {
     datastore = new Datastore();
-    Place place = new Place("text@example.com","placetest","place description",-123,123);
-    datastore.storePlace(place);
   }
 
 
@@ -55,10 +53,10 @@ public class UserMapServlet extends HttpServlet {
     if (email == null || email.equals("")) {
       // Request is invalid, return empty array
       //esponse.getWriter().println("[]");
-      places = datastore.getAllPlaces();
+      places = Place.getAll();
     }
     else{
-        places = datastore.getPlaces(User.getByEmail(email));
+        places = Place.getByUser(User.getByEmail(email));
     }
 
     Gson gson = new Gson();

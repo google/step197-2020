@@ -77,8 +77,8 @@ public class Datastore {
   /**
    * Get List of messages posted by a specific user.
    *
-   * @return a list of messages posted by the user, or empty list if user has
-   *         never posted a message. List is sorted by time descending.
+   * @return a list of messages posted by the user, or empty list if user has never posted a
+   *     message. List is sorted by time descending.
    */
   public List<Message> getMessages(String user) {
     List<Message> messages = new ArrayList<>();
@@ -104,51 +104,4 @@ public class Datastore {
 
     return messages;
   }
-
-  /** Stores a new Place in Datastore. */
-  public void storePlace(Place place) {
-    Entity placeEntity = new Entity("Place", place.getId().toString());
-    placeEntity.setProperty("owner", place.getOwner());
-    placeEntity.setProperty("title", place.getTitle());
-    placeEntity.setProperty("description", place.getDescription());
-    placeEntity.setProperty("latitude", place.getLatitude());
-    placeEntity.setProperty("longitude", place.getLongitude());
-    placeEntity.setProperty("timestamp", place.getTimestamp());
-
-    datastore.put(placeEntity);
-  }
-
-
-  /** Get all the places currently in the Datastore. */
-  public List<Place> getAllPlaces() {
-    List<Place> places = new ArrayList<>();
-    Query query = new Query("Place").addSort("timestamp", SortDirection.DESCENDING);
-    PreparedQuery results = datastore.prepare(query);
-    for (Entity entity : results.asIterable()) {
-      places.add(new Place(entity));
-    }
-    return places;
-  }
-
-  /**
-   * Get List of places created by a specific user.
-   *
-   * @return a list of plcaes posted by the user, or empty list if user has never
-   *         posted a places. List is sorted by time descending.
-   */
-  public List<Place> getPlaces(User user) {
-    String userEmail = user.getEmail();
-    List<Place> places = new ArrayList<>();
-    Query query = new Query("Place")
-      .setFilter(new Query.FilterPredicate("owner", FilterOperator.EQUAL, userEmail))
-      .addSort("timestamp", SortDirection.DESCENDING);
-    PreparedQuery results = datastore.prepare(query);
-    System.out.println("user email: " + userEmail);
-    for (Entity entity : results.asIterable()) {
-      places.add(new Place(entity));
-    }
-
-    return places;
-  }
-
 }

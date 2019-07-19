@@ -36,8 +36,6 @@ public class UserMapServlet extends HttpServlet {
     datastore = new Datastore();
   }
 
-
-
   /**
    * Responds with a JSON representation of {@link Message} data for a specific
    * user. Responds with an empty array if the user is not provided.
@@ -49,14 +47,13 @@ public class UserMapServlet extends HttpServlet {
     response.setContentType("application/json");
 
     String email = request.getParameter("user");
-    List <Place> places;
-    if (email == null || email.equals("")) {
+    List<Place> places;
+    if (email == null || email.isEmpty()) {
       // Request is invalid, return empty array
-      //esponse.getWriter().println("[]");
+      // esponse.getWriter().println("[]");
       places = Place.getAll();
-    }
-    else{
-        places = Place.getByUser(User.getByEmail(email));
+    } else {
+      places = Place.getByUser(User.getByEmail(email));
     }
 
     Gson gson = new Gson();

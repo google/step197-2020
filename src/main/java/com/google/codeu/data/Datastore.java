@@ -98,10 +98,7 @@ public class Datastore {
 
         Message message = new Message(id, user, text, timestamp);
         messages.add(message);
-      } catch (Exception e) {
-        System.err.println("Error reading message.");
-        System.err.println(entity.toString());
-        e.printStackTrace();
+      } finally {
       }
     }
 

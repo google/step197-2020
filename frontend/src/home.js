@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-function createMap(rows) {
+export function createMap(rows) {
   const map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 37.422, lng: -122.084 },
     zoom: 7
@@ -61,7 +61,7 @@ function createData(
   return { id, owner, title, description, latitude, longitude, timestamp };
 }
 
-function PinList(props) {
+export function PinList(props) {
   const content = (
     <ul>
       {props.rows.map(pin => (

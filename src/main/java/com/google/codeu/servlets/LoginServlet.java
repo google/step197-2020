@@ -45,7 +45,7 @@ public class LoginServlet extends HttpServlet {
         User.store(user);
       }
 
-      response.sendRedirect("/user-page.html?user=" + user.getEmail());
+      response.sendRedirect("/user-page?user=" + user.getEmail());
       return;
     }
 

@@ -50,6 +50,6 @@ public class AboutMeServlet extends HttpServlet {
     user.setAboutMe(aboutMe);
     User.store(user);
 
-    response.sendRedirect("/user-page.html?user=" + email);
+    response.sendRedirect("/user-page?user=" + email);
   }
 }

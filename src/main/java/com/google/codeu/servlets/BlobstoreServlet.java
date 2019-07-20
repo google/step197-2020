@@ -55,7 +55,7 @@ public class BlobstoreServlet extends HttpServlet {
 
     Message message = new Message(user, userText + imageHTML);
     datastore.storeMessage(message);
-    response.sendRedirect("/user-page.html?user=" + user);
+    response.sendRedirect("/user-page?user=" + user);
   }
 
   /**

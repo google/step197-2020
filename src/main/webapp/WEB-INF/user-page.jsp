@@ -21,8 +21,18 @@ limitations under the License.
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="/css/main.css" />
     <link rel="stylesheet" href="/css/user-page.css" />
-    <script src="/js/user-page-loader.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%= request.getAttribute("MAPS_API_KEY") %>"></script>
+    <script src="<%= request.getAttribute("SERVER_ROOT") %>user_page.js"></script>
   </head>
+
+  <style>
+    #map {
+      width: 500px;
+      height: 500px;
+      border: thin solid black;
+    }
+  </style>
+  
   <body onload="buildUI();">
     <nav>
       <ul id="navigation">
@@ -32,6 +42,8 @@ limitations under the License.
     </nav>
     <h1 id="page-title">User Page</h1>
 
+    <div id="map"></div>
+    <div id="PinList"></div>
     <div id="about-me-container">Loading...</div>
     <div id="about-me-form" class="hidden">
       <form action="/about" method="POST">

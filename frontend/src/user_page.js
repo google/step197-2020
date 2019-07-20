@@ -1,18 +1,6 @@
-/*
- * Copyright 2019 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+import { createMap, PinList } from "./home.js";
+import React from "react";
+import ReactDOM from "react-dom";
 
 // Get ?user=XYZ parameter value
 const urlParams = new URLSearchParams(window.location.search);
@@ -92,12 +80,13 @@ function buildMessageDiv(message) {
 }
 
 /** Fetches data and populates the UI of the page. */
-function buildUI() {
+window.buildUI = function buildUI() {
   setPageTitle();
   showMessageFormIfViewingSelf();
   fetchMessages();
   fetchAboutMe();
   fetchBlobstoreUrlAndShowForm();
+  fetchPlaces();
 }
 
 function fetchAboutMe() {
@@ -126,3 +115,16 @@ function fetchBlobstoreUrlAndShowForm() {
       messageForm.classList.remove("hidden");
     });
 }
+
+function fetchPlaces() {
+  fetch("/api/place?user=" + parameterUsername)
+    .then(response => {
+      return response.json();
+    })
+    .then(rows => {
+      createMap(rows);
+      const rootElement = document.getElementById("PinList");
+      ReactDOM.render(<PinList rows={rows} />, rootElement);
+    });
+}
+

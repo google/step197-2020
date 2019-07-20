@@ -29,13 +29,6 @@ import org.jsoup.safety.Whitelist;
 @WebServlet("/api/place")
 public class UserMapServlet extends HttpServlet {
 
-  private Datastore datastore;
-
-  @Override
-  public void init() {
-    datastore = new Datastore();
-  }
-
   /**
    * Responds with a JSON representation of {@link Message} data for a specific
    * user. Responds with an empty array if the user is not provided.
@@ -53,6 +46,11 @@ public class UserMapServlet extends HttpServlet {
       // esponse.getWriter().println("[]");
       places = Place.getAll();
     } else {
+      User user = User.getByEmail(email);
+      if(user == null){
+        response.setStatus(400);
+        return;
+      }
       places = Place.getByUser(User.getByEmail(email));
     }
 

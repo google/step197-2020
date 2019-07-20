@@ -34,7 +34,7 @@ function addLoginOrLogoutLinkToNavigation() {
         navigationElement.appendChild(
           createListItem(
             createLink(
-              "/user-page.html?user=" + loginStatus.username,
+              "/user-page?user=" + loginStatus.username,
               "Your Page"
             )
           )

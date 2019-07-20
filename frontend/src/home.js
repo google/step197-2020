@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-export function createMap(rows) {
-  const map = new google.maps.Map(document.getElementById("map"), {
+export function createMap(rows, element = document.getElementById("map")) {
+  const map = new google.maps.Map(element, {
     center: { lat: 37.422, lng: -122.084 },
     zoom: 7
   });
@@ -17,6 +17,7 @@ export function createMap(rows) {
       pin.timestamp
     );
   });
+  return map;
 }
 
 /** Adds a marker that shows an info window when clicked. */
@@ -64,8 +65,8 @@ function createData(
 export function PinList(props) {
   const content = (
     <ul>
-      {props.rows.map(pin => (
-        <li>
+      {props.rows.map((pin, i) => (
+        <li key={i}>
           {pin.owner}-- {pin.title}: "{pin.description}" ( {pin.latitude},
           {pin.longitude})
         </li>

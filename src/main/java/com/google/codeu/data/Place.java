@@ -16,13 +16,11 @@
 
 package com.google.codeu.data;
 
-import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
-import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,15 +38,28 @@ public class Place {
   private long timestamp;
 
   /**
-   * Constructs a new {@link Place} posted by {@code user} with {@code text}
-   * content. Generates a random ID and uses the current system time for the
-   * creation time.
+   * Constructs a new {@link Place} posted by {@code user} with {@code text} content. Generates a
+   * random ID and uses the current system time for the creation time.
    */
   public Place(String owner, String title, String description, double latitude, double longitude) {
-    this(UUID.randomUUID(), owner, title, description, latitude, longitude, System.currentTimeMillis());
+    this(
+        UUID.randomUUID(),
+        owner,
+        title,
+        description,
+        latitude,
+        longitude,
+        System.currentTimeMillis());
   }
 
-  public Place(UUID id, String owner, String title, String description, double latitude, double longitude, long timestamp) {
+  public Place(
+      UUID id,
+      String owner,
+      String title,
+      String description,
+      double latitude,
+      double longitude,
+      long timestamp) {
     this.id = id;
     this.owner = owner;
     this.title = title;
@@ -60,15 +71,14 @@ public class Place {
 
   /** Return Place data using based on entity from search query. */
   public Place(Entity entity) {
-    this.id = UUID.fromString((String)entity.getKey().getName());
-    this.owner = (String)entity.getProperty("owner");
-    this.title = (String)entity.getProperty("title");
-    this.description = (String)entity.getProperty("description");
-    this.latitude = (long)entity.getProperty("latitude");
-    this.longitude = (long)entity.getProperty("longitude");
-    this.timestamp = (long)entity.getProperty("timestamp");
+    this.id = UUID.fromString(entity.getKey().getName());
+    this.owner = (String) entity.getProperty("owner");
+    this.title = (String) entity.getProperty("title");
+    this.description = (String) entity.getProperty("description");
+    this.latitude = (double) entity.getProperty("latitude");
+    this.longitude = (double) entity.getProperty("longitude");
+    this.timestamp = (long) entity.getProperty("timestamp");
   }
-
 
   /** Stores a new Place in Datastore. */
   public static void store(Place place) {
@@ -99,15 +109,17 @@ public class Place {
   /**
    * Get List of places created by a specific user.
    *
-   * @return a list of plcaes posted by the user, or empty list if user has never
-   *         posted a places. List is sorted by time descending.
+   * @return a list of plcaes posted by the user, or empty list if user has never posted a places.
+   *     List is sorted by time descending.
    */
   public static List<Place> getByUser(User user) {
     DatastoreService datastore = Datastore.GetSingletonService();
     String userEmail = user.getEmail();
     List<Place> places = new ArrayList<>();
-    Query query = new Query("Place").setFilter(new Query.FilterPredicate("owner", FilterOperator.EQUAL, userEmail))
-        .addSort("timestamp", SortDirection.DESCENDING);
+    Query query =
+        new Query("Place")
+            .setFilter(new Query.FilterPredicate("owner", FilterOperator.EQUAL, userEmail))
+            .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
@@ -136,7 +148,7 @@ public class Place {
   public double getLatitude() {
     return latitude;
   }
-  
+
   public double getLongitude() {
     return longitude;
   }
@@ -144,5 +156,4 @@ public class Place {
   public long getTimestamp() {
     return timestamp;
   }
-
 }

@@ -55,7 +55,7 @@ public class Tag {
   /** Return Tag data using based on entity from search query. */
   public Tag(Entity entity) {
     this.label = (String)entity.getProperty("label");
-    this.id = UUID.fromString(entity.getProperty("id"));
+    this.id = UUID.fromString((String)entity.getProperty("id"));
   }  
   
   public static List<Tag> getAll() {

@@ -1,5 +1,87 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { createMap } from "./home.js";
+
+class SearchBar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.searchbar = React.createRef();
+    this.map = React.createRef();
+    this.setupSearchBar = this.setupSearchBar.bind(this);
+  }
+
+  componentDidMount() {
+    this.setupSearchBar();
+  }
+
+  setupSearchBar() {
+    let map = createMap([], this.map.current);
+    let searchBox = new google.maps.places.Autocomplete(this.searchbar.current);
+
+    // Bias the SearchBox results towards current map's viewport.
+    map.addListener("bounds_changed", () => {
+      searchBox.setBounds(map.getBounds());
+    });
+
+    var marker = null;
+    // Listen for the event fired when the user selects a prediction and retrieve
+    // more details for that place.
+    searchBox.addListener("place_changed", () => {
+      var place = searchBox.getPlace();
+      const { location } = place.geometry;
+
+      this.props.onChange({
+        lat: location.lat(),
+        lng: location.lng()
+      });
+
+      // Clear out the old markers.
+      if (marker != null) {
+        marker.setMap(null);
+      }
+      marker = null;
+
+      // For each place, get the icon, name and location.
+      var bounds = new google.maps.LatLngBounds();
+      if (!place.geometry) {
+        console.log("Returned place contains no geometry");
+        return;
+      }
+      var icon = {
+        url: place.icon,
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(25, 25)
+      };
+      // Create a marker for each place.
+      marker = new google.maps.Marker({
+        map: map,
+        icon: icon,
+        title: place.name,
+        position: place.geometry.location
+      });
+
+      if (place.geometry.viewport) {
+        // Only geocodes have viewport.
+        bounds.union(place.geometry.viewport);
+      } else {
+        bounds.extend(place.geometry.location);
+      }
+      map.fitBounds(bounds);
+    });
+  }
+  render() {
+    const { value, onChange } = this.props;
+    return (
+      <div>
+        <label htmlFor="searchbar" >Search for a place: </label>
+        <input id="searchbar" ref={this.searchbar} style={{ width:"500px" }}/>
+        <div id="map" ref={this.map} />
+      </div>
+    );
+  }
+}
 
 class AddPlace extends React.Component {
   constructor(props) {
@@ -7,10 +89,10 @@ class AddPlace extends React.Component {
     this.state = {
       name: "",
       description: "",
-      x_coord: "",
-      y_coord: "",
-      image: ""
+      latlng: {},
+      image: null,
     };
+    this.fetchBlobstoreURL = this.fetchBlobstoreURL.bind(this);
   }
 
   componentDidMount() {
@@ -31,8 +113,6 @@ class AddPlace extends React.Component {
     const {
       name,
       description,
-      x_coord,
-      y_coord,
       image,
       blobstoreURL
     } = this.state;
@@ -62,24 +142,10 @@ class AddPlace extends React.Component {
           }}
         />
         <br />
-        <textarea
-          name="x_coord"
-          placeholder={"Enter a X-coord"}
-          value={this.state.x_coord}
-          onChange={e => {
-            this.setState({ x_coord: e.target.value });
-          }}
+        <SearchBar
+          value={this.state.latlng}
+          onChange={latlng => this.setState({ latlng })}
         />
-        <br />
-        <textarea
-          name="y_coord"
-          placeholder={"Enter a Y-coord"}
-          value={this.state.y_coord}
-          onChange={e => {
-            this.setState({ y_coord: e.target.value });
-          }}
-        />
-        <br />
         Select image to upload:
         <input
           type="file"
@@ -94,8 +160,8 @@ class AddPlace extends React.Component {
             const formData = new FormData();
             formData.append("name", this.state.name);
             formData.append("description", this.state.description);
-            formData.append("x_coord", this.state.x_coord);
-            formData.append("y_coord", this.state.y_coord);
+            formData.append("lng", this.state.latlng.lng);
+            formData.append("lat", this.state.latlng.lat);
             formData.append("image", this.state.image);
             fetch(blobstoreURL, {
               method: "POST",

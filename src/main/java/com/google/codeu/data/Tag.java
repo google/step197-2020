@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2019 Google Inc.
  *
@@ -18,7 +19,11 @@ package com.google.codeu.data;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Entity;
 
+
+
+
 /** A tag, which can map to many different places. */
+/*
 public class Tag {
 
   private String label;
@@ -26,12 +31,14 @@ public class Tag {
   /**
    * Constructs a new {@link Tag} posted using only a label
    */
+
+/*
   public Tag(String label) {
     this.label;
   }
-  
+   */
   /** Return Tag data using based on entity from search query. */
-  public Tag(Entity entity) {
+ /* public Tag(Entity entity) {
     this.label = (String)entity.getProperty("label");
   }
 
@@ -39,4 +46,4 @@ public class Tag {
     return label;
   }
 
-}
+} */

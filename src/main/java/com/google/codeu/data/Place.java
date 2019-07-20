@@ -35,8 +35,8 @@ public class Place {
   private String owner;
   private String title;
   private String description;
-  private long latitude;
-  private long longitude;
+  private double latitude;
+  private double longitude;
   private long timestamp;
 
   /**
@@ -44,11 +44,11 @@ public class Place {
    * content. Generates a random ID and uses the current system time for the
    * creation time.
    */
-  public Place(String owner, String title, String description, long latitude, long longitude) {
+  public Place(String owner, String title, String description, double latitude, double longitude) {
     this(UUID.randomUUID(), owner, title, description, latitude, longitude, System.currentTimeMillis());
   }
 
-  public Place(UUID id, String owner, String title, String description, long latitude, long longitude, long timestamp) {
+  public Place(UUID id, String owner, String title, String description, double latitude, double longitude, long timestamp) {
     this.id = id;
     this.owner = owner;
     this.title = title;
@@ -133,11 +133,11 @@ public class Place {
     return description;
   }
 
-  public long getLatitude() {
+  public double getLatitude() {
     return latitude;
   }
-
-  public long getLongitude() {
+  
+  public double getLongitude() {
     return longitude;
   }
 

@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 @WebServlet("/place/add")
-public class AddPlaceServlet extends HttpServlet{
+public class AddPlaceFrontendServlet extends HttpServlet{
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {

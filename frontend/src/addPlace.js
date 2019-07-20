@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { createMap } from "./home.js";
+import Navigation from "./Navigation";
 
 class SearchBar extends React.Component {
   constructor(props) {
@@ -75,8 +76,8 @@ class SearchBar extends React.Component {
     const { value, onChange } = this.props;
     return (
       <div>
-        <label htmlFor="searchbar" >Search for a place: </label>
-        <input id="searchbar" ref={this.searchbar} style={{ width:"500px" }}/>
+        <label htmlFor="searchbar">Search for a place: </label>
+        <input id="searchbar" ref={this.searchbar} style={{ width: "500px" }} />
         <div id="map" ref={this.map} />
       </div>
     );
@@ -90,7 +91,7 @@ class AddPlace extends React.Component {
       name: "",
       description: "",
       latlng: {},
-      image: null,
+      image: null
     };
     this.fetchBlobstoreURL = this.fetchBlobstoreURL.bind(this);
   }
@@ -110,19 +111,20 @@ class AddPlace extends React.Component {
   }
 
   render() {
-    const {
-      name,
-      description,
-      image,
-      blobstoreURL
-    } = this.state;
+    const { name, description, image, blobstoreURL } = this.state;
 
     if (blobstoreURL == null) {
-      return "Loading...";
+      return (
+        <div>
+          <Navigation />
+          Loading...
+        </div>
+      );
     }
 
     return (
       <div>
+        <Navigation />
         <h1>Add Place</h1>
         <textarea
           name="name"

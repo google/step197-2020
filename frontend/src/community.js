@@ -39,3 +39,5 @@ function CommunityPage() {
 
 const root = document.getElementById('root');
 ReactDOM.render(<CommunityPage />, root);
+
+addLoginOrLogoutLinkToNavigation();

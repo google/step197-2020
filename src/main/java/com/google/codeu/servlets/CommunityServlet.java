@@ -17,7 +17,7 @@ public class CommunityServlet extends HttpServlet {
 
     Properties props = ServletUtils.GetProperties();
     request.setAttribute("TITLE", "Community");
-    request.setAttribute("HEAD_HTML", "");
+    request.setAttribute("HEAD_HTML", "<script src=\"/js/navigation-loader.js\"></script>");
 
     ServletUtils.RenderReact("community", request, response);
   }

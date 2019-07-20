@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import Navigation from "./Navigation.js";
 
 function MessageFeed() {
   const [messages, setMessages] = React.useState([]);
@@ -62,6 +63,7 @@ function NumUserMessages({ user, count }) {
 function App() {
   return (
     <React.Fragment>
+      <Navigation />
       <h1>Message Feed</h1>
       <hr />
       <MessageFeed />

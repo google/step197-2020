@@ -40,6 +40,9 @@ function addLoginOrLogoutLinkToNavigation() {
           )
         );
         navigationElement.appendChild(
+          createListItem(createLink("/place/add", "Add Place"))
+        );
+        navigationElement.appendChild(
           createListItem(createLink("/community", "Community"))
         );
         navigationElement.appendChild(

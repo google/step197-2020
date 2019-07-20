@@ -36,7 +36,7 @@ function Navigation() {
       <NavLink url="/aboutus.html" text="About Our Team" />
       {username != undefined ? (
         <Fragment>
-          <NavLink url={"/user-page.html?user=" + username} text="Your Page" />
+          <NavLink url={"/user-page?user=" + username} text="Your Page" />
           <NavLink url="/place/add" text="Add Place" />
           <NavLink url="/community" text="Community" />
           <NavLink url="/logout" text="Logout"/>

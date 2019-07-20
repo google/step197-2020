@@ -18,3 +18,8 @@ indexes:
   - name: user
   - name: timestamp
     direction: desc
+- kind: Place
+  properties:
+  - name: owner
+  - name: timestamp
+    direction: desc

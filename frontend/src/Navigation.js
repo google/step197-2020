@@ -2,7 +2,7 @@
  * Creates navigation depending on whether user is logged in or not
  */
 
-import React, { useState, useEffect, Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 function Navigation() {
   const [username, setUsername] = useState(null);
@@ -16,6 +16,10 @@ function Navigation() {
       .catch(e => console.log(e));
   }, []);
 
+  if (username === null) {
+    return null;
+  }
+
   return (
     <nav
       id="navigation"
@@ -28,18 +32,17 @@ function Navigation() {
         position: "sticky"
       }}
     >
-      <NavLink url="/" text="8lobal" style={{ float: "left" }} />
       <NavLink url="/" text="Home" />
       <NavLink url="/aboutus.html" text="About Our Team" />
-      {username !== null ? (
+      {username != undefined ? (
         <Fragment>
           <NavLink url={"/user-page.html?user=" + username} text="Your Page" />
           <NavLink url="/place/add" text="Add Place" />
-          <NavLink url="/community.html" text="Community" />
-          <NavLink url="/logout" text="Logout" />
+          <NavLink url="/community" text="Community" />
+          <NavLink url="/logout" text="Logout"/>
         </Fragment>
       ) : (
-        <NavLink url="/login" text="Login" />
+        <NavLink url="/login " text="Login" />
       )}
     </nav>
   );
@@ -47,9 +50,9 @@ function Navigation() {
 
 function NavLink({ url, text, style }) {
   return (
-    <div style={{ display: "inline", margin: 10, float: "right", ...style }}>
+    <span style={{ margin: 10, ...style }}>
       <a href={url}>{text}</a>
-    </div>
+    </span>
   );
 }
 

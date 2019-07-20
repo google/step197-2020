@@ -1,11 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import Navigation from "./Navigation";
 
 function User({ user }) {
   return (
     <React.Fragment>
-      <h2>{user.email}</h2>
+      <a href={"/user-page?user=" + user.email}>
+        <h3>{user.email}</h3>
+      </a>
+      <h4>About</h4>
       <div>{user.aboutMe}</div>
+      <hr />
     </React.Fragment>
   );
 }
@@ -31,13 +36,14 @@ function CommunityPage() {
 
   return (
     <div>
+      <Navigation />
       <h1>Community</h1>
       {inner}
     </div>
   );
 }
 
-const root = document.getElementById('root');
+const root = document.getElementById("root");
 ReactDOM.render(<CommunityPage />, root);
 
 addLoginOrLogoutLinkToNavigation();

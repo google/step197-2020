@@ -32,23 +32,31 @@ limitations under the License.
         <li><a href="/aboutus.html">About Our Team</a></li>
       </ul>
     </nav>
-    <h1>Pin By Location</h1>
+    <h1>8lobal</h1>
+    <h2>Our Users' Pins</h2>
     <div id="map"></div>
-    <div id = "PinList"></div>
-    <div id = "overview">
-      <h1>
-      Project Overview: 
-      </h1>
+    <div id="PinList"></div>
+    <div id="overview">
+      <h2>
+        Project Overview:
+      </h2>
       <p>
-      The user will be able to pin a specific location, search for other users pinned destinations on the map, 
-      add new locations, 
-      react to other users pinned locations, 
-      and view information about a destination.
+        As the world becomes more accessible, people touch and connect to more
+        places than ever. Yet these experiences are often hidden away instead of
+        shared with others. Our project is a social network that hopes to bring
+        together communities, particularly diverse ones like CodeU, to share
+        their unique stories from various places. We visualize these connections
+        on several interactive global maps. Users can see the experiences of
+        others in their community in the pins on the Home Map. These pins are
+        not only experiences, favorites, nostalgic memories, or stories. They
+        are the representation of our diverse backgrounds that led to our
+        current selves.
       </p>
       <p>Sophia: About Me, Images I, Images II, converting About Me to react</p>
       <p>Janet: Public Feed, convert public Feed to React, Style Text</p>
-      <p>Thomas: Community Page, convert community page to react, Maps I, Maps II</p>
-      </div>
+      <p>
+        Thomas: Community Page, convert community page to react, Maps I, Maps II
+      </p>
     </div>
   </body>
   <style>

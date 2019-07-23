@@ -1,32 +1,162 @@
-/*
- * Copyright 2019 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/* Prevent the page from becoming too wide. */
-body {
-  max-width: 600px;
+html {
+  color: #353535;
+  width: 70%;
+  min-height: 100%;
+  text-align: center;
+  font-family: monospace;
+  line-height: 22px;
+  background: linear-gradient(#0076c7, #247516);
+  word-break: break-word;
+  padding: 0 15% 6% 15%;
 }
 
-/* Remove bullet points from navigation bar. */
-nav ul {
-  list-style-type: none;
+html::after {
+  content: "";
+  background: linear-gradient(
+      #0076c700 40%,
+      #0f767f99 70%,
+      #0f767fdb 85%,
+      #0f767f 100%
+    ), url(
+    https://images.pexels.com/photos/41950/earth-planet-front-side-back-41950.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
+    ); /* license: https://www.pexels.com/photo/planet-earth-41950/ */
+  opacity: .15;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;   
+}
+
+body {
+  background: linear-gradient(
+  white 80%,
+  transparent
+  );
+  padding: 0 7% 35% 7%;
+  min-height: 95%;
+}
+
+li, ul {
+  text-align: left;
+  margin: auto 0;
   padding-left: 0;
 }
 
-/* Keep navigation menu on one line. */
-nav li {
+nav {
+  font-size: 1.1em;
+  position: sticky;
+  top: 0;
+  margin: auto;
+  background-color: white;
+  z-index: 10;
+  opacity: .9;
+}
+
+nav ul {
+  list-style-type: none;
+  padding-left: 0;
+  text-align: center;
+}
+
+nav li, nav a, nav span {
   display: inline-block;
-  margin-right: 10px
+  margin: 3px;
+  border-top: 3px solid white;
+  padding: 4px;
+  padding-top: 0;
+}
+
+nav a:hover {
+  border-top: 3px double goldenrod
+}
+
+a, nav li {
+  color: #0076c7;
+  transition-duration: .6s;
+  text-decoration: none;
+}
+
+a:hover {
+  color: goldenrod;
+  text-shadow: 1px 1px 3px #cccccc;
+}
+
+
+#map {
+  margin: 20px auto;
+  text-align: center;
+  background-color: none;
+  width: 100%;
+  height: 500px;
+  border: thin solid #e2e2e2;
+}
+
+
+h1 {
+  letter-spacing: -.25px;
+  color: #ffe263;
+  text-shadow: .5px .5px 2px #696969;
+  font-weight: 100;
+  font-size: 3.25em;
+  border-bottom: 4px double #f7f1d8;
+  padding: 15px;
+  padding-bottom : 10px;
+  margin: 5px 5%;
+  word-break: break-all;
+  line-height: 30px;
+}
+
+h2 {
+  text-transform: lowercase;
+  color: #247516;
+  letter-spacing: 1.5px;
+  font-size: 1.85em;
+  font-weight: 500;
+  margin: 25px 0 5px 0;
+}
+
+.listContainer ul {
+  list-style-type: none;
+}
+
+.listContainer li {
+  border-left: 1px dotted #0076c7;
+  padding-left: 8px;
+  margin-bottom: 10px;
+}
+
+.listContainer li:hover {
+  border-left: 3px double #0076c7;
+  padding-left: 6px;
+  transition-duration: .2s;
+  opacity: .75;
+}
+
+.listContainer {
+  margin: 20px 0;
+  height: 100%;
+  max-height: 600px;
+  overflow: auto;
+}
+
+.listContainer h1 {
+  top: 0;
+  position: sticky;
+  background-color: rgba(255, 255, 255, 0.75);
+}
+
+textarea {
+  width: 100%;
+  opacity: .7;
+  padding: 7px;
+}
+
+textarea:hover, textarea:active {
+  opacity: 1;
+}
+
+hr {
+  border-color: white;
 }

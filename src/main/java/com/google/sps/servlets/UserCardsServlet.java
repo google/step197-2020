@@ -12,13 +12,18 @@ import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
+
+
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
-import com.google.appengine.api.datastore.FetchOptions.Builder;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -76,9 +81,7 @@ public class UserCardsServlet extends HttpServlet {
         String fromLang = request.getParameter("fromLang");
         String toLang = request.getParameter("toLang");
         String textNotTranslated = request.getParameter("textNotTranslated");
-
-        // Need to integrate Google Translate API 
-        String textTranslated = "null";
+        String textTranslated = translateText(textNotTranslated);
 
         Card card = new Card(blobKey, labels, fromLang, toLang, textNotTranslated, textTranslated);
         Entity cardEntity = card.createEntity(KeyFactory.stringToKey(folderKey));
@@ -87,6 +90,17 @@ public class UserCardsServlet extends HttpServlet {
         datastore.put(cardEntity);
     }
 
+  }
+
+  private String translateText(String textNotTranslated, String toLang) {
+
+    // Do the translation.
+    Translate translate = TranslateOptions.getDefaultInstance().getService();
+    Translation translation = 
+        translate.translate(originalText, Translate.TranslateOption.targetLanguage(toLang));
+    String translatedText = translation.getTranslatedText();
+
+    return translatedText;
   }
 
   private String getBlobKeyfromBlobstore(HttpServletRequest request, String formInputElementName) {
@@ -110,11 +124,4 @@ public class UserCardsServlet extends HttpServlet {
     }
     return blobKey.getKeyString();
   }
-
-}
-
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-  }
-
 }

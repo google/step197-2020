@@ -17,19 +17,22 @@ import PageError from "./pages/404";
 
 // This file handles all routing to different pages
 function App() {
-  return (
-    <div className="App">
+    return (
+      <div >
+        
       <Switch>
-        <Route exact path="/CreateCard" component={CreateCard} />
-        <Route exact path="/" component={MyFolders} />
+        <Route exact path="/CreateCard"><CreateCard></CreateCard></Route>
+        <Route exact path="/myFolders" exact component={MyFolders} />
         <Route exact path="/ImageInterface" component={ImageInterface} />
         <Route exact path="/YoutubeInterface" component={YoutubeDetect} />
         <Route exact path="/CreateFolder" component={CreateFolder} />
         <Route exact path="/InsideFolder" component={InsideFolder} />
         <Route component={PageError}/>
       </Switch>
-    </div>
-  );
+    
+      </div>
+    );
+  
 }
 
 export default App;

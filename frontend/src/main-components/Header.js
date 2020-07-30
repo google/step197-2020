@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import Search from "../sub-components/Search";
-//import logo from "../SVG/Logo.jpg";
+import logo from "../SVG/Logo.jpg";
 import "material-design-icons";
 
 const Header = (props) => {
@@ -41,7 +41,7 @@ const Header = (props) => {
    * If the device size is less than 700px wide then we will display
    * a button for our side menu instead of our logo.
    */
-  const width = window.innerWidth;
+   const width = window.innerWidth;
   if (width < 700) {
     display = (
       <Menu onClick={(e)=> props.handleClick()}>
@@ -49,13 +49,12 @@ const Header = (props) => {
       </Menu>
     );
   }
-
-  return (
-    <Head class="flex-container">
-      <Box>{display}</Box>
-      <Search></Search>
-    </Head>
-  );
+    return (
+      <Head class="flex-container">
+        <Box>{display}</Box>
+        <Search></Search>
+      </Head>
+    );
 };
 
 

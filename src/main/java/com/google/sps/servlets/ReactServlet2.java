@@ -8,13 +8,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import javax.servlet.ServletException;
 
-@WebServlet("/app")
-public class ReactServlet extends HttpServlet {
+@WebServlet(urlPatterns={"/myFolders","CreateCard","CreateFolder", "ImageInterface", "YoutubeInterface", "InsideFolder"})
+public class ReactServlet2 extends HttpServlet {
   
-  //If User does not exist in database, we create a new User entity. Page redirected to the /MyFolder Url
+  //This servlet takes care of all our data- endpoints page rendering so will require user authentication
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
       request.setAttribute("TITLE", "Frame.cards");
-      ServletUtils.RenderReact("index2", request, response);
+      ServletUtils.RenderReact("index", request, response);
       
   }
 

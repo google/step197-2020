@@ -1,5 +1,5 @@
 import React from 'react';
-//import './LoginButton.css';
+import './LoginButton.css';
 
 class LoginButton extends React.Component {
     constructor(props) {
@@ -14,7 +14,7 @@ class LoginButton extends React.Component {
           backgroundColor: this.props.color,
           fontSize: this.props.fontSize,
           }}>
-          <a href="#" target="_blank">{this.props.status}</a>
+          <a href="/myFolders" target="_blank">{this.props.status}</a>
         </div>
       );
     }

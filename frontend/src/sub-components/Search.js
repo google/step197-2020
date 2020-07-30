@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "@emotion/styled";
-import "material-design-icons";
 
 const Search = (props) => {
     const Container = styled.div`
@@ -56,7 +55,7 @@ const Search = (props) => {
       <Container>
         <Form action="/someServlet">
           <Button type="submit" class="material-icons">
-         <i class="material-icons">search</i>
+          <i class="material-icons">search</i>
           </Button>
           <Input type="text" placeholder="Search.." name="search-input"></Input>
         </Form>

@@ -19,7 +19,7 @@ limitations under the License.
   <head>
     <meta charset="UTF-8" />
     <title><%= request.getAttribute("TITLE") %></title>
-    <link rel="stylesheet" href="/css/main.css" />
+    <!--link rel="stylesheet" href="/css/main.css" /-->
     <%= request.getAttribute("HEAD_HTML") == null ? "" : request.getAttribute("HEAD_HTML") %>
   </head>
   <body>

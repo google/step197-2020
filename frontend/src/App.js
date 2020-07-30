@@ -7,13 +7,13 @@ import {
   Link,
   Redirect,
 } from "react-router-dom";
-import MyFolders from "../pages/MyFolders";
-import InsideFolder from "../pages/InsideFolder";
-import YoutubeDetect from "../pages/YoutubeDetect";
-import CreateCard from "../pages/CreateCard";
-import CreateFolder from "../pages/CreateFolder";
-import ImageInterface from "../pages/ImageInterface";
-import PageError from "../pages/404";
+import MyFolders from "./pages/MyFolders";
+import InsideFolder from "./pages/InsideFolder";
+import YoutubeDetect from "./pages/YoutubeDetect";
+import CreateCard from "./pages/CreateCard";
+import CreateFolder from "./pages/CreateFolder";
+import ImageInterface from "./pages/ImageInterface";
+import PageError from "./pages/404";
 
 // This file handles all routing to different pages
 function App() {
@@ -21,7 +21,7 @@ function App() {
     <div className="App">
       <Switch>
         <Route exact path="/CreateCard" component={CreateCard} />
-        <Route exact path="/" exact component={MyFolders} />
+        <Route exact path="/" component={MyFolders} />
         <Route exact path="/ImageInterface" component={ImageInterface} />
         <Route exact path="/YoutubeInterface" component={YoutubeDetect} />
         <Route exact path="/CreateFolder" component={CreateFolder} />

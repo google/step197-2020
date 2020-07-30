@@ -20,7 +20,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "../src/main/webapp/build/js"),
     filename: "[name].js",
-    publicPath: "http://localhost:9000/"
+    publicPath: "http://localhost:9000/",
   },
   module: {
     rules: [
@@ -29,16 +29,16 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: "babel-loader",
-          options: { presets: ["@babel/preset-env"] }
-        }
-      }
-    ]
+          options: { presets: ["@babel/preset-env"] },
+        },
+      },
+    ],
   },
   devServer: {
     port: 9000,
     headers: {
       "Access-Control-Allow-Origin": "http://localhost:8080",
-      "Access-Control-Allow-Headers": "*"
-    }
+      "Access-Control-Allow-Headers": "*",
+    },
   },
 };

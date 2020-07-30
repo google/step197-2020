@@ -20,6 +20,7 @@
   "dependencies": {
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
+    "css-loader": "^4.1.1",
     "material-design-icons": "^3.0.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",

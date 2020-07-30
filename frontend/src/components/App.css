@@ -1,0 +1,10 @@
+.App {
+  text-align: center;
+}
+
+#main {
+  display: flex;
+  position: relative;
+  min-height: 100vh;
+  margin-bottom: 1rem;
+}

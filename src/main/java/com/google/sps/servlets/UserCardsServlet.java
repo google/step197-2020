@@ -26,8 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
-
+import com.google.sps.data.Card;
 
 /** **/
 @WebServlet("/usercards")
@@ -40,18 +39,79 @@ public class UserCardsServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
 
-        String datastoreFolderKey = request.getParameter("folder-key");
-        /*
-        // Create a Query object that returns all cards with the same key
-        Query cardQuery = new Query("Card").setAncestor(datastoreFolderKey);
-        */
+        List<Folder> userCards = new ArrayList<>();
 
+        String folderKey = request.getParameter("folderKey");
 
+        // Query all folders identified by the userKey
+        Query cardQuery = new Query("Card").setAncestor(folderKey);
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        PreparedQuery results = datastore.prepare(cardQuery);
+
+        // Add folders to a list
+        for (Entity entity: results.asIterable()) {
+          Card card = Card.EntityToCard(entity);
+          userCards.add(card);
+        }
+
+        response.setContentType("application/json;");
+        response.getWriter().println(new Gson().toJson(userCards));
+    }
+  }
+  
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    
+    UserService userService = UserServiceFactory.getUserService();
+
+    if (userService.isUserLoggedIn()) {
+
+        String textNotTranslated = request.getParameter("textNotTranslated");
+
+        // if blobKey is null, user did not add an image
+        String folderKey = request.getParameter("folderKey");
+        String blobKey = getBlobKeyfromBlobstore(request, "image");
+        String labels = request.getParameter("labels");
+        String fromLang = request.getParameter("fromLang");
+        String toLang = request.getParameter("toLang");
+        String textNotTranslated = request.getParameter("textNotTranslated");
+
+        // Need to integrate Google Translate API 
+        String textTranslated = "null";
+
+        Card card = new Card(blobKey, labels, fromLang, toLang, textNotTranslated, textTranslated);
+        Entity cardEntity = card.createEntity(KeyFactory.stringToKey(folderKey));
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        datastore.put(cardEntity);
     }
 
   }
 
+  private String getBlobKeyfromBlobstore(HttpServletRequest request, String formInputElementName) {
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+    List<BlobKey> blobKeys = blobs.get("image");
 
+    // User submitted form without selecting a file, so we can't get a BlobKey. (dev server)
+    if (blobKeys == null || blobKeys.isEmpty()) {
+      return null;
+    }
+
+    // Our form only contains a single file input, so get the first index.
+    BlobKey blobKey = blobKeys.get(0);
+
+    // User submitted form without selecting a file, so the blobInfo has 0 byte (live server)
+    BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+    if (blobInfo.getSize() == 0) {
+      blobstoreService.delete(blobKey);
+      return null;
+    }
+    return blobKey.getKeyString();
+  }
+
+}
 
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 

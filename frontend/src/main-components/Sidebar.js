@@ -35,12 +35,12 @@ const Sidebar = (props) => {
   return (
     <Side id="side" class="flex-container">
       
-      <SideIcon link="/" icon={homeIcon}></SideIcon>
+      <SideIcon link="/myFolders" icon={homeIcon}></SideIcon>
       <SideIcon link="/CreateCard" icon={newCardIcon}></SideIcon>
       <SideIcon link="/CreateFolder" icon={newFolderIcon}></SideIcon>
       <SideIcon link="/ImageInterface" icon={objectIcon}></SideIcon>
       <SideIcon link="/YoutubeInterface" icon={youTubeIcon}></SideIcon>
-      <SideIcon link="/noneyet" icon={accountIcon}></SideIcon>
+      <SideIcon link="/myFolders" icon={accountIcon}></SideIcon>
       
     </Side>
   );

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import javax.servlet.ServletException;
 
-@WebServlet(urlPatterns={"/myFolders","CreateCard","CreateFolder", "ImageInterface", "YoutubeInterface", "InsideFolder"})
+@WebServlet(urlPatterns={"/myFolders","createCard","createFolder", "imageInterface", "youtubeInterface", "insideFolder"})
 public class ReactServlet2 extends HttpServlet {
   
   //This servlet takes care of all our data- endpoints page rendering so will require user authentication

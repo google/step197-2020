@@ -22,7 +22,7 @@ function App() {
         
       <Switch>
         <Route exact path="/CreateCard"><CreateCard></CreateCard></Route>
-        <Route exact path="/myFolders" exact component={MyFolders} />
+        <Route exact path="/MyFolders"  component={MyFolders} />
         <Route exact path="/ImageInterface" component={ImageInterface} />
         <Route exact path="/YoutubeInterface" component={YoutubeDetect} />
         <Route exact path="/CreateFolder" component={CreateFolder} />

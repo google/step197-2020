@@ -24,9 +24,9 @@ const SideIcon = (props) => {
 
   return (
     <Container>
-      <a to={props.link}>
+      <Link to={props.link}>
           <Image src={props.icon} alt="icon option"></Image>
-      </a>
+      </Link>
     </Container>
   );
 };

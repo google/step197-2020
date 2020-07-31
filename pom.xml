@@ -43,6 +43,12 @@
     </dependency>
 
     <dependency>
+        <groupId>com.google.cloud</groupId>
+        <artifactId>google-cloud-translate</artifactId>
+        <version>1.95.0</version>
+    </dependency>
+
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.12</version>
@@ -71,8 +77,6 @@
 
   </dependencies>
 
-  
-
   <build>
     <plugins>
       <!-- Provides `mvn package appengine:run` for local testing
@@ -83,7 +87,7 @@
         <version>2.2.0</version>
         <configuration>
           <!-- TODO: set project ID. -->
-          <deploy.projectId>esaracay-step-2020</deploy.projectId>
+          <deploy.projectId>framecards</deploy.projectId>
           <deploy.version>1</deploy.version>
         </configuration>
       </plugin>

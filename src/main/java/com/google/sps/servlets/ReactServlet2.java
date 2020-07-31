@@ -14,7 +14,7 @@ public class ReactServlet2 extends HttpServlet {
   //This servlet takes care of all our data- endpoints page rendering so will require user authentication
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
       request.setAttribute("TITLE", "Frame.cards");
-      ServletUtils.RenderReact("index", request, response);
+      ServletUtils.RenderReact("mainApp", request, response);
       
   }
 

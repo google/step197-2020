@@ -32,6 +32,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.sps.data.User;
 import com.google.gson.Gson;
+import java.util.Map;
 import java.util.HashMap;
 import com.google.common.collect.ImmutableMap;
 
@@ -42,19 +43,21 @@ public final class LoginServletTest {
   private static final String USER_ID = "testID";
   
   private final LocalServiceTestHelper helper =
-        new LocalServiceTestHelper(
-            new LocalDatastoreServiceTestConfig()
-                  .setDefaultHighRepJobPolicyUnappliedJobPercentage(0),
-            new LocalUserServiceTestConfig())
-          .setEnvIsAdmin(true).setEnvIsLoggedIn(true)
-          .setEnvEmail("test@gmail.com").setEnvAuthDomain("gmail.com")
-          .setEnvAttributes(
-              new HashMap(
-                  ImmutableMap.of(
-                      "com.google.appengine.api.users.UserService.user_id_key", USER_ID)));
+    new LocalServiceTestHelper(
+      new LocalDatastoreServiceTestConfig()
+        .setDefaultHighRepJobPolicyUnappliedJobPercentage(0),
+      new LocalUserServiceTestConfig())
+      .setEnvIsAdmin(true).setEnvIsLoggedIn(true)
+      .setEnvEmail("test@gmail.com").setEnvAuthDomain("gmail.com")
+      .setEnvAttributes(
+        new HashMap(
+          ImmutableMap.of(
+            "com.google.appengine.api.users.UserService.user_id_key", USER_ID)));
 
-  private static final User USER_A = new User(USER_ID,"null", "/_ah/logout?continue\u003d%2F", "test@gmail.com", true);
-  private static final User USER_B = new User("null", "/_ah/login?continue\u003d%2F", "null", "null", false);
+  private static final User USER_A = new User(USER_ID, "test@gmail.com");
+  private static final User USER_B = new User("null", "null");
+  private static final String LOGOUTURL = "/_ah/logout?continue\u003d%2F";
+  private static final String LOGINURL = "/_ah/login?continue\u003d%2F";
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
   private StringWriter responseWriter;
@@ -64,68 +67,78 @@ public final class LoginServletTest {
 
   @Before
   public void setUp() throws Exception {
-      helper.setUp();
-      servlet = new LoginServlet();
-      mockRequest = mock(HttpServletRequest.class);
-      mockResponse = mock(HttpServletResponse.class);
-      
-      // Set up a fake HTTP response 
-      responseWriter = new StringWriter();
-      when(mockResponse.getWriter()).thenReturn(new PrintWriter(responseWriter));
+    helper.setUp();
+    servlet = new LoginServlet();
+    mockRequest = mock(HttpServletRequest.class);
+    mockResponse = mock(HttpServletResponse.class);
+    
+    // Set up a fake HTTP response 
+    responseWriter = new StringWriter();
+    when(mockResponse.getWriter()).thenReturn(new PrintWriter(responseWriter));
 
-      // Initialize datastore
-      datastore = DatastoreServiceFactory.getDatastoreService();
+    // Initialize datastore
+    datastore = DatastoreServiceFactory.getDatastoreService();
   }
 
   @After
   public void tearDown() throws Exception {
-      helper.setEnvIsLoggedIn(true);
-      helper.tearDown();
+    helper.setEnvIsLoggedIn(true);
+    helper.tearDown();
   }
-  
   
   @Test
-  public void userInDatastoreAlready() throws Exception {
+  public void loginWhenUserInDatastoreAlready() throws Exception {
+    
+    storeUsertoDatastore(datastore, USER_A);
 
-      datastore.put(USER_A.createEntity());
-      servlet.doGet(mockRequest, mockResponse);
-      String response = responseWriter.toString();
-      System.out.println(response);
+    servlet.doGet(mockRequest, mockResponse);
+    String response = responseWriter.toString();
+    
+    Key key = USER_A.createEntity().getKey(); 
+    USER_A.setUserKey(KeyFactory.keyToString(key));
+    String expectedResponse = new Gson().toJson(getExpectedJsonInfo(USER_A, true, LOGOUTURL, "null"));
 
-      Key key = USER_A.createEntity().getKey(); 
-      String userKeyStr = KeyFactory.keyToString(key);
-      USER_A.setUserKey(userKeyStr);
-      String expectedResponse = new Gson().toJson(USER_A);
-      
-      assertTrue(compareJson(response, expectedResponse));
-
+    assertTrue(compareJson(response, expectedResponse));
   }
 
-
+  
   @Test
   public void userLoggedInButNotInDatastore() throws Exception {
 
-      servlet.doGet(mockRequest, mockResponse);
-      String response = responseWriter.toString();
+    servlet.doGet(mockRequest, mockResponse);
+    String response = responseWriter.toString();
 
-      Key key = USER_A.createEntity().getKey(); 
-      String userKeyStr = KeyFactory.keyToString(key);
-      USER_A.setUserKey(userKeyStr);
-      String expectedResponse = new Gson().toJson(USER_A);
+    Key key = USER_A.createEntity().getKey(); 
+    USER_A.setUserKey(KeyFactory.keyToString(key));
+    String expectedResponse = new Gson().toJson(getExpectedJsonInfo(USER_A, true, LOGOUTURL, "null"));
 
-      assertTrue(compareJson(response, expectedResponse));
+    assertTrue(compareJson(response, expectedResponse));
   }
 
   
   @Test
   public void userNotLoggedIn() throws Exception {
 
-      helper.setEnvIsLoggedIn(false);
-      servlet.doGet(mockRequest, mockResponse);
+    helper.setEnvIsLoggedIn(false);
+    servlet.doGet(mockRequest, mockResponse);
+    String response = responseWriter.toString();
+    String expectedResponse = new Gson().toJson(getExpectedJsonInfo(USER_B, false, "null", LOGINURL));
 
-      String response = responseWriter.toString();
-      String expectedResponse = new Gson().toJson(USER_B);
+    assertTrue(compareJson(response, expectedResponse));
+  }
+  
+  public Map<String, Object> getExpectedJsonInfo(User user, boolean tabStatus, String logoutUrl, String loginUrl) {
 
-      assertTrue(compareJson(response, expectedResponse));
+    Map<String, Object> expectedJsonInfo = new HashMap<>();
+    expectedJsonInfo.put("userInfo", user);
+    expectedJsonInfo.put("showTabStatus", tabStatus);
+    expectedJsonInfo.put("logoutUrl", logoutUrl);
+    expectedJsonInfo.put("loginUrl", loginUrl);
+
+    return expectedJsonInfo;
+  }
+
+  public void storeUsertoDatastore(DatastoreService datastore, User user) {
+    datastore.put(user.createEntity());
   }
 }

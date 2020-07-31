@@ -3,7 +3,6 @@ package com.google.sps.data;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 
 public final class Folder {
 
@@ -18,10 +17,6 @@ public final class Folder {
         this.folderName = folderName;
         this.folderDefaultLanguage = folderDefaultLanguage;
         this.folderKey = "null";
-    }
-
-    public String getId() {
-        return this.userId;
     }
 
     public String getFolderName() {
@@ -57,13 +52,13 @@ public final class Folder {
     }
 
     // Returns a folder instance from a given Entity
-    public static Folder EntityToFolder(Entity entity) throws EntityNotFoundException {
+    public static Folder EntityToFolder(Entity entity) {
         
         String folderName = (String) entity.getProperty("folderName");
         String folderDefaultLanguage = (String) entity.getProperty("folderDefaultLanguage");
         String folderKey = (String) entity.getProperty("folderKey");
 
-        Folder folder = new Folder(userId, folderName, folderDefaultLanguage);
+        Folder folder = new Folder(folderName, folderDefaultLanguage);
         folder.setFolderKey(folderKey);
 
         return folder;

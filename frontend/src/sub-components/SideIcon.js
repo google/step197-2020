@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
-//import { motion } from "framer-motion";
+import { motion } from "framer-motion";
+
 
 const SideIcon = (props) => {
   const Container = styled.div`
@@ -21,11 +22,14 @@ const SideIcon = (props) => {
       color: #blue;
     }
   `;
+ 
 
   return (
     <Container>
       <Link to={props.link}>
+        <motion.div whileHover={{ scale: 1.2 }}>
           <Image src={props.icon} alt="icon option"></Image>
+        </motion.div>
       </Link>
     </Container>
   );

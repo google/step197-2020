@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import NavBar from "./mainpage/NavBar";
-import LandingPage from "./mainpage/LandingPage";
-import About from "./mainpage/About";
+import NavBar from "./homePage/NavBar";
+import LandingPage from "./homePage/LandingPage";
+import About from "./homePage/About";
 
 function Home() {
   return (

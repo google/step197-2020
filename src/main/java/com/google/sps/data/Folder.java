@@ -3,6 +3,8 @@ package com.google.sps.data;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 
 public final class Folder {
 
@@ -43,6 +45,11 @@ public final class Folder {
         
         // Set owner of folder 
         Entity folder = new Entity("Folder", userKey);
+
+        // Store initial folder entity without propertieies to generate auto ID for entity
+        // This is necessary to obtain a "complete" key
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        datastore.put(folder);
 
         folder.setProperty("folderName", this.folderName);
         folder.setProperty("folderDefaultLanguage", this.folderDefaultLanguage);

@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.sps.data.Folder;
 import java.util.List; 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 
 /** **/
@@ -35,10 +37,13 @@ public class UserFoldersServlet extends HttpServlet {
     
     UserService userService = UserServiceFactory.getUserService();
 
+    Map<String, Object> jsonInfo = new HashMap<>();
+    jsonInfo.put("showCreateFormStatus", false);
+    List<Folder> userFolders = new ArrayList<>();
+
     if (userService.isUserLoggedIn()) {
 
-      List<Folder> userFolders = new ArrayList<>();
-
+      jsonInfo.put("showCreateFormStatus", true);
       String userKey = request.getParameter("userKey");
 
       // Query all folders identified by the userKey
@@ -54,10 +59,11 @@ public class UserFoldersServlet extends HttpServlet {
           userFolders.add(folder);
         }
       }
-      
-      response.setContentType("application/json;");
-      response.getWriter().println(new Gson().toJson(userFolders));
     }
+
+    jsonInfo.put("userFolders", userFolders);
+    response.setContentType("application/json;");
+    response.getWriter().println(new Gson().toJson(jsonInfo));
   }
   
   /**

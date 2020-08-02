@@ -101,7 +101,6 @@ public final class LoginServletTest {
     assertTrue(compareJson(response, expectedResponse));
   }
 
-  
   @Test
   public void userLoggedInButNotInDatastore() throws Exception {
 
@@ -115,7 +114,6 @@ public final class LoginServletTest {
     assertTrue(compareJson(response, expectedResponse));
   }
 
-  
   @Test
   public void userNotLoggedIn() throws Exception {
 

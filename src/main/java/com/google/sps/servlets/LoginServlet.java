@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.sps.data.User;
+import java.util.Map;
+import java.util.HashMap;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -24,6 +26,7 @@ public class LoginServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     UserService userService = UserServiceFactory.getUserService();
+    Map<String, Object> jsonInfo = new HashMap<>();
 
     String urlToRedirect = "/";
     String userId = "null";
@@ -34,46 +37,52 @@ public class LoginServlet extends HttpServlet {
     // Boolean to update User's main page 
     Boolean showNewTab = false;
 
+    User user;
     if (userService.isUserLoggedIn()) {
-      userEmail = userService.getCurrentUser().getEmail();
       userId = userService.getCurrentUser().getUserId();
+      userEmail = userService.getCurrentUser().getEmail();
       logoutUrl = userService.createLogoutURL(urlToRedirect);
       showNewTab = true;
+      user = new User(userId, userEmail);
     } else {
       loginUrl = userService.createLoginURL(urlToRedirect);
+      user = new User(userId, userEmail);
     }
 
-    User user = new User(userId, loginUrl, logoutUrl, userEmail, showNewTab);
-    
     if (userId != "null") {
-        checkUserInDatastore(user);
+      if (!isUserInDatastore(user)) {
+        storeUserToDatastore(user);
+      }
     }
+
+    jsonInfo.put("userInfo", user);
+    jsonInfo.put("showTabStatus", showNewTab);
+    jsonInfo.put("logoutUrl", logoutUrl);
+    jsonInfo.put("loginUrl", loginUrl);
 
     response.setContentType("application/json;");
-    response.getWriter().println(new Gson().toJson(user));
+    response.getWriter().println(new Gson().toJson(jsonInfo));
   }
 
-  public void checkUserInDatastore(User user) {
-    // ** NEED TO WRITE TEST FOR BEHAVIORAL TESTING
-
-    Key userKey = KeyFactory.createKey("User", user.getUserId());
+  public boolean isUserInDatastore(User user) {
+    
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Key userKey = KeyFactory.createKey("User", user.getUserId());
     Entity userEntity;
 
     // Check if user is in datastore
     try {
       userEntity = datastore.get(userKey);
       user.setUserKey(KeyFactory.keyToString(userKey));
+      return true;
     } catch (EntityNotFoundException e) {
-      userEntity = null;
-    }
-
-    if (userEntity == null) {
-        addUserToDatastore(datastore, user);
+      return false;
     }
   }
 
-  public void addUserToDatastore(DatastoreService datastore, User user) {
+  public void storeUserToDatastore(User user) {
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     // Create new user entity 
     Entity newEntity = user.createEntity();

@@ -1,20 +1,74 @@
-import React from "react";
+import React, { useState, Component } from "react";
 import ReactDOM from "react-dom";
 import NavBar from "./homePage/NavBar";
 import LandingPage from "./homePage/LandingPage";
 import About from "./homePage/About";
 
-function Home() {
-  return (
-    <div className="App">
-      <NavBar />
-      <LandingPage />
-      <About />
-    </div>
-  );
+class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.loginClick = this.handleLoginClick.bind(this);
+    this.folderClick = this.handleFoldersClick.bind(this);
+    this.state = {
+      userId: "null",
+      loginStatus: false,
+      logoutUrl: "null",
+      isDataFetched: false,
+    };
+    this.checkLogin();
+  }
+
+  checkLogin(e) {
+    console.log("Checking Login Status ");
+    const userInfo = fetch("/login")
+      .then((response) => response.json())
+      .then((info) => {
+        if (info["showNewTab"] === true) {
+          console.log("in here");
+          this.setState({ loginStatus: true, logoutUrl: info["logoutUrl"], isDataFetched: true, userId: info["userId"] });
+        } else {
+          this.setState({ loginStatus: false, isDataFetched: true });
+        }
+      });
+  }
+
+  handleLoginClick = (e) => {
+    const userInfo = fetch("/login")
+      .then((response) => response.json())
+      .then((userInfo) => {
+        // Check if the user has logged in before
+        if (userInfo["showNewTab"] === true) {
+          window.location = this.state.logoutUrl;
+        } else {
+          window.location = userInfo["loginUrl"];
+        }
+      });
+  };
+
+  handleFoldersClick = (e) => {
+    console.log("rerouting to folders page");
+    window.location = "/myFolders?" + this.state.userId;
+  };
+
+  render() {
+    if (!this.state.isDataFetched) return null;
+    return (
+      <div className="App">
+        <NavBar
+          loginStatus={this.state.loginStatus}
+          loginClick={this.loginClick}
+          folderClick={this.folderClick}
+        />
+        <LandingPage
+          loginStatus={this.state.loginStatus}
+          loginClick={this.loginClick}
+          folderClick={this.folderClick}
+          Url={this.handleLoginClick}
+        />
+        <About />
+      </div>
+    );
+  }
 }
 
-ReactDOM.render(
-    <Home></Home>,
-  document.getElementById("root")
-);
+ReactDOM.render(<Home />, document.getElementById("root"));

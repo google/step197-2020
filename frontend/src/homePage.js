@@ -18,6 +18,7 @@ class Home extends React.Component {
     this.checkLogin();
   }
 
+  // Calls the login Servlet when the page loads for the first time
   checkLogin(e) {
     console.log("Checking Login Status ");
     const userInfo = fetch("/login")
@@ -32,6 +33,7 @@ class Home extends React.Component {
       });
   }
 
+  // Handles buttons that login user
   handleLoginClick = (e) => {
     const userInfo = fetch("/login")
       .then((response) => response.json())
@@ -45,12 +47,14 @@ class Home extends React.Component {
       });
   };
 
+
   handleFoldersClick = (e) => {
     console.log("rerouting to folders page");
     window.location = "/myFolders?" + this.state.userId;
   };
 
   render() {
+    // Ensures that the loginServlet has been called before loading child components 
     if (!this.state.isDataFetched) return null;
     return (
       <div className="App">

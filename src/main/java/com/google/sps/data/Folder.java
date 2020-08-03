@@ -46,7 +46,7 @@ public final class Folder {
         // Set owner of folder 
         Entity folder = new Entity("Folder", userKey);
 
-        // Store initial folder entity without propertieies to generate auto ID for entity
+        // Store initial folder entity without properties to generate auto ID for entity
         // This is necessary to obtain a "complete" key
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(folder);

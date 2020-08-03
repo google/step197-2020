@@ -26,7 +26,6 @@ public class LoginServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     UserService userService = UserServiceFactory.getUserService();
-    Map<String, Object> jsonInfo = new HashMap<>();
 
     String urlToRedirect = "/";
     String userId = "null";
@@ -55,6 +54,8 @@ public class LoginServlet extends HttpServlet {
       }
     }
 
+    // Aggregate response information
+    Map<String, Object> jsonInfo = new HashMap<>();
     jsonInfo.put("userInfo", user);
     jsonInfo.put("showTabStatus", showNewTab);
     jsonInfo.put("logoutUrl", logoutUrl);

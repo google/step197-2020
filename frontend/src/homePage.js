@@ -20,13 +20,11 @@ class Home extends React.Component {
 
   // Calls the login Servlet when the page loads for the first time
   checkLogin(e) {
-    console.log("Checking Login Status ");
     const userInfo = fetch("/login")
       .then((response) => response.json())
       .then((info) => {
-        if (info["showNewTab"] === true) {
-          console.log("in here");
-          this.setState({ loginStatus: true, logoutUrl: info["logoutUrl"], isDataFetched: true, userId: info["userId"] });
+        if (info["showTabStatus"] === true) {
+          this.setState({ loginStatus: true, logoutUrl: info["logoutUrl"], isDataFetched: true, userId: info['userInfo']['userId'] });
         } else {
           this.setState({ loginStatus: false, isDataFetched: true });
         }
@@ -37,12 +35,12 @@ class Home extends React.Component {
   handleLoginClick = (e) => {
     const userInfo = fetch("/login")
       .then((response) => response.json())
-      .then((userInfo) => {
+      .then((info) => {
         // Check if the user has logged in before
-        if (userInfo["showNewTab"] === true) {
+        if (info["showTabStatus"] === true) {
           window.location = this.state.logoutUrl;
         } else {
-          window.location = userInfo["loginUrl"];
+          window.location = info["loginUrl"];
         }
       });
   };

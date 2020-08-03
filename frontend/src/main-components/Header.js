@@ -46,7 +46,7 @@ const Header = (props) => {
   if (width < 700) {
     display = (
       <Menu onClick={(e)=> props.handleClick()}>
-        <i class="material-icons">menu</i>
+        <i className="material-icons">menu</i>
       </Menu>
     );
   }

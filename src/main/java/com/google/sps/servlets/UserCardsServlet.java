@@ -13,11 +13,6 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
-import com.google.cloud.translate.Translate;
-import com.google.cloud.translate.TranslateOptions;
-import com.google.cloud.translate.Translation;
-
-
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
@@ -29,11 +24,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import com.google.gson.Gson;
 
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
+import com.google.sps.tool.GoogleTranslationAPI;
+
 import com.google.sps.data.Folder;
 import com.google.sps.data.Card;
 import java.util.List; 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.HashMap;
 
 /** **/
 @WebServlet("/usercards")
@@ -44,9 +45,15 @@ public class UserCardsServlet extends HttpServlet {
     
     // Ensures user is authenticated
     UserService userService = UserServiceFactory.getUserService();
+    List<Card> userCards = new ArrayList<>();
+
+    // Aggregate information as a json
+    Map<String, Object> jsonInfo = new HashMap<>();
+    jsonInfo.put("showCreateFormStatus", false);
+
     if (userService.isUserLoggedIn()) {
 
-        List<Card> userCards = new ArrayList<>();
+        jsonInfo.put("showCreateFormStatus", true);
 
         String folderKey = request.getParameter("folderKey");
 
@@ -62,10 +69,11 @@ public class UserCardsServlet extends HttpServlet {
             userCards.add(card);
           }   
         }
-
-        response.setContentType("application/json;");
-        response.getWriter().println(new Gson().toJson(userCards));
     }
+    
+    jsonInfo.put("userCards", userCards);
+    response.setContentType("application/json;");
+    response.getWriter().println(new Gson().toJson(jsonInfo));
   }
   
   @Override
@@ -75,14 +83,13 @@ public class UserCardsServlet extends HttpServlet {
 
     if (userService.isUserLoggedIn()) {
 
-        // if blobKey is null, user did not add an image
         String folderKey = request.getParameter("folderKey");
-        String blobKey = getBlobKeyfromBlobstore(request, "image");
         String labels = request.getParameter("labels");
         String fromLang = request.getParameter("fromLang");
         String toLang = request.getParameter("toLang");
         String textNotTranslated = request.getParameter("textNotTranslated");
-        String textTranslated = translateText(textNotTranslated, toLang);
+        String textTranslated = GoogleTranslationAPI.translateText(textNotTranslated, toLang);
+        String blobKey = getBlobKey(request);
 
         Card card = new Card(blobKey, labels, fromLang, toLang, textNotTranslated, textTranslated);
         Entity cardEntity = card.createEntity(KeyFactory.stringToKey(folderKey));
@@ -90,21 +97,25 @@ public class UserCardsServlet extends HttpServlet {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(cardEntity);
     }
-
   }
+  
+  private String getBlobKey(HttpServletRequest request){
+    // Method to determine whether or not this is a unit test or live server
+    // Unit tests will always set blobKey to "null"
+    // There should be no paramater testStatus in the live server thus returns null
+    String blobKey;
 
-  private String translateText(String textNotTranslated, String toLang) {
+    if (request.getParameter("testStatus") == null) {
+      blobKey = getBlobKeyfromBlobstore(request, "image");
+    } else {
+      blobKey = "null";
+    }
 
-    // Do the translation.
-    Translate translate = TranslateOptions.getDefaultInstance().getService();
-    Translation translation = 
-        translate.translate(textNotTranslated, Translate.TranslateOption.targetLanguage(toLang));
-    String translatedText = translation.getTranslatedText();
-
-    return translatedText;
-  }
+    return blobKey;
+  } 
 
   private String getBlobKeyfromBlobstore(HttpServletRequest request, String formInputElementName) {
+    
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get("image");

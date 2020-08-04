@@ -3,10 +3,11 @@ package com.google.sps.data;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 
 public final class Card {
 
-    private String id;
     private String blobKey;
     private String labels;
     private String fromLang;
@@ -92,6 +93,12 @@ public final class Card {
     public Entity createEntity(Key folderKey) {
         
         Entity card = new Entity("Card", folderKey);
+
+        // Store initial card entity without properties to generate auto ID for entity
+        // This is necessary to obtain a "complete" key
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        datastore.put(card);
+
         card.setProperty("blobKey", this.blobKey);
         card.setProperty("labels", this.labels);
         card.setProperty("fromLang", this.fromLang);

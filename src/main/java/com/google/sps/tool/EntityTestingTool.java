@@ -33,8 +33,8 @@ public class EntityTestingTool {
     datastore.put(folderB_Entity);
 
     List<Folder> folders = new ArrayList<>();
-    folders.add(Folder.EntityToFolder(folderA_Entity));
-    folders.add(Folder.EntityToFolder(folderB_Entity));
+    folders.add(new Folder(folderA_Entity));
+    folders.add(new Folder(folderB_Entity));
 
     return folders;
   }
@@ -49,8 +49,8 @@ public class EntityTestingTool {
     datastore.put(CardB_Entity);
 
     List<Card> cards = new ArrayList<>();
-    cards.add(Card.EntityToCard(CardA_Entity));
-    cards.add(Card.EntityToCard(CardB_Entity));
+    cards.add(new Card(CardA_Entity));
+    cards.add(new Card(CardB_Entity));
 
     return cards;
   }

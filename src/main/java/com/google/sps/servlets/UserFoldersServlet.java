@@ -46,16 +46,14 @@ public class UserFoldersServlet extends HttpServlet {
       jsonInfo.put("showCreateFormStatus", true);
       String userKey = request.getParameter("userKey");
 
-      // Query all folders identified by the userKey
       Query folderQuery = new Query("Folder").setAncestor(KeyFactory.stringToKey(userKey));
 
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(folderQuery);
 
-      // Add folders to a list
       if (results != null) {
         for (Entity entity: results.asIterable()) {
-          Folder folder = Folder.EntityToFolder(entity);
+          Folder folder = new Folder(entity);
           userFolders.add(folder);
         }
       }

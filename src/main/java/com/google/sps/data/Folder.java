@@ -21,6 +21,12 @@ public final class Folder {
         this.folderKey = "null";
     }
 
+    public Folder(Entity entity) {
+        this.folderName = (String) entity.getProperty("folderName");
+        this.folderDefaultLanguage = (String) entity.getProperty("folderDefaultLanguage");
+        this.folderKey = (String) entity.getProperty("folderKey");
+    }
+
     public String getFolderName() {
         return this.folderName;
     }
@@ -58,16 +64,4 @@ public final class Folder {
         return folder;
     }
 
-    // Returns a folder instance from a given Entity
-    public static Folder EntityToFolder(Entity entity) {
-        
-        String folderName = (String) entity.getProperty("folderName");
-        String folderDefaultLanguage = (String) entity.getProperty("folderDefaultLanguage");
-        String folderKey = (String) entity.getProperty("folderKey");
-
-        Folder folder = new Folder(folderName, folderDefaultLanguage);
-        folder.setFolderKey(folderKey);
-
-        return folder;
-    }
 }

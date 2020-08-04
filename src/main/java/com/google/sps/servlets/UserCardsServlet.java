@@ -57,7 +57,6 @@ public class UserCardsServlet extends HttpServlet {
 
         String folderKey = request.getParameter("folderKey");
 
-        // Query all folders identified by the userKey
         Query cardQuery = new Query("Card").setAncestor(KeyFactory.stringToKey(folderKey));
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -65,7 +64,7 @@ public class UserCardsServlet extends HttpServlet {
 
         if (results != null) {
           for (Entity entity: results.asIterable()) {
-            Card card = Card.EntityToCard(entity);
+            Card card = new Card(entity);
             userCards.add(card);
           }   
         }

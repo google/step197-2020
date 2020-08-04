@@ -157,7 +157,7 @@ public final class UserCardsServletTest {
     when(mockRequest.getParameter("labels")).thenReturn("spanish");
     when(mockRequest.getParameter("fromLang")).thenReturn("en");
     when(mockRequest.getParameter("toLang")).thenReturn("es");
-    when(mockRequest.getParameter("textNotTranslated")).thenReturn("hello");
+    when(mockRequest.getParameter("rawText")).thenReturn("hello");
 
     servlet.doPost(mockRequest, mockResponse);
     PreparedQuery responseEntity = datastore.prepare(new Query("Card").setAncestor(FOLDER_A.getKey()));
@@ -179,7 +179,7 @@ public final class UserCardsServletTest {
     when(mockRequest.getParameter("labels")).thenReturn("spanish");
     when(mockRequest.getParameter("fromLang")).thenReturn("en");
     when(mockRequest.getParameter("toLang")).thenReturn("es");
-    when(mockRequest.getParameter("textNotTranslated")).thenReturn("hello");
+    when(mockRequest.getParameter("rawText")).thenReturn("hello");
     
     EntityTestingTool.populateDatastoreWithCards(CARD_A, CARD_B, datastore, FOLDERKEY);
     servlet.doPost(mockRequest, mockResponse);

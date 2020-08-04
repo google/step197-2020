@@ -86,11 +86,11 @@ public class UserCardsServlet extends HttpServlet {
         String labels = request.getParameter("labels");
         String fromLang = request.getParameter("fromLang");
         String toLang = request.getParameter("toLang");
-        String textNotTranslated = request.getParameter("textNotTranslated");
-        String textTranslated = GoogleTranslationAPI.translateText(textNotTranslated, toLang);
+        String rawText = request.getParameter("rawText");
+        String textTranslated = GoogleTranslationAPI.translateText(rawText, toLang);
         String blobKey = getBlobKey(request);
 
-        Card card = new Card(blobKey, labels, fromLang, toLang, textNotTranslated, textTranslated);
+        Card card = new Card(blobKey, labels, fromLang, toLang, rawText, textTranslated);
         Entity cardEntity = card.createEntity(KeyFactory.stringToKey(folderKey));
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

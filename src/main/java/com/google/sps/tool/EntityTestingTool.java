@@ -19,7 +19,7 @@ public class EntityTestingTool {
     return (card.getProperty("blobKey") != null  &&
       card.getProperty("labels") != null &&
       card.getProperty("textTranslated") != null &&
-      card.getProperty("textNotTranslated") != null &&
+      card.getProperty("rawText") != null &&
       card.getProperty("fromLang") != null &&
       card.getProperty("toLang") != null &&
       card.getProperty("cardKey") != null);

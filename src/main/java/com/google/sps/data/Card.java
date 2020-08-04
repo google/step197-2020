@@ -12,7 +12,7 @@ public final class Card {
     private String labels;
     private String fromLang;
     private String toLang;
-    private String textNotTranslated;
+    private String rawText;
     private String textTranslated;
     private String cardKey;
       
@@ -21,14 +21,14 @@ public final class Card {
         String labels,
         String fromLang,
         String toLang,
-        String textNotTranslated,
+        String rawText,
         String textTranslated) {
             
       this.blobKey = blobKey;
       this.labels = labels;
       this.fromLang = fromLang;
       this.toLang = toLang;
-      this.textNotTranslated = textNotTranslated;
+      this.rawText = rawText;
       this.textTranslated = textTranslated;
       this.cardKey = "null";
     }
@@ -39,7 +39,7 @@ public final class Card {
       this.labels = (String) entity.getProperty("labels");
       this.fromLang = (String) entity.getProperty("fromLang");
       this.toLang = (String) entity.getProperty("toLang");
-      this.textNotTranslated = (String) entity.getProperty("textNotTranslated");
+      this.rawText = (String) entity.getProperty("rawText");
       this.textTranslated = (String) entity.getProperty("textTranslated");
       this.cardKey = (String) entity.getProperty("cardKey");
     }
@@ -60,8 +60,8 @@ public final class Card {
         return this.toLang;
     }
 
-    public String getTextNotTranslated() {
-        return this.textNotTranslated;
+    public String getRawText() {
+        return this.rawText;
     }
 
     public String getTextTranslated() {
@@ -90,7 +90,7 @@ public final class Card {
     }
 
     public void setNewText(String newText) {
-        this.textNotTranslated = newText;
+        this.rawText = newText;
     }
 
     public void setTextTranslated(String newText) {
@@ -114,7 +114,7 @@ public final class Card {
         card.setProperty("labels", this.labels);
         card.setProperty("fromLang", this.fromLang);
         card.setProperty("toLang", this.toLang);
-        card.setProperty("textNotTranslated", this.textNotTranslated);
+        card.setProperty("rawText", this.rawText);
         card.setProperty("textTranslated", this.textTranslated);
         card.setProperty("cardKey", KeyFactory.keyToString(card.getKey()));
 

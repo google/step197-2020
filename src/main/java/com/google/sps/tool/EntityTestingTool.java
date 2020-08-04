@@ -8,6 +8,8 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import com.google.sps.data.Card;
 import com.google.sps.data.Folder;
 
@@ -55,5 +57,21 @@ public class EntityTestingTool {
     return cards;
   }
 
-    
+  public static Map<String, Object> getExpectedJsonFolderInfo(List<Folder> folders, boolean showCreateFormStatus) {
+
+    Map<String, Object> expectedJsonInfo = new HashMap<>();
+    expectedJsonInfo.put("showCreateFormStatus", showCreateFormStatus);
+    expectedJsonInfo.put("userFolders", folders);
+
+    return expectedJsonInfo;
+  }
+
+  public static Map<String, Object> getExpectedJsonCardInfo(List<Card> cards, boolean showCreateFormStatus) {
+
+    Map<String, Object> expectedJsonInfo = new HashMap<>();
+    expectedJsonInfo.put("showCreateFormStatus", showCreateFormStatus);
+    expectedJsonInfo.put("userCards", cards);
+
+    return expectedJsonInfo;
+  }
 }

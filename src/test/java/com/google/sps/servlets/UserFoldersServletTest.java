@@ -97,7 +97,7 @@ public final class UserFoldersServletTest {
     List<Folder> foldersInDatastore = EntityTestingTool.populateDatastoreWithFolders(FOLDER_A, FOLDER_B, datastore, USERKEY);
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    String expectedResponse = new Gson().toJson(getExpectedJsonInfo(foldersInDatastore, true));
+    String expectedResponse = new Gson().toJson(EntityTestingTool.getExpectedJsonFolderInfo(foldersInDatastore, true));
 
     assertTrue(compareJson(response, expectedResponse));
   }
@@ -115,7 +115,7 @@ public final class UserFoldersServletTest {
     when(mockRequest.getParameter("userKey")).thenReturn(USERKEY);
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    String expectedResponse = new Gson().toJson(getExpectedJsonInfo(noFoldersInDatastore, true));
+    String expectedResponse = new Gson().toJson(EntityTestingTool.getExpectedJsonFolderInfo(noFoldersInDatastore, true));
 
     assertTrue(compareJson(response, expectedResponse));
   }
@@ -129,7 +129,7 @@ public final class UserFoldersServletTest {
 
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    String expectedResponse = new Gson().toJson(getExpectedJsonInfo(noFoldersQueried, false));
+    String expectedResponse = new Gson().toJson(EntityTestingTool.getExpectedJsonFolderInfo(noFoldersQueried, false));
 
     assertTrue(compareJson(response, expectedResponse));
   }
@@ -169,12 +169,4 @@ public final class UserFoldersServletTest {
 
   }
 
-  public Map<String, Object> getExpectedJsonInfo(List<Folder> folders, boolean showCreateFormStatus) {
-
-    Map<String, Object> expectedJsonInfo = new HashMap<>();
-    expectedJsonInfo.put("showCreateFormStatus", showCreateFormStatus);
-    expectedJsonInfo.put("userFolders", folders);
-
-    return expectedJsonInfo;
-  }
 }

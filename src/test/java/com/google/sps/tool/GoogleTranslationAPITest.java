@@ -1,5 +1,7 @@
 package com.google.sps.tool;
 
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import org.junit.Test;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
@@ -7,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.google.sps.tool.GoogleTranslationAPI;
 
+@RunWith(JUnit4.class)
 public class GoogleTranslationAPITest {
 
   @Test

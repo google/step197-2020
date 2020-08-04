@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalBlobstoreServiceTestConfig;
 
-
+@RunWith(JUnit4.class)
 public final class UploadOnBlobstoreServletTest {
 
   private final LocalServiceTestHelper helper = 

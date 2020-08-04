@@ -1,6 +1,7 @@
 import React from 'react';
 import './LandingPage.css';
 import LoginButton from './LoginButton.js';
+import { motion } from "framer-motion";
 
 class LandingPage extends React.Component {
     constructor(props) {
@@ -11,7 +12,13 @@ class LandingPage extends React.Component {
       return (
         <div className="LandingPage">
           <h1>Frame.cards learning made easy</h1>
-          <LoginButton status="Get Started" color="#5A90A1" fontSize="32px"></LoginButton>
+          <motion.div whileHover={{scale:1.2}}>
+            <LoginButton
+              status="Get Started"
+              color="#5A90A1"
+              fontSize="32px"
+            ></LoginButton>
+          </motion.div>
         </div>
       );
     }

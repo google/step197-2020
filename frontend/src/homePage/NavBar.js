@@ -1,6 +1,7 @@
 import React from 'react';
 import './NavBar.css';
 import LoginButton from './LoginButton.js';
+import logo from "../SVG/Logo.jpg";
 
 class NavBar extends React.Component {
     constructor(props) {
@@ -10,7 +11,8 @@ class NavBar extends React.Component {
     render() {
       return (
         <div className="NavBar">
-          <div className="Logo"></div>
+          <div className="Logo">
+          </div>
           <LoginButton status="Login" color="#C4C4C4" fontSize="24px"></LoginButton>
         </div>
       );

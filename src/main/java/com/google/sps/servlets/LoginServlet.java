@@ -29,25 +29,22 @@ public class LoginServlet extends HttpServlet {
     String userId = "null";
     String logoutUrl = "null";
     String loginUrl = "null";
-    String userEmail = "null";
 
     // Boolean to update User's main page 
-    Boolean showNewTab = false;
+    String showNewTab = false;
 
     if (userService.isUserLoggedIn()) {
-      userEmail = userService.getCurrentUser().getEmail();
-      userId = userService.getCurrentUser().getUserId();
-      logoutUrl = userService.createLogoutURL(urlToRedirect);
-      showNewTab = true;
+      String userEmail = userService.getCurrentUser().getEmail();
+      String userId = userService.getCurrentUser().getUserId();
+      String logoutUrl = userService.createLogoutURL(urlToRedirect);
+      String showNewTab = true;
     } else {
-      loginUrl = userService.createLoginURL(urlToRedirect);
+      String loginUrl = userService.createLoginURL(urlToRedirect);
     }
 
-    User user = new User(userId, loginUrl, logoutUrl, userEmail, showNewTab);
+    User user = new User(userId, loginUrl, logoutUrl, email, showNewTab);
     
-    if (userId != "null") {
-        checkUserInDatastore(user);
-    }
+    checkUserInDatastore(user);
 
     response.setContentType("application/json;");
     response.getWriter().println(new Gson().toJson(user));
@@ -57,33 +54,18 @@ public class LoginServlet extends HttpServlet {
     // ** NEED TO WRITE TEST FOR BEHAVIORAL TESTING
 
     Key userKey = KeyFactory.createKey("User", user.getUserId());
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Entity userEntity;
+    if (datastore.get(userkey) == null) {
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-    // Check if user is in datastore
-    try {
-      userEntity = datastore.get(userKey);
-      user.setUserKey(KeyFactory.keyToString(userKey));
-    } catch (EntityNotFoundException e) {
-      userEntity = null;
-    }
+        // Create new user entity 
+        Entity userEntity = user.createEntity();
+        Key userKey = userEntity.getKey();
 
-    if (userEntity == null) {
-        addUserToDatastore(datastore, user);
+        // Create User's key and add to object 
+        String userKeyStr = KeyFactory.keyToString(userKey);
+        user.setUserKey(userKeyStr);
+
+        datastore.put(userEntity);
     }
   }
-
-  public void addUserToDatastore(DatastoreService datastore, User user) {
-
-    // Create new user entity 
-    Entity newEntity = user.createEntity();
-
-    // Create User's key and add to object
-    Key key = newEntity.getKey(); 
-    String userKeyStr = KeyFactory.keyToString(key);
-    user.setUserKey(userKeyStr);
-
-    datastore.put(newEntity);
-  }
-
 }

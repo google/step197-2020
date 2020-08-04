@@ -3,6 +3,7 @@ package com.google.sps.data;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 
 public final class Card {
 
@@ -103,7 +104,7 @@ public final class Card {
         return card;
     }
 
-    public static Card EntityToCard(Entity entity) {
+    public static Card EntityToCard(Entity entity) throws EntityNotFoundException {
 
         String blobKey = (String) entity.getProperty("blobKey");
         String labels = (String) entity.getProperty("labels");

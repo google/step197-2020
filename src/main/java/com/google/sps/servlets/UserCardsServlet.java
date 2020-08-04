@@ -7,11 +7,11 @@ import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.TranslateOptions;
@@ -21,19 +21,17 @@ import com.google.cloud.translate.Translation;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import com.google.gson.Gson;
 
-import com.google.sps.data.Folder;
 import com.google.sps.data.Card;
-import java.util.List; 
-import java.util.ArrayList;
-import java.util.Map;
 
 /** **/
 @WebServlet("/usercards")
@@ -46,21 +44,20 @@ public class UserCardsServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
 
-        List<Card> userCards = new ArrayList<>();
+        List<Folder> userCards = new ArrayList<>();
 
         String folderKey = request.getParameter("folderKey");
 
         // Query all folders identified by the userKey
-        Query cardQuery = new Query("Card").setAncestor(KeyFactory.stringToKey(folderKey));
+        Query cardQuery = new Query("Card").setAncestor(folderKey);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(cardQuery);
 
-        if (results != null) {
-          for (Entity entity: results.asIterable()) {
-            Card card = Card.EntityToCard(entity);
-            userCards.add(card);
-          }   
+        // Add folders to a list
+        for (Entity entity: results.asIterable()) {
+          Card card = Card.EntityToCard(entity);
+          userCards.add(card);
         }
 
         response.setContentType("application/json;");
@@ -75,6 +72,8 @@ public class UserCardsServlet extends HttpServlet {
 
     if (userService.isUserLoggedIn()) {
 
+        String textNotTranslated = request.getParameter("textNotTranslated");
+
         // if blobKey is null, user did not add an image
         String folderKey = request.getParameter("folderKey");
         String blobKey = getBlobKeyfromBlobstore(request, "image");
@@ -82,7 +81,7 @@ public class UserCardsServlet extends HttpServlet {
         String fromLang = request.getParameter("fromLang");
         String toLang = request.getParameter("toLang");
         String textNotTranslated = request.getParameter("textNotTranslated");
-        String textTranslated = translateText(textNotTranslated, toLang);
+        String textTranslated = translateText(textNotTranslated);
 
         Card card = new Card(blobKey, labels, fromLang, toLang, textNotTranslated, textTranslated);
         Entity cardEntity = card.createEntity(KeyFactory.stringToKey(folderKey));
@@ -98,7 +97,7 @@ public class UserCardsServlet extends HttpServlet {
     // Do the translation.
     Translate translate = TranslateOptions.getDefaultInstance().getService();
     Translation translation = 
-        translate.translate(textNotTranslated, Translate.TranslateOption.targetLanguage(toLang));
+        translate.translate(originalText, Translate.TranslateOption.targetLanguage(toLang));
     String translatedText = translation.getTranslatedText();
 
     return translatedText;

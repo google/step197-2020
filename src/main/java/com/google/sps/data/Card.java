@@ -33,6 +33,17 @@ public final class Card {
       this.cardKey = "null";
     }
 
+    public Card(Entity entity){
+
+      this.blobKey = (String) entity.getProperty("blobKey");
+      this.labels = (String) entity.getProperty("labels");
+      this.fromLang = (String) entity.getProperty("fromLang");
+      this.toLang = (String) entity.getProperty("toLang");
+      this.textNotTranslated = (String) entity.getProperty("textNotTranslated");
+      this.textTranslated = (String) entity.getProperty("textTranslated");
+      this.cardKey = (String) entity.getProperty("cardKey");
+    }
+
     public String getBlobKey() {
         return this.blobKey;
     }
@@ -107,22 +118,6 @@ public final class Card {
         card.setProperty("textTranslated", this.textTranslated);
         card.setProperty("cardKey", KeyFactory.keyToString(card.getKey()));
 
-        return card;
-    }
-
-    public static Card EntityToCard(Entity entity) {
-
-        String blobKey = (String) entity.getProperty("blobKey");
-        String labels = (String) entity.getProperty("labels");
-        String fromLang = (String) entity.getProperty("fromLang");
-        String toLang = (String) entity.getProperty("toLang");
-        String textNotTranslated = (String) entity.getProperty("textNotTranslated");
-        String textTranslated = (String) entity.getProperty("textTranslated");
-        String cardKey = (String) entity.getProperty("cardKey");
-
-        Card card = new Card(blobKey, labels, fromLang, toLang, textNotTranslated, textTranslated);
-        card.setCardKey(cardKey);
-        
         return card;
     }
 }

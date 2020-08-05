@@ -1,15 +1,15 @@
-import React from 'react';
-import FlashcardFront from './FlashcardFront';
-import FlashcardBack from './FlashcardBack';
-import ReactCardFlip from 'react-card-flip';
+import React from "react";
+import FlashcardFront from "./FlashcardFront";
+import FlashcardBack from "./FlashcardBack";
+import ReactCardFlip from "react-card-flip";
 
 /*
   This is the styling for the main flashcard.
 */
-const flipStyle ={
-  width:"300px",
-  height:"350px",
-  margin:"15px",
+const flipStyle = {
+  width: "300px",
+  height: "350px",
+  margin: "15px",
 };
 
 /*
@@ -20,36 +20,37 @@ const flipStyle ={
   sure to install it if possible!
 */
 class Flashcard extends React.Component {
-    constructor(props) {
-      super(props);
-      this.handleClick=this.handleClick.bind(this);
-      this.state = { isFlipped: false};
-    }
-    
-    /*
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+    this.state = { isFlipped: false };
+  }
+
+  /*
       This allows the flashcard to be flipped over
       upon being clicked on.
     */
-    handleClick(e) {
-      e.preventDefault();
-      this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
-      console.log(e);
-    }
-
-    render() {
-      return (
-        <div className="Flashcard" onClick={this.handleClick} style={flipStyle}>
-            <ReactCardFlip 
-              isFlipped={this.state.isFlipped} 
-              flipDirection="horizontal" 
-              containerStyle={flipStyle}
-              cardZIndex="-2">
-                <FlashcardFront text={this.props.text} image={this.props.image}/>
-                <FlashcardBack text={this.props.translation}/>
-            </ReactCardFlip>
-        </div>
-      );
-    }
+  handleClick(e) {
+    e.preventDefault();
+    this.setState((prevState) => ({ isFlipped: !prevState.isFlipped }));
+    console.log(e);
   }
+
+  render() {
+    return (
+      <div className="Flashcard" onClick={this.handleClick} style={flipStyle}>
+        <ReactCardFlip
+          isFlipped={this.state.isFlipped}
+          flipDirection="horizontal"
+          containerStyle={flipStyle}
+          cardZIndex="-2"
+        >
+          <FlashcardFront text={this.props.text} image={this.props.image} />
+          <FlashcardBack text={this.props.translation} />
+        </ReactCardFlip>
+      </div>
+    );
+  }
+}
 
 export default Flashcard;

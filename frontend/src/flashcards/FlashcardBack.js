@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
 /*
   Styling for the back of the flashcard.
 */
-const backStyle={
+const backStyle = {
   borderRadius: "30px",
   position: "absolute",
   width: "300px",
@@ -21,13 +21,13 @@ const backStyle={
 };
 
 class FlashcardBack extends React.Component {
-    render() {
-      return (
-        <div className="FlashcardBack" style={backStyle}>
-          {this.props.text}
-        </div>
-      );
-    }
+  render() {
+    return (
+      <div className="FlashcardBack" style={backStyle}>
+        {this.props.text}
+      </div>
+    );
   }
+}
 
 export default FlashcardBack;

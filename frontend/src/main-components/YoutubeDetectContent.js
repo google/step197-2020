@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
+import func from "./translate";
 
 const YoutubeDetectContent = (props) => {
   const Container = styled.div`
@@ -13,7 +14,7 @@ const YoutubeDetectContent = (props) => {
 
   return (
     <Container>
-      <h1>Youtube Detect  objects</h1>
+      <button onClick={func}></button>
     </Container>
   );
 };

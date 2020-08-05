@@ -1,12 +1,12 @@
 {
   "languages": [
     {
-      "language": "Afrikaans",
-      "code": "af"
+      "language": "Italian",
+      "code": "it"
     },
     {
-      "language": "Amharic",
-      "code": "am"
+      "language": "Hindi",
+      "code": "hi"
     },
     {
       "language": "Arabic",
@@ -31,6 +31,10 @@
     {
       "language": "German",
       "code": "de"
+    },
+    {
+      "language": "Vietnamese",
+      "code": "vi"
     },
     {
       "language": "Greek",

@@ -9,6 +9,7 @@ const MyFoldersContent = (props) => {
     border-radius: 1rem;
     background-color: white;
     margin: 1%;
+    flex-direction: row;
   `;
 
   return (

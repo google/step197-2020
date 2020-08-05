@@ -3,6 +3,12 @@ import Header from "../main-components/Header";
 import Sidebar from "../main-components/Sidebar";
 import InsideFolderContent from "../main-components/InsideFolderContent";
 
+const folder ={
+  folderName: "_verbs",
+  folderDefaultLanguage:"english",
+  folderKey: "some_key",
+};
+
 function InsideFolder() {
   // Handles mobile menu button and updates sidebar view
   const [sideSetting, setSideSetting] = useState("f");
@@ -20,7 +26,7 @@ function InsideFolder() {
       <Header id="head" handleClick={handleClick}></Header>
       <div id="main">
         <Sidebar bool={sideSetting}></Sidebar>
-        <InsideFolderContent></InsideFolderContent>
+        <InsideFolderContent folder={folder}></InsideFolderContent>
       </div>
     </div>
   );

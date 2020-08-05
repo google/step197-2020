@@ -26,7 +26,7 @@ function InsideFolder() {
       <Header id="head" handleClick={handleClick}></Header>
       <div id="main">
         <Sidebar bool={sideSetting}></Sidebar>
-        <InsideFolderContent folder={folder}></InsideFolderContent>
+        <InsideFolderContent></InsideFolderContent>
       </div>
     </div>
   );

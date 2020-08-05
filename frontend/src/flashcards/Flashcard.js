@@ -9,7 +9,7 @@ import ReactCardFlip from 'react-card-flip';
 const flipStyle ={
   width:"300px",
   height:"350px",
-  margin:"10px",
+  margin:"15px",
 };
 
 /*

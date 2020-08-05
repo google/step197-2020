@@ -41,6 +41,16 @@ public class EntityTestingTool {
     return folders;
   }
 
+  public static Folder populateDatastoreWithAFolder(Folder FOLDER_A, DatastoreService datastore, String USERKEY) {
+    
+    Entity folderEntity = FOLDER_A.createEntity(KeyFactory.stringToKey(USERKEY));
+
+    // Update entity in datastore 
+    datastore.put(folderEntity);
+
+    return new Folder(folderEntity);
+  }
+
   public static List<Card> populateDatastoreWithCards(Card CARD_A, Card CARD_B, DatastoreService datastore, String FOLDERKEY) {
     
     Entity CardA_Entity = CARD_A.createEntity(KeyFactory.stringToKey(FOLDERKEY));

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styled from "@emotion/styled";
 import css from "./CreateFolderContent.css";
 import { motion } from "framer-motion";
-import supportedLang from "./SupportedLang.json";
+import supportedLang from "../sub-components/SupportedLang.json";
 
 class CreateFolderContent extends Component {
   constructor(props) {
@@ -17,7 +17,6 @@ class CreateFolderContent extends Component {
     this.handleFolderLang = this.handleFolderLang.bind(this);
   }
 
-
   handleFolderName(event) {
     event.preventDefault();
     this.setState({ folderName: event.target.value });
@@ -27,7 +26,10 @@ class CreateFolderContent extends Component {
     this.setState({ folderLang: event.target.value });
   }
 
-
+  /*
+   * This react component renders a form that makes a post
+   * request to UserFoldersServlet for folder creation.
+   */
   render() {
     return (
       <div id="container">
@@ -39,13 +41,14 @@ class CreateFolderContent extends Component {
 
           <div id="formBox">
             <ul>
-              <form id="myForm" action="/folder">
+              <form id="myForm" action="/folder" method="post">
                 <li>
                   <label>Folder Name: </label>
                 </li>
                 <li>
                   <input
-                    id="folderType"
+                    id="folderName"
+                    name="folderName"
                     type="text"
                     placeholder={this.state.folderName}
                     onBlur={this.handleFolderName}
@@ -59,7 +62,8 @@ class CreateFolderContent extends Component {
                 <li>
                   <div id="scroll">
                     <select
-                      id="folderLang"
+                      id="language"
+                      name="language"
                       value={this.state.folderLang}
                       onChange={this.handleFolderLang}
                     >

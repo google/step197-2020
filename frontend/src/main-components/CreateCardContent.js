@@ -4,6 +4,7 @@ import css from "./CreateCardContent.css";
 import { motion } from "framer-motion";
 import FrontCard from "../flashcards/FlashcardFrontPreview"
 import BackCard from "../flashcards/FlashcardBackPreview";
+import translate, { getTranslation } from "../sub-components/translate"
 import LangaugeScroll from "../sub-components/languageScroll"
 class CreateCardContent extends Component {
   constructor(props) {
@@ -11,13 +12,24 @@ class CreateCardContent extends Component {
     this.state = {
       imgSrc: "",
       text: "none",
-      translation:"none",
+      translation: "none",
+      fromLang: "none",
+      toLang: "none",
     };
+    this.TranslateText = this.TranslateText.bind(this);
+    getTranslation("good day", "en", "es");
   }
-
-  handleText(event) {
+  /* 
+  * When the user has finished typing the Google translate  
+  * API iss called to fetch the translated version    of text
+ */
+  TranslateText(event) {
     event.preventDefault();
-    this.setState({ folderName: event.target.value });
+    if (this.state.fromLang !== "none" && this.state.toLang !== "none") {
+      const translated = translate(event.target.value, this.state.fromLang, this.state.toLang);
+      this.setState({ translation: translated, text: event.target.value});
+    }
+    this.setState({ text: event.target.value });
   }
 
   render() {
@@ -25,13 +37,13 @@ class CreateCardContent extends Component {
       <div id="container">
         <div id="innerContainer">
           <div id="CardPreview">
-            <div class="holdCard">
+            <div className="holdCard">
               <FrontCard
                 image={this.state.imgSrc}
                 text={this.state.text}
               ></FrontCard>
             </div>
-            <div class="holdCard">
+            <div className="holdCard">
               <BackCard text={this.state.translation}></BackCard>
             </div>
           </div>
@@ -42,20 +54,20 @@ class CreateCardContent extends Component {
                 <li>
                   <span className="inline">
                     <label className="block">From:</label>
-                    <LangaugeScroll></LangaugeScroll>
+                    <LangaugeScroll key="from"></LangaugeScroll>
                   </span>
                   <span className="inline">
                     <label className="block">To:</label>
-                    <LangaugeScroll></LangaugeScroll>
+                    <LangaugeScroll key="to"></LangaugeScroll>
                   </span>
                 </li>
                 <li>
                   <label className="block">Text:</label>
-                 =
+                  <input id="mainText" type="text" placeholder={this.state.text} onBlur={this.TranslateText}required></input>
                 </li>
                 <li>
                   <label className="block">Translation:</label>
-                  <p id="translated"></p>
+                  <input id="translate" type="text" value={this.state.translation} readOnly></input>
                 </li>
                 <li>
                   <span className="inline">

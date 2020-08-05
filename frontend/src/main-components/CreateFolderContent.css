@@ -67,7 +67,7 @@ li {
   padding: 0.5rem;
 }
 
-#folderType {
+#folderName {
   width: 50%;
   height: 2.5rem;
   border: 0.2rem solid #136f9f;
@@ -75,7 +75,7 @@ li {
   font-size: 1.75rem;
 }
 
-#folderLang {
+#language {
   width: 30%;
   min-width: 12rem;
   height: 2.5rem;

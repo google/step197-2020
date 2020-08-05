@@ -1,0 +1,40 @@
+{
+  "languages": [
+    {
+      "language": "Afrikaans",
+      "code": "af"
+    },
+    {
+      "language": "Amharic",
+      "code": "am"
+    },
+    {
+      "language": "Arabic",
+      "code": "ar"
+    },
+    {
+      "language": "Chinese",
+      "code": "zh"
+    },
+    {
+      "language": "English",
+      "code": "en"
+    },
+    {
+      "language": "French",
+      "code": "fr"
+    },
+    {
+      "language": "Spanish",
+      "code": "es"
+    },
+    {
+      "language": "German",
+      "code": "de"
+    },
+    {
+      "language": "Greek",
+      "code": "el"
+    }
+  ]
+}

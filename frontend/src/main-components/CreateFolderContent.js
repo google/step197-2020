@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled from "@emotion/styled";
 import css from "./CreateFolderContent.css";
 import { motion } from "framer-motion";
+import supportedLang from "./SupportedLang.json";
 
 class CreateFolderContent extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class CreateFolderContent extends Component {
     this.handleFolderLang = this.handleFolderLang.bind(this);
   }
 
+
   handleFolderName(event) {
     event.preventDefault();
     this.setState({ folderName: event.target.value });
@@ -27,7 +29,6 @@ class CreateFolderContent extends Component {
 
 
   render() {
-    
     return (
       <div id="container">
         <div id="innerContainer">
@@ -56,15 +57,25 @@ class CreateFolderContent extends Component {
                   <label>Folder Language:</label>
                 </li>
                 <li>
-                  <select
-                    id="folderLang"
-                    value={this.state.folderLang}
-                    onChange={this.handleFolderLang}
-                  >
-                    <option value="English">English</option>
-                    <option value="Spanish">Spanish</option>
-                    <option value="Chinese">Chinese</option>
-                  </select>
+                  <div id="scroll">
+                    <select
+                      id="folderLang"
+                      value={this.state.folderLang}
+                      onChange={this.handleFolderLang}
+                    >
+                      <option value="English">English</option>
+                      {
+                        // Parse json and display supported languages in scroll list
+                        supportedLang.languages.map((lang) => {
+                          return (
+                            <option value={lang.language}>
+                              {lang.language}
+                            </option>
+                          );
+                        })
+                      }
+                    </select>
+                  </div>
                 </li>
                 <li>
                   <input id="submission" type="submit" value="Submit" />

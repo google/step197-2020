@@ -43,6 +43,10 @@ public final class Folder {
         this.folderName = newFolderName;
     }
 
+    public void setFolderDefaultLanguage(String newDefaultLanguage) {
+        this.folderDefaultLanguage = newDefaultLanguage;
+    }
+
     public void setFolderKey(String folderKey) {
         this.folderKey = folderKey;
     }

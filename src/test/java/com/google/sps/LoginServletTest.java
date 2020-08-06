@@ -53,8 +53,8 @@ public final class LoginServletTest {
                   ImmutableMap.of(
                       "com.google.appengine.api.users.UserService.user_id_key", USER_ID)));
 
-  private static final User USER_A = new User(USER_ID,"null", "/_ah/logout?continue\u003d%2F", "test@gmail.com", true);
-  private static final User USER_B = new User("null", "/_ah/login?continue\u003d%2F", "null", "null", false);
+  private static final User USER_A = new User(USER_ID,"null", "/_ah/logout?continue\u003d%2FhomePage", "test@gmail.com", true);
+  private static final User USER_B = new User("null", "/_ah/login?continue\u003d%2FhomePage", "null", "null", false);
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
   private StringWriter responseWriter;
@@ -125,6 +125,7 @@ public final class LoginServletTest {
 
       String response = responseWriter.toString();
       String expectedResponse = new Gson().toJson(USER_B);
+      System.out.println(response);
 
       assertTrue(compareJson(response, expectedResponse));
   }

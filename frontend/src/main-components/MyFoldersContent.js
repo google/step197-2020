@@ -10,10 +10,27 @@ const MyFoldersContent = (props) => {
     background-color: white;
     margin: 1%;
   `;
+  const folderData =[
+    {
+      folderName: String,
+      folderDefaultLanguage: String,
+      folderKey: String
+    },
+    {
+      folderName: String,
+      folderDefaultLanguage: String,
+      folderKey: String
+    },
+ ]
+ const folders = folderData.map((folder) =>
 
+);
+  
   return (
     <Container>
       <h1>You have 0 Folders </h1>
+      <br></br>
+      <div style={FolderContainer}>{folders}</div>
     </Container>
   );
 };

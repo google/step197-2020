@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 
 /** **/
-@WebServlet("/userfolders")
+@WebServlet("/userfolder")
 public class UserFoldersServlet extends HttpServlet {
 
   /**

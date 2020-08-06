@@ -42,7 +42,6 @@ const Header = (props) => {
    * a button for our side menu instead of our logo.
    */
   const width = self.innerWidth;
-  console.log(width);
   if (width < 700) {
     display = (
       <Menu onClick={(e)=> props.handleClick()}>

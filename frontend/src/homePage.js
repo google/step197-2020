@@ -1,8 +1,10 @@
 import React, { useState, Component } from "react";
+
 import ReactDOM from "react-dom";
 import NavBar from "./homePage/NavBar";
 import LandingPage from "./homePage/LandingPage";
 import About from "./homePage/About";
+
 
 class Home extends React.Component {
   constructor(props) {
@@ -10,7 +12,7 @@ class Home extends React.Component {
     this.loginClick = this.handleLoginClick.bind(this);
     this.folderClick = this.handleFoldersClick.bind(this);
     this.state = {
-      userId: "null",
+      userKey: "null",
       loginStatus: false,
       logoutUrl: "null",
       isDataFetched: false,
@@ -24,7 +26,7 @@ class Home extends React.Component {
       .then((response) => response.json())
       .then((info) => {
         if (info["showTabStatus"] === true) {
-          this.setState({ loginStatus: true, logoutUrl: info["logoutUrl"], isDataFetched: true, userId: info['userInfo']['userId'] });
+          this.setState({ loginStatus: true, logoutUrl: info["logoutUrl"], isDataFetched: true, userKey: info['userInfo']['userKey'] });
         } else {
           this.setState({ loginStatus: false, isDataFetched: true });
         }
@@ -47,7 +49,7 @@ class Home extends React.Component {
 
 
   handleFoldersClick = (e) => {
-    window.location = "/myFolders?" + this.state.userId;
+    window.location = "/myFolders?userKey=" + this.state.userKey;
   };
 
   render() {
@@ -73,3 +75,4 @@ class Home extends React.Component {
 }
 
 ReactDOM.render(<Home />, document.getElementById("root"));
+

@@ -87,7 +87,7 @@ public class UserCardsServlet extends HttpServlet {
         String fromLang = request.getParameter("fromLang");
         String toLang = request.getParameter("toLang");
         String rawText = request.getParameter("rawText");
-        String textTranslated = GoogleTranslationAPI.translateText(rawText, toLang);
+        String textTranslated = request.getParameter("translatedText");
         String blobKey = getBlobKey(request);
 
         Card card = new Card(blobKey, labels, fromLang, toLang, rawText, textTranslated);

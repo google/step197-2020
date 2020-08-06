@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import styled from "@emotion/styled";
 import css from "./CreateCardContent.css";
 import { motion } from "framer-motion";
-import FrontCard from "../flashcards/FlashcardFrontPreview"
+import FrontCard from "../flashcards/FlashcardFrontPreview";
 import BackCard from "../flashcards/FlashcardBackPreview";
-import translate, { getTranslation } from "../sub-components/translate"
-import LangaugeScroll from "../sub-components/languageScroll"
+import { getTranslation } from "../sub-components/translate";
+import LangaugeScroll from "../sub-components/languageScroll";
 class CreateCardContent extends Component {
   constructor(props) {
     super(props);
@@ -17,19 +17,39 @@ class CreateCardContent extends Component {
       toLang: "none",
     };
     this.TranslateText = this.TranslateText.bind(this);
-    getTranslation("good day", "en", "es");
+    this.fromLangSelected = this.fromLangSelected.bind(this);
+    this.toLangSelected = this.toLangSelected.bind(this);
   }
-  /* 
-  * When the user has finished typing the Google translate  
-  * API iss called to fetch the translated version    of text
- */
+  /** 
+   * When the user has finished typing the Google translate
+   * API iss called to fetch the translated version    of text
+   */
   TranslateText(event) {
     event.preventDefault();
+    console.log(this.state.fromLang);
+    console.log(this.state.toLang);
+    console.log(event.target.value);
+    // Ensures that languages have been selected before translating
     if (this.state.fromLang !== "none" && this.state.toLang !== "none") {
-      const translated = translate(event.target.value, this.state.fromLang, this.state.toLang);
-      this.setState({ translation: translated, text: event.target.value});
+      const translated = getTranslation(
+        event.target.value,
+        this.state.fromLang,
+        this.state.toLang
+      );
+      this.setState({ translation: translated, text: event.target.value });
     }
     this.setState({ text: event.target.value });
+  }
+
+  // Updates the selected language codes
+  fromLangSelected(domEvent) {
+    const selectedValue = domEvent.target[domEvent.target.selectedIndex].value;
+    this.setState({ fromLang: selectedValue });
+  }
+
+  toLangSelected(domEvent) {
+    const selectedValue = domEvent.target[domEvent.target.selectedIndex].value;
+    this.setState({ toLang: selectedValue });
   }
 
   render() {
@@ -54,20 +74,39 @@ class CreateCardContent extends Component {
                 <li>
                   <span className="inline">
                     <label className="block">From:</label>
-                    <LangaugeScroll key="from"></LangaugeScroll>
+                    <LangaugeScroll
+                      clickFunc={this.fromLangSelected}
+                      selected={this.state.fromLang}
+                      key="from"
+                    ></LangaugeScroll>
                   </span>
                   <span className="inline">
                     <label className="block">To:</label>
-                    <LangaugeScroll key="to"></LangaugeScroll>
+                    <LangaugeScroll
+                      clickFunc={this.toLangSelected}
+                      selected={this.state.toLang}
+                      key="to"
+                    ></LangaugeScroll>
                   </span>
                 </li>
                 <li>
                   <label className="block">Text:</label>
-                  <input id="mainText" type="text" placeholder={this.state.text} onBlur={this.TranslateText}required></input>
+                  <input
+                    id="mainText"
+                    type="text"
+                    placeholder={this.state.text}
+                    onBlur={this.TranslateText}
+                    required
+                  ></input>
                 </li>
                 <li>
                   <label className="block">Translation:</label>
-                  <input id="translate" type="text" value={this.state.translation} readOnly></input>
+                  <input
+                    id="translate"
+                    type="text"
+                    placeholder={this.state.translation}
+                    readOnly
+                  ></input>
                 </li>
                 <li>
                   <span className="inline">

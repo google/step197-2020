@@ -22,14 +22,13 @@ class languageScroll extends Component {
 
 
     return (
-      <Options name="languages"
-      >
-
+      <Options onChange={this.props.clickFunc} value={this.props.selected}name="languages">
         {
           // Parse json and display supported languages in scroll list
           supportedLang.languages.map((lang) => {
            
-            return <option value={lang.code}>{lang.language}</option>;
+            return <option key={lang.code}
+              value={lang.code}>{lang.language}</option>;
           })
         }
       </Options>

@@ -9,7 +9,7 @@ export function getTranslation(term, fromLang, toLang) {
     "https://translation.googleapis.com/language/translate/v2",
     {
       body:
-        `{'q':${term}, 'source': ${fromLang},'target': ${toLang}, 'format': 'text'}`,
+        `{'q':${term}, 'source':${fromLang}, 'target':${toLang}, 'format':'text'}`,
       headers: {
         Authorization:
           `Bearer ${privateInfo.token}`,
@@ -21,7 +21,8 @@ export function getTranslation(term, fromLang, toLang) {
   )
     .then((res) => res.json())
     .then((result) => {
-      return result.data.Translation;
+      console.log(result);
+      return result.data.translations.translatedText;
     });
   
   return response;

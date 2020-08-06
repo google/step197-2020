@@ -26,7 +26,7 @@ class CreateFolderContent extends Component {
     this.setState({ folderLang: event.target.value });
   }
 
-  /*
+  /** 
    * This react component renders a form that makes a post
    * request to UserFoldersServlet for folder creation.
    */

@@ -410,11 +410,6 @@ exports[`mainApp snapshot Create Folder renders 1`] = `
                     value="English"
                   >
                     <option
-                      value="English"
-                    >
-                      English
-                    </option>
-                    <option
                       value="Italian"
                     >
                       Italian

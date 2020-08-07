@@ -1,16 +1,16 @@
 import React from 'react';
 import renderer from "react-test-renderer";
 
-import About from "./homePage/About";
-import LandingPage from "./homePage/LandingPage";
-import NavBar from "./homePage/NavBar";
-import Header from "./main-components/Header";
-import SideBar from "./main-components/Sidebar";
-import CreateCard from "./pages/CreateCard";
-import CreateFolder from "./pages/CreateFolder";
-import MyFolders from "./pages/MyFolders";
-import InsideFolder from "./pages/InsideFolder";
-import NotFound from "./pages/404";
+import About from "../homePage/About";
+import LandingPage from "../homePage/LandingPage";
+import NavBar from "../homePage/NavBar";
+import Header from "../main-components/Header";
+import SideBar from "../main-components/Sidebar";
+import CreateCard from "../pages/CreateCard";
+import CreateFolder from "../pages/CreateFolder";
+import MyFolders from "../pages/MyFolders";
+import InsideFolder from "../pages/InsideFolder";
+import NotFound from "../pages/404";
 import { MemoryRouter } from 'react-router-dom';
 
 /**

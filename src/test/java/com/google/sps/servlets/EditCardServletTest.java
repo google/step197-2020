@@ -54,8 +54,6 @@ public final class EditCardServletTest {
       .setEnvIsAdmin(true).setEnvIsLoggedIn(true)
       .setEnvEmail("test@gmail.com").setEnvAuthDomain("gmail.com");
 
-  private static final Card CURRENT_CARD = new Card("null", "spanish", "en", "es", "hello", "hola");
-  private static final Card EDITED_CARD = new Card("null", "vietnamese", "en", "vi", "hello", "xin chào");
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
   private StringWriter responseWriter;
@@ -84,12 +82,15 @@ public final class EditCardServletTest {
 
   @Test
   public void EditCard() throws Exception {
+
+    Card currentCard = new Card("null", "spanish", "en", "es", "hello", "hola");
+    Card expectedCard = new Card("null", "vietnamese", "en", "vi", "hello", "xin chào");
     
     // Generate a dummy Folder Entity
-    Entity FOLDER_A = new Entity("Folder", "testID");
-    String FOLDERKEY = KeyFactory.keyToString(FOLDER_A.getKey());
+    Entity folder = new Entity("Folder", "testID");
+    String folderKey = KeyFactory.keyToString(folder.getKey());
 
-    Card cardInDatastore = EntityTestingTool.populateDatastoreWithACard(CURRENT_CARD, datastore, FOLDERKEY);
+    Card cardInDatastore = EntityTestingTool.populateDatastoreWithACard(currentCard, datastore, folderKey);
     String cardKey = cardInDatastore.getCardKey();
 
     // Make sure the expected Card has the same key
@@ -107,7 +108,7 @@ public final class EditCardServletTest {
     Entity editedCard = datastore.get(KeyFactory.stringToKey(cardKey));
 
     String response = new Gson().toJson(new Card(editedCard));
-    String expectedResponse = new Gson().toJson(EDITED_CARD);
+    String expectedResponse = new Gson().toJson(expectedCard);
 
     assertEquals(response, expectedResponse);
   }

@@ -94,7 +94,7 @@ public final class EditCardServletTest {
     String cardKey = cardInDatastore.getCardKey();
 
     // Make sure the expected Card has the same key
-    EDITED_CARD.setCardKey(cardKey);
+    expectedCard.setCardKey(cardKey);
 
     when(mockRequest.getParameter("labels")).thenReturn("vietnamese");
     when(mockRequest.getParameter("fromLang")).thenReturn("en");

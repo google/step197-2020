@@ -15,26 +15,37 @@ const InsideFolderContent = (props) => {
   `;
 
   //Ideally we would use a servlet to get cards, but for now here's an empty card container.
-  const cardsContainer={};
+  let flashcards;
+  // Currently we don't have a way to parse the folder key from the url
+  try {
+    fetch(`/usercards?folderKey=${folderKey}`, { method: "GET" })
+      .then((result) => result.json())
+      .then((data) => {
+        flashcards = data.map((flashcard) => (
+          <Flashcard
+            key={flashcard.cardKey}
+            image={flashcard.blobKey}
+            text={flashcard.textNotTranslated}
+            translation={flashcard.textTranslated}
+            labels={flashcard.labels}
+          />
+        ));
+      });
+  } catch (err) {
+    console.log("Can not fetch flashcards.");
+  }
 
-  //Get the cards and turn them into Flashcard components
-  const flashcards = cardsContainer.map((flashcard) => (
-    <Flashcard
-      key={flashcard.cardKey}
-      image={flashcard.blobKey}
-      text={flashcard.textNotTranslated}
-      translation={flashcard.textTranslated}
-      labels={flashcard.labels}
-    />
-  ));
   const CardContainer = {
     display: "flex",
     flexFlow: "row wrap",
     justifyContent: "space-around",
     alignItems: "start",
   };
+  let count = 0;
 
-  let count = flashcards.length;
+  if (flashcards) {
+    count = flashcards.length;
+  }
   flashcards.unshift(<NewCard />);
   return (
     <div style={{ flex: "9", display: "flex" }}>

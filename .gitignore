@@ -8,3 +8,4 @@ target
 .factorypath
 *.swp
 src/main/webapp/build
+WEB-INF/appengine-generated/datastore-indexes-auto.xml

@@ -56,8 +56,6 @@ public final class EditFolderServletTest {
       .setEnvIsAdmin(true).setEnvIsLoggedIn(true)
       .setEnvEmail("test@gmail.com").setEnvAuthDomain("gmail.com");
 
-  private static final Folder CURRENT_FOLDER = new Folder("FIRSTFOLDER", "en");
-  private static final Folder EDITED_FOLDER = new Folder("EDITEDFOLDER", "es_edited");
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
   private StringWriter responseWriter;
@@ -86,16 +84,19 @@ public final class EditFolderServletTest {
 
   @Test
   public void EditFolder() throws Exception {
+
+    Folder currentFolder = new Folder("FIRSTFOLDER", "en");
+    Folder expectedFolder = new Folder("EDITEDFOLDER", "es_edited");
     
     // Generate testing User
-    Entity USER_A = new Entity("User", "testId");
-    String USERKEY = KeyFactory.keyToString(USER_A.getKey());
+    Entity user = new Entity("User", "testId");
+    String userKey = KeyFactory.keyToString(user.getKey());
 
-    Folder folderInDatastore = EntityTestingTool.populateDatastoreWithAFolder(CURRENT_FOLDER, datastore, USERKEY);
+    Folder folderInDatastore = EntityTestingTool.populateDatastoreWithAFolder(currentFolder, datastore, userKey);
     String folderKey = folderInDatastore.getFolderKey();
 
     // Make sure the expected Folder has the same key
-    EDITED_FOLDER.setFolderKey(folderKey);
+    expectedFolder.setFolderKey(folderKey);
 
     when(mockRequest.getParameter("folderName")).thenReturn("EDITEDFOLDER");
     when(mockRequest.getParameter("folderDefaultLanguage")).thenReturn("es_edited");
@@ -106,7 +107,7 @@ public final class EditFolderServletTest {
     Entity editedFolder = datastore.get(KeyFactory.stringToKey(folderKey));
 
     String response = new Gson().toJson(new Folder(editedFolder));
-    String expectedResponse = new Gson().toJson(EDITED_FOLDER);
+    String expectedResponse = new Gson().toJson(expectedFolder);
 
     assertEquals(response, expectedResponse);
   }

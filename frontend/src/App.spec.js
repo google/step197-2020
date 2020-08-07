@@ -11,6 +11,7 @@ import CreateFolder from "./pages/CreateFolder";
 import MyFolders from "./pages/MyFolders";
 import InsideFolder from "./pages/InsideFolder";
 import NotFound from "./pages/404";
+import { MemoryRouter } from 'react-router-dom';
 
 /**
  * Snapshot testing for home page
@@ -46,7 +47,11 @@ describe("mainComponents", () => {
   });
 
   test("snapshot SideBar renders", () => {
-    const component = renderer.create(<SideBar />);
+    const component = renderer.create(
+      <MemoryRouter>
+        <SideBar />
+      </MemoryRouter>
+    );
     let tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
@@ -57,31 +62,51 @@ describe("mainComponents", () => {
  */
 describe('mainApp', () => {
   test("snapshot My Folders renders", () => {
-    const component = renderer.create(<MyFolders />);
+    const component = renderer.create(
+      <MemoryRouter>
+        <MyFolders />
+      </MemoryRouter>
+    );
     let tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   test("snapshot CreateCard renders", () => {
-    const component = renderer.create(<CreateCard />);
+    const component = renderer.create(
+      <MemoryRouter>
+        <CreateCard />
+      </MemoryRouter>
+    );
     let tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
 
    test("snapshot Create Folder renders", () => {
-     const component = renderer.create(<CreateFolder />);
+     const component = renderer.create(
+       <MemoryRouter>
+         <CreateFolder />
+       </MemoryRouter>
+     );
      let tree = component.toJSON();
      expect(tree).toMatchSnapshot();
    });
 
    test("snapshot Inside Folder renders", () => {
-     const component = renderer.create(<InsideFolder />);
+     const component = renderer.create(
+       <MemoryRouter>
+         <InsideFolder />
+       </MemoryRouter>
+     );
      let tree = component.toJSON();
      expect(tree).toMatchSnapshot();
    });
   
   test("snapshot 404 renders", () => {
-    const component = renderer.create(<NotFound />);
+    const component = renderer.create(
+      <MemoryRouter>
+        <NotFound/>
+      </MemoryRouter>
+    );
     let tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });

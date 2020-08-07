@@ -1,5 +1,5 @@
-import React from 'react';
-import FlashcardFront from './FlashcardFront';
+import React from "react";
+import FlashcardFront from "./FlashcardFront";
 import { Link } from "react-router-dom";
 
 const folderStyle = {
@@ -22,18 +22,17 @@ const folderStyle = {
 const outerStyle = {
   width: "300px",
   height: "350px",
-  margin: "10px",
+  margin: "20px",
 };
 class Folder extends React.Component {
-
   render() {
     return (
-      <div className="Folder" key={this.props.key} style={outerStyle}>
-        <Link to="/insideFolder">
+      <div className="Folder" key={this.props.folderKey} style={outerStyle}>
+        <Link to={`/insideFolder?folderKey=${this.props.folderKey}`}>
           <div style={folderStyle}>
             <br />
-            <p>{this.props.name}</p>
-            <p style={{ textDecoration: "underline" }}>{this.props.language}</p>
+            <p style={{ textDecoration: "underline" }}>{this.props.name}</p>
+            <p>{this.props.language}</p>
           </div>
         </Link>
       </div>

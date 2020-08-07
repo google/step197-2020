@@ -12,31 +12,19 @@ const MyFoldersContent = (props) => {
     margin: 1%;
     flex-direction: column;
   `;
-  const folderData =[
-    {
-      folderName: "Bob",
-      folderDefaultLanguage: "English",
-      folderKey: String
-    },
-    {
-      folderName: "Verbs",
-      folderDefaultLanguage: "Spanish",
-      folderKey: String
-    },
- ];
- const folderStyle={
-  display: "flex",
-  flexFlow: "row wrap",
-  justifyContent: "space-around",
-  alignItems: "start",
-}
- const folders = folderData.map((folder) =>
-  <Folder
-     key={folder.folderKey} 
-     name={folder.folderName} 
-     language={folder.folderDefaultLanguage}/>
-);
-  
+  const folderStyle = {
+    display: "flex",
+    flexFlow: "row wrap",
+    justifyContent: "space-around",
+    alignItems: "start",
+  }
+  const folders = folderData.map((folder) =>
+    <Folder
+      key={folder.folderKey}
+      name={folder.folderName}
+      language={folder.folderDefaultLanguage} />
+  );
+
   return (
     <Container>
       <h1>You have 0 Folders </h1>

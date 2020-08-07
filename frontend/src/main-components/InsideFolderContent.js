@@ -15,46 +15,9 @@ const InsideFolderContent = (props) => {
   `;
 
   //Ideally we would use a servlet to get cards, but for now here's an empty card container.
-  const cardsContainer = [
-    {
-      blobKey: String,
-      labels: String,
-      fromLang: String,
-      toLang: String,
-      textNotTranslated: String,
-      textTranslated: String,
-      cardKey: String,
-    },
-    {
-      blobKey: String,
-      labels: String,
-      fromLang: String,
-      toLang: String,
-      textNotTranslated: "Hi",
-      textTranslated: "Hola",
-      cardKey: String,
-    },
-    {
-      blobKey: String,
-      labels: String,
-      fromLang: String,
-      toLang: String,
-      textNotTranslated: String,
-      textTranslated: String,
-      cardKey: String,
-    },
-    {
-      blobKey: String,
-      labels: String,
-      fromLang: String,
-      toLang: String,
-      textNotTranslated: String,
-      textTranslated: String,
-      cardKey: String,
-    },
-  ];
+  const cardsContainer={};
 
-  //Get the card
+  //Get the cards and turn them into Flashcard components
   const flashcards = cardsContainer.map((flashcard) => (
     <Flashcard
       key={flashcard.cardKey}

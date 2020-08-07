@@ -57,9 +57,6 @@ public final class DeleteFolderServletTest {
       .setEnvIsAdmin(true).setEnvIsLoggedIn(true)
       .setEnvEmail("test@gmail.com").setEnvAuthDomain("gmail.com");
 
-  private static final Folder FOLDER_A = new Folder("FIRSTFOLDER", "en");
-  private static final Folder FOLDER_B = new Folder("SECONDFOLDER", "es");
-  private static final Card CARD_A = new Card("null", "spanish", "en", "es", "hello", "hola");
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
   private StringWriter responseWriter;
@@ -91,37 +88,46 @@ public final class DeleteFolderServletTest {
     // Currently only one folder in datastore before deletion
     // Return: 0 folder left
     
+    // Generate testing folder to add into datastore
+    Folder folder = new Folder("FIRSTFOLDER", "en");
+    
     // Generate testing User
-    Entity USER_A = new Entity("User", "testId");
-    String USERKEY = KeyFactory.keyToString(USER_A.getKey());
+    Entity user = new Entity("User", "testId");
+    String userKey = KeyFactory.keyToString(user.getKey());
 
-    Folder folderInDatastore = EntityTestingTool.populateDatastoreWithAFolder(FOLDER_A, datastore, USERKEY);
+    Folder folderInDatastore = EntityTestingTool.populateDatastoreWithAFolder(folder, datastore, userKey);
     String folderKey = folderInDatastore.getFolderKey();
 
     when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
 
     servlet.doPost(mockRequest, mockResponse);
-    assertEquals(0, datastore.prepare(new Query("Folder").setAncestor(USER_A.getKey())).countEntities(withLimit(10)));
+    assertEquals(0, datastore.prepare(new Query("Folder").setAncestor(user.getKey())).countEntities(withLimit(10)));
   }
 
   @Test
   public void DeleteFolderAndItsCards() throws Exception {
     // Currently only one folder in datastore before deletion
     // Return: 0 folder left
-    
-    // Generate testing User
-    Entity USER_A = new Entity("User", "testId");
-    String USERKEY = KeyFactory.keyToString(USER_A.getKey());
 
-    Folder folderInDatastore = EntityTestingTool.populateDatastoreWithAFolder(FOLDER_A, datastore, USERKEY);
+    // Generate testing folder to add into datastore
+    Folder folder = new Folder("FIRSTFOLDER", "en");
+    
+    // Generate card to add into datastore
+    Card card = new Card("null", "spanish", "en", "es", "hello", "hola");
+
+    // Generate testing User
+    Entity user = new Entity("User", "testId");
+    String userKey = KeyFactory.keyToString(user.getKey());
+
+    Folder folderInDatastore = EntityTestingTool.populateDatastoreWithAFolder(folder, datastore, userKey);
     String folderKey = folderInDatastore.getFolderKey();
 
-    Card cardInsideFolder = EntityTestingTool.populateDatastoreWithACard(CARD_A, datastore, folderKey);
+    Card cardInsideFolder = EntityTestingTool.populateDatastoreWithACard(card, datastore, folderKey);
 
     when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
 
     servlet.doPost(mockRequest, mockResponse);
-    assertEquals(0, datastore.prepare(new Query("Folder").setAncestor(USER_A.getKey())).countEntities(withLimit(10)));
+    assertEquals(0, datastore.prepare(new Query("Folder").setAncestor(user.getKey())).countEntities(withLimit(10)));
     assertEquals(0, datastore.prepare(new Query("Card").setAncestor(KeyFactory.stringToKey(folderKey))).countEntities(withLimit(10)));
   }
 }

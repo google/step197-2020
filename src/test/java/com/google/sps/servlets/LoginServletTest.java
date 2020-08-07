@@ -56,7 +56,7 @@ public final class LoginServletTest {
 
   private static final User LOGGED_IN_USER = new User(USER_ID, "test@gmail.com");
   private static final User LOGGED_OUT_USER = new User("null", "null");
-  private static final String LOGOUTURL = "/_ah/logout?continue\u003d%2";
+  private static final String LOGOUTURL = "/_ah/logout?continue\u003d%2F";
   private static final String LOGINURL = "/_ah/login?continue\u003d%2F";
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;

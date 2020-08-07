@@ -56,8 +56,6 @@ public final class UserFoldersServletTest {
       .setEnvIsAdmin(true).setEnvIsLoggedIn(true)
       .setEnvEmail("test@gmail.com").setEnvAuthDomain("gmail.com");
 
-  private static final Folder FOLDER_A = new Folder("FIRSTFOLDER", "en");
-  private static final Folder FOLDER_B = new Folder("SECONDFOLDER", "en");
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
   private StringWriter responseWriter;
@@ -86,15 +84,19 @@ public final class UserFoldersServletTest {
   
   @Test
   public void QueryUserFolders() throws Exception {
-    // Returns array of Folders and signals front-end to show Create Folder Option
+    /* Returns array of Folders and signals front-end to show Create Folder Option */
+
+    // Generate testing folders to store in datastore
+    Folder folderA = new Folder("FIRSTFOLDER", "en");
+    Folder folderB = new Folder("SECONDFOLDER", "en");
     
     // Generate testing User
-    Entity USER_A = new Entity("User", "testId");
-    String USERKEY = KeyFactory.keyToString(USER_A.getKey());
+    Entity user = new Entity("User", "testId");
+    String userKey = KeyFactory.keyToString(user.getKey());
 
-    when(mockRequest.getParameter("userKey")).thenReturn(USERKEY);
+    when(mockRequest.getParameter("userKey")).thenReturn(userKey);
     
-    List<Folder> foldersInDatastore = EntityTestingTool.populateDatastoreWithFolders(FOLDER_A, FOLDER_B, datastore, USERKEY);
+    List<Folder> foldersInDatastore = EntityTestingTool.populateDatastoreWithFolders(folderA, folderB, datastore, userKey);
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
     String expectedResponse = new Gson().toJson(getExpectedJsonInfo(foldersInDatastore, true));
@@ -104,15 +106,15 @@ public final class UserFoldersServletTest {
 
   @Test
   public void UserHasNoCurrentFolder() throws Exception {
-    // Returns an empty array list and signals front-end to show Create Folder Option
+    /* Returns an empty array list and signals front-end to show Create Folder Option */
 
     List<Folder> noFoldersInDatastore = new ArrayList<>();
-
+    
     // Generate testing User
-    Entity USER_A = new Entity("User", "testId");
-    String USERKEY = KeyFactory.keyToString(USER_A.getKey());
+    Entity user = new Entity("User", "testId");
+    String userKey = KeyFactory.keyToString(user.getKey());
 
-    when(mockRequest.getParameter("userKey")).thenReturn(USERKEY);
+    when(mockRequest.getParameter("userKey")).thenReturn(userKey);
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
     String expectedResponse = new Gson().toJson(getExpectedJsonInfo(noFoldersInDatastore, true));
@@ -122,7 +124,7 @@ public final class UserFoldersServletTest {
 
   @Test
   public void UserNotLoggedIn() throws Exception {
-    // Returns an empty array list and signals front-end to not show Create Folder Option
+    /* Returns an empty array list and signals front-end to not show Create Folder Option */
 
     helper.setEnvIsLoggedIn(false);
     List<Folder> noFoldersQueried = new ArrayList<>();
@@ -136,36 +138,40 @@ public final class UserFoldersServletTest {
 
   @Test
   public void UserCreatesFirstFolder() throws Exception {
-    // First time user is creating a folder, so current number of folders should be 1
-
+    /* First time user is creating a folder, so current number of folders should be 1 */
+    
     // Generate testing User
-    Entity USER_A = new Entity("User", "testId");
-    String USERKEY = KeyFactory.keyToString(USER_A.getKey());
+    Entity user = new Entity("User", "testId");
+    String userKey = KeyFactory.keyToString(user.getKey());
 
     when(mockRequest.getParameter("folderName")).thenReturn("Folder1");
     when(mockRequest.getParameter("folderDefaultLanguage")).thenReturn("en");
-    when(mockRequest.getParameter("userKey")).thenReturn(USERKEY);
+    when(mockRequest.getParameter("userKey")).thenReturn(userKey);
 
     servlet.doPost(mockRequest, mockResponse);
-    assertEquals(1, datastore.prepare(new Query("Folder").setAncestor(USER_A.getKey())).countEntities(withLimit(10)));
+    assertEquals(1, datastore.prepare(new Query("Folder").setAncestor(user.getKey())).countEntities(withLimit(10)));
   }
 
   @Test
   public void UserCreatesAFolderAndHasMultipleFoldersAlready() throws Exception {
-    // Return the current number of folders that user has after creating a folder
+    /* Return the current number of folders that user has after creating a folder */
 
+    // Generate testing folders to store in datastore
+    Folder folderA = new Folder("FIRSTFOLDER", "en");
+    Folder folderB = new Folder("SECONDFOLDER", "en");
+    
     // Generate testing User
-    Entity USER_A = new Entity("User", "testId");
-    String USERKEY = KeyFactory.keyToString(USER_A.getKey());
-
-    List<Folder> foldersInDatastore = EntityTestingTool.populateDatastoreWithFolders(FOLDER_A, FOLDER_B, datastore, USERKEY);
+    Entity user = new Entity("User", "testId");
+    String userKey = KeyFactory.keyToString(user.getKey());
+    
+    List<Folder> foldersInDatastore = EntityTestingTool.populateDatastoreWithFolders(folderA, folderB, datastore, userKey);
 
     when(mockRequest.getParameter("folderName")).thenReturn("Folder1");
     when(mockRequest.getParameter("folderDefaultLanguage")).thenReturn("en");
-    when(mockRequest.getParameter("userKey")).thenReturn(USERKEY);
+    when(mockRequest.getParameter("userKey")).thenReturn(userKey);
 
     servlet.doPost(mockRequest, mockResponse);
-    assertEquals(3, datastore.prepare(new Query("Folder").setAncestor(USER_A.getKey())).countEntities(withLimit(10)));
+    assertEquals(3, datastore.prepare(new Query("Folder").setAncestor(user.getKey())).countEntities(withLimit(10)));
 
   }
 

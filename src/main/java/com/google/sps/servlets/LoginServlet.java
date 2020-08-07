@@ -42,11 +42,11 @@ public class LoginServlet extends HttpServlet {
       userEmail = userService.getCurrentUser().getEmail();
       logoutUrl = userService.createLogoutURL(urlToRedirect);
       showNewTab = true;
-      user = new User(userId, userEmail);
     } else {
       loginUrl = userService.createLoginURL(urlToRedirect);
-      user = new User(userId, userEmail);
     }
+
+    user = new User(userId, userEmail);
 
     if ((userId != "null") && (!isUserInDatastore(user))) {
       storeUserToDatastore(user);

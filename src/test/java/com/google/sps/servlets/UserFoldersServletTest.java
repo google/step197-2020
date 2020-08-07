@@ -99,7 +99,7 @@ public final class UserFoldersServletTest {
     List<Folder> foldersInDatastore = EntityTestingTool.populateDatastoreWithFolders(folderA, folderB, datastore, userKey);
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    String expectedResponse = new Gson().toJson(getExpectedJsonInfo(foldersInDatastore, true));
+    String expectedResponse = new Gson().toJson(getExpectedJsonInfo(/*folder=*/foldersInDatastore, /*showCreateFormStatus=*/true));
 
     assertTrue(compareJson(response, expectedResponse));
   }
@@ -117,7 +117,7 @@ public final class UserFoldersServletTest {
     when(mockRequest.getParameter("userKey")).thenReturn(userKey);
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    String expectedResponse = new Gson().toJson(getExpectedJsonInfo(noFoldersInDatastore, true));
+    String expectedResponse = new Gson().toJson(getExpectedJsonInfo(/*folder=*/noFoldersInDatastore, /*showCreateFormStatus=*/true));
 
     assertTrue(compareJson(response, expectedResponse));
   }
@@ -131,7 +131,7 @@ public final class UserFoldersServletTest {
 
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    String expectedResponse = new Gson().toJson(getExpectedJsonInfo(noFoldersQueried, false));
+    String expectedResponse = new Gson().toJson(/*folder=*/noFoldersQueried, /*showCreateFormStatus=*/false));
 
     assertTrue(compareJson(response, expectedResponse));
   }

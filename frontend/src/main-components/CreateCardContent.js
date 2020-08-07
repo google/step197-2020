@@ -6,6 +6,7 @@ import FrontCard from "../flashcards/FlashcardFrontPreview";
 import BackCard from "../flashcards/FlashcardBackPreview";
 import { getTranslation } from "../sub-components/translate";
 import LangaugeScroll from "../sub-components/languageScroll";
+import FolderScroll from "../sub-components/folderScroll";
 class CreateCardContent extends Component {
   constructor(props) {
     super(props);
@@ -15,12 +16,16 @@ class CreateCardContent extends Component {
       translation: "none",
       fromLang: "none",
       toLang: "none",
+      folder: "",
     };
     this.TranslateText = this.TranslateText.bind(this);
     this.fromLangSelected = this.fromLangSelected.bind(this);
     this.toLangSelected = this.toLangSelected.bind(this);
+    // TODO: Implement a way for the userKey to be passed between all pages for now it will be hardcoded
+    this.userKey =
+      "ahFzdTE5LWNvZGV1LTgtNTQ3MnIfCxIEVXNlciIVMTIxODQwMTczNDMzMDE4NzUzNDMxDA";
   }
-  /** 
+  /**
    * When the user has finished typing the Google translate
    * API iss called to fetch the translated version    of text
    */
@@ -52,6 +57,11 @@ class CreateCardContent extends Component {
     this.setState({ toLang: selectedValue });
   }
 
+  folderSelected(domEvent) {
+    const selectedValue = domEvent.target[domEvent.target.selectedIndex].value;
+    this.setState({ folder: selectedValue });
+  }
+
   render() {
     return (
       <div id="container">
@@ -70,14 +80,18 @@ class CreateCardContent extends Component {
 
           <div id="formBox">
             <ul>
-              <form id="myForm" action="/usercards">
+              <form
+                id="myForm"
+                action={`/usercards?userKey=${this.userKey}`}
+                method="post"
+              >
                 <li>
                   <span className="inline">
                     <label className="block">From:</label>
                     <LangaugeScroll
                       clickFunc={this.fromLangSelected}
                       selected={this.state.fromLang}
-                      key="from"
+                      key="fromLang"
                     ></LangaugeScroll>
                   </span>
                   <span className="inline">
@@ -85,7 +99,7 @@ class CreateCardContent extends Component {
                     <LangaugeScroll
                       clickFunc={this.toLangSelected}
                       selected={this.state.toLang}
-                      key="to"
+                      key="toLang"
                     ></LangaugeScroll>
                   </span>
                 </li>
@@ -102,7 +116,7 @@ class CreateCardContent extends Component {
                 <li>
                   <label className="block">Translation:</label>
                   <input
-                    id="translate"
+                    id="translated"
                     type="text"
                     placeholder={this.state.translation}
                     readOnly
@@ -115,7 +129,11 @@ class CreateCardContent extends Component {
                   </span>
                   <span className="inline">
                     <label className="block">Folder:</label>
-                    <input type="file" id="folder" name="folderSelect"></input>
+                    <FolderScroll
+                      userKey={this.userKey}
+                      clickFunc={this.folderSelected}
+                      selected={this.state.folder}
+                    ></FolderScroll>
                   </span>
                 </li>
 

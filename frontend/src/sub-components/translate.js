@@ -5,26 +5,22 @@ import   privateInfo from "../../../../../credentials/token.json";
  */
 export function getTranslation(term, fromLang, toLang) {
 
-  const response = fetch(
-    "https://translation.googleapis.com/language/translate/v2",
-    {
-      body:
-        `{'q':${term}, 'source':${fromLang}, 'target':${toLang}, 'format':'text'}`,
-      headers: {
-        Authorization:
-          `Bearer ${privateInfo.token}`,
-        "Content-Type": "application/json",
-        "X-Goog-User-Project": "framecards",
-      },
-      method: "POST",
-    }
-  )
-    .then((res) => res.json())
+  const response = fetch("/translate", {
+    method: "POST",
+    headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      rawText: `${term}`,
+      toLang: `${toLang}`,
+      fromLang: `${fromLang}`
+    })
+    }).then((res) => res.json())
     .then((result) => {
       console.log(result);
-      return result.data.translations.translatedText;
+      return result.translatedText;
     });
   
-  return response;
 }
 

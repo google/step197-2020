@@ -1,10 +1,10 @@
-import React, { Component, useState } from "react";
-import supportedLang from "./SupportedLang.json";
+import React, { Component } from "react";
 import styled from "@emotion/styled";
 
 class folderScroll extends Component {
   constructor(props) {
     super(props);
+    this.mount = false;
     this.state = {
       isDataFetched: false,
       folders: "",
@@ -12,10 +12,24 @@ class folderScroll extends Component {
     this.grabFolders();
   }
 
-  grabFolders() {
-    const folders = fetch("/folder").then((data) =>
-      useState({ isDataFetched: true, folders: data })
-    );
+  grabFolders(e) {
+    this.mount = true;
+    if (this.mount) {
+      try {
+        fetch(`/folder?userKey=${this.props.userKey}`, { method: "GET" })
+          .then((result) => result.json())
+          .then((data) => {
+            console.log(data);
+            this.setState({ isDataFetched: true, folders: data });
+          });
+      } catch (err) {
+        console.log("Error: Could not fetch folders");
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    this.mount = false;
   }
 
   render() {
@@ -29,16 +43,19 @@ class folderScroll extends Component {
       border-radius: 0.5rem;
       font-size: 1.75rem;
     `;
-
+    if (!this.state.isDataFetched) {
+      return <h5>loading</h5>;
+    }
     return (
       <Options
         onChange={this.props.clickFunc}
         value={this.props.selected}
         name="languages"
+        id={this.props.key}
       >
         {
-          // Parse json and display supported languages in scroll list
-          data.usersFolders.map((folder) => {
+          // Parse json and display all folders
+          this.state.folders.map((folder) => {
             return (
               <option key={folder.folderName} value={folder.folderKey}>
                 {folder.folderName}

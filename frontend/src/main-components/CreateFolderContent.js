@@ -11,14 +11,15 @@ class CreateFolderContent extends Component {
       folderName: "None",
       folderLang: "English",
     };
-    // TODO: get userId
-    this.userId = "123";
+    // TODO: get userKey
+    this.userKey ="ahFzdTE5LWNvZGV1LTgtNTQ3MnIfCxIEVXNlciIVMTcxNzQ5MTA2ODUxNTcxMzcxNTkxDA";
     this.handleFolderName = this.handleFolderName.bind(this);
     this.handleFolderLang = this.handleFolderLang.bind(this);
   }
 
   handleFolderName(event) {
     event.preventDefault();
+    console.log(this.userKey);
     this.setState({ folderName: event.target.value });
   }
 
@@ -41,7 +42,7 @@ class CreateFolderContent extends Component {
 
           <div id="formBox">
             <ul>
-              <form id="myForm" action="/folder" method="post">
+              <form id="myForm" action={`/folder?userKey=${this.userKey}`} method="post">
                 <li>
                   <label>Folder Name: </label>
                 </li>
@@ -66,6 +67,7 @@ class CreateFolderContent extends Component {
                       name="language"
                       value={this.state.folderLang}
                       onChange={this.handleFolderLang}
+                      required
                     >
                       <option value="English">English</option>
                       {

@@ -23,34 +23,34 @@ public class EntityTestingTool {
       card.getProperty("cardKey") != null);
   }
 
-  public static List<Folder> populateDatastoreWithFolders(Folder FOLDER_A, Folder FOLDER_B, DatastoreService datastore, String USERKEY) {
+  public static List<Folder> populateDatastoreWithFolders(Folder folderA, Folder folderB, DatastoreService datastore, String USERKEY) {
     
-    Entity folderA_Entity = FOLDER_A.createEntity(KeyFactory.stringToKey(USERKEY));
-    Entity folderB_Entity = FOLDER_B.createEntity(KeyFactory.stringToKey(USERKEY));
+    Entity folderEntityA = folderA.createEntity(KeyFactory.stringToKey(USERKEY));
+    Entity folderEntityB = folderB.createEntity(KeyFactory.stringToKey(USERKEY));
 
     // Update entity in datastore 
-    datastore.put(folderA_Entity);
-    datastore.put(folderB_Entity);
+    datastore.put(folderEntityA);
+    datastore.put(folderEntityB);
 
     List<Folder> folders = new ArrayList<>();
-    folders.add(new Folder(folderA_Entity));
-    folders.add(new Folder(folderB_Entity));
+    folders.add(new Folder(folderEntityA));
+    folders.add(new Folder(folderEntityB));
 
     return folders;
   }
 
-  public static List<Card> populateDatastoreWithCards(Card CARD_A, Card CARD_B, DatastoreService datastore, String FOLDERKEY) {
+  public static List<Card> populateDatastoreWithCards(Card cardA, Card cardB, DatastoreService datastore, String FOLDERKEY) {
     
-    Entity CardA_Entity = CARD_A.createEntity(KeyFactory.stringToKey(FOLDERKEY));
-    Entity CardB_Entity = CARD_B.createEntity(KeyFactory.stringToKey(FOLDERKEY));
+    Entity cardEntityA = cardA.createEntity(KeyFactory.stringToKey(FOLDERKEY));
+    Entity cardEntityB = cardB.createEntity(KeyFactory.stringToKey(FOLDERKEY));
 
     // Update entity in datastore 
-    datastore.put(CardA_Entity);
-    datastore.put(CardB_Entity);
+    datastore.put(cardEntityA);
+    datastore.put(cardEntityB);
 
     List<Card> cards = new ArrayList<>();
-    cards.add(new Card(CardA_Entity));
-    cards.add(new Card(CardB_Entity));
+    cards.add(new Card(cardEntityA));
+    cards.add(new Card(cardEntityB));
 
     return cards;
   }

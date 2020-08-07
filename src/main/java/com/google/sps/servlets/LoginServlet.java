@@ -27,7 +27,7 @@ public class LoginServlet extends HttpServlet {
 
     UserService userService = UserServiceFactory.getUserService();
 
-    String urlToRedirect = "/homepage";
+    String urlToRedirect = "/";
     String userId = "null";
     String logoutUrl = "null";
     String loginUrl = "null";

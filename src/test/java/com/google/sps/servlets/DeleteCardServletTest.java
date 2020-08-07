@@ -57,8 +57,6 @@ public final class DeleteCardServletTest {
       .setEnvIsAdmin(true).setEnvIsLoggedIn(true)
       .setEnvEmail("test@gmail.com").setEnvAuthDomain("gmail.com");
 
-  private static final Card CARD_A = new Card("null", "spanish", "en", "es", "hello", "hola");
-  private static final Card CARD_B = new Card("null", "vietnamese", "en", "vi", "hello", "xin chào");
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
   private StringWriter responseWriter;
@@ -90,36 +88,43 @@ public final class DeleteCardServletTest {
     // Currently only one card in datastore before deletion
     // Return: 0 card
     
+    // Generate testing card to add into datastore
+    Card card = new Card("null", "spanish", "en", "es", "hello", "hola");
+    
     // Generate a dummy Folder Entity
-    Entity FOLDER_A = new Entity("Folder", "testID");
-    String FOLDERKEY = KeyFactory.keyToString(FOLDER_A.getKey());
+    Entity folder = new Entity("Folder", "testID");
+    String folderKey = KeyFactory.keyToString(folder.getKey());
 
-    Card cardInDatastore = EntityTestingTool.populateDatastoreWithACard(CARD_A, datastore, FOLDERKEY);
+    Card cardInDatastore = EntityTestingTool.populateDatastoreWithACard(card, datastore, folderKey);
     String cardKey = cardInDatastore.getCardKey();
 
     when(mockRequest.getParameter("cardKey")).thenReturn(cardKey);
 
     servlet.doPost(mockRequest, mockResponse);
-    assertEquals(0, datastore.prepare(new Query("Card").setAncestor(FOLDER_A.getKey())).countEntities(withLimit(10)));
+    assertEquals(0, datastore.prepare(new Query("Card").setAncestor(folder.getKey())).countEntities(withLimit(10)));
   }
 
   @Test
   public void DeleteCardAndThereAreOneLeft() throws Exception {
     // Currently two cards in datastore before deletion
     // Return: 1 card left
+
+    // Generate testing card to add into datastore
+    Card cardA = new Card("null", "spanish", "en", "es", "hello", "hola");
+    Card cardB = new Card("null", "vietnamese", "en", "vi", "hello", "xin chào");
     
     // Generate a dummy Folder Entity
-    Entity FOLDER_A = new Entity("Folder", "testID");
-    String FOLDERKEY = KeyFactory.keyToString(FOLDER_A.getKey());
+    Entity folder = new Entity("Folder", "testID");
+    String folderKey = KeyFactory.keyToString(folder.getKey());
 
-    Card cardToDelete = EntityTestingTool.populateDatastoreWithACard(CARD_A, datastore, FOLDERKEY);
-    String cardKey = cardToDelete.getCardKey();
+    Card cardToDelete = EntityTestingTool.populateDatastoreWithACard(cardA, datastore, folderKey);
+    String cardAKey = cardToDelete.getCardKey();
 
-    Card secondCard = EntityTestingTool.populateDatastoreWithACard(CARD_B, datastore, FOLDERKEY);
+    Card secondCard = EntityTestingTool.populateDatastoreWithACard(cardB, datastore, folderKey);
 
-    when(mockRequest.getParameter("cardKey")).thenReturn(cardKey);
+    when(mockRequest.getParameter("cardKey")).thenReturn(cardAKey);
 
     servlet.doPost(mockRequest, mockResponse);
-    assertEquals(1, datastore.prepare(new Query("Card").setAncestor(FOLDER_A.getKey())).countEntities(withLimit(10)));
+    assertEquals(1, datastore.prepare(new Query("Card").setAncestor(folder.getKey())).countEntities(withLimit(10)));
   }
 }

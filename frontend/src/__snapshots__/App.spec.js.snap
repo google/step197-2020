@@ -1,0 +1,130 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home page snapshot  renders 1`] = `
+<div
+  className="About"
+/>
+`;
+
+exports[`Home page snapshot About renders 1`] = `
+<div
+  className="About"
+/>
+`;
+
+exports[`Home page snapshot About renders 2`] = `
+<div
+  className="About"
+/>
+`;
+
+exports[`Home page snapshot Landing Page renders 1`] = `
+<div
+  className="NavBar"
+>
+  <div
+    style={Object {}}
+  />
+  <div
+    style={Object {}}
+  >
+    <div
+      className="buttonBox"
+    >
+      <button
+        className="MyButton"
+        style={
+          Object {
+            "backgroundColor": "#C4C4C4",
+            "fontSize": "24px",
+          }
+        }
+      >
+         
+        Login
+         
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Home page snapshot Navigation Bar renders 1`] = `
+<div
+  className="NavBar"
+>
+  <div
+    style={Object {}}
+  />
+  <div
+    style={Object {}}
+  >
+    <div
+      className="buttonBox"
+    >
+      <button
+        className="MyButton"
+        style={
+          Object {
+            "backgroundColor": "#C4C4C4",
+            "fontSize": "24px",
+          }
+        }
+      >
+         
+        Login
+         
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Home page snapshot landing  renders 1`] = `
+<div
+  className="About"
+/>
+`;
+
+exports[`Home page snapshot landing Page renders 1`] = `
+<div
+  className="About"
+/>
+`;
+
+exports[`Home page snapshot renders 1`] = `
+<div
+  className="About"
+/>
+`;
+
+exports[`mainApp snapshot Navigation Bar renders 1`] = `
+<div
+  className="NavBar"
+>
+  <div
+    style={Object {}}
+  />
+  <div
+    style={Object {}}
+  >
+    <div
+      className="buttonBox"
+    >
+      <button
+        className="MyButton"
+        style={
+          Object {
+            "backgroundColor": "#C4C4C4",
+            "fontSize": "24px",
+          }
+        }
+      >
+         
+        Login
+         
+      </button>
+    </div>
+  </div>
+</div>
+`;

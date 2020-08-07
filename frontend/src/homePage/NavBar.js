@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import "./NavBar.css";
+import css from "./NavBar.css";
 import LoginButton from "./LoginButton.js";
 import {motion} from "framer-motion"
 

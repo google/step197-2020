@@ -48,10 +48,8 @@ public class LoginServlet extends HttpServlet {
       user = new User(userId, userEmail);
     }
 
-    if (userId != "null") {
-      if (!isUserInDatastore(user)) {
-        storeUserToDatastore(user);
-      }
+    if ((userId != "null") && (!isUserInDatastore(user))) {
+      storeUserToDatastore(user);
     }
 
     // Aggregate response information
@@ -66,7 +64,7 @@ public class LoginServlet extends HttpServlet {
   }
 
   public boolean isUserInDatastore(User user) {
-    
+
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Key userKey = KeyFactory.createKey("User", user.getUserId());
     Entity userEntity;

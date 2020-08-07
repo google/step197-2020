@@ -131,7 +131,7 @@ public final class UserFoldersServletTest {
 
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    String expectedResponse = new Gson().toJson(/*folder=*/noFoldersQueried, /*showCreateFormStatus=*/false));
+    String expectedResponse = new Gson().toJson(getExpectedJsonInfo(/*folder=*/noFoldersQueried, /*showCreateFormStatus=*/false));
 
     assertTrue(compareJson(response, expectedResponse));
   }

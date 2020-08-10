@@ -21,14 +21,11 @@ class CreateCardContent extends Component {
     this.toLangSelected = this.toLangSelected.bind(this);
   }
   /** 
-   * When the user has finished typing the Google translate
-   * API iss called to fetch the translated version    of text
+   * When the user has finished typing, the Google translate
+   * API is called to fetch the translated version of the text input.
    */
   TranslateText(event) {
     event.preventDefault();
-    console.log(this.state.fromLang);
-    console.log(this.state.toLang);
-    console.log(event.target.value);
     // Ensures that languages have been selected before translating
     if (this.state.fromLang !== "none" && this.state.toLang !== "none") {
       const translated = getTranslation(

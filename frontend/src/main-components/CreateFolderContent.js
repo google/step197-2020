@@ -42,7 +42,7 @@ class CreateFolderContent extends Component {
 
           <div id="formBox">
             <ul>
-              <form id="myForm" action={`/folder?userKey=${this.userKey}`} method="post">
+              <form id="myForm" action={`/folder?userKey=${this.userKey}`} method="POST">
                 <li>
                   <label>Folder Name: </label>
                 </li>

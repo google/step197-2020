@@ -83,7 +83,7 @@ class CreateCardContent extends Component {
               <form
                 id="myForm"
                 action={`/usercards?userKey=${this.userKey}`}
-                method="post"
+                method="POST"
               >
                 <li>
                   <span className="inline">

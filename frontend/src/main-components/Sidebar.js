@@ -42,7 +42,7 @@ const Sidebar = (props) => {
       <SideIcon link="/ImageInterface" icon={objectIcon}></SideIcon>
       <SideIcon link="/YoutubeInterface" icon={youTubeIcon}></SideIcon>
       <SideIcon link="/myFolders" icon={logoutIcon}></SideIcon>
-      
+    
     </Side>
   );
 };

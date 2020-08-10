@@ -26,5 +26,5 @@ limitations under the License.
   <body>
     <div id="root"></div>
   </body>
-    <script  src="<%= request.getAttribute("SERVER_ROOT") %><%= request.getAttribute("REACT_MODULE") %>.js"></script>
+    <script crossorigin="anonymous" src="<%= request.getAttribute("SERVER_ROOT") %><%= request.getAttribute("REACT_MODULE") %>.js"></script>
 </html>

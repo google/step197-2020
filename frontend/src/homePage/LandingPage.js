@@ -14,6 +14,8 @@ class LandingPage extends React.Component {
         this.color = "#F4B400"
         this.clickHandling = this.props.folderClick;
       }
+
+      
     }
   
     render() {

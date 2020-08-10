@@ -96,10 +96,15 @@ public final class UserFoldersServletTest {
 
     when(mockRequest.getParameter("userKey")).thenReturn(userKey);
     
-    List<Folder> foldersInDatastore = EntityTestingTool.populateDatastoreWithFolders(folderA, folderB, datastore, userKey);
+    List<Folder> folders = new ArrayList<>();
+    Folder folderAInDatastore = EntityTestingTool.populateDatastoreWithAFolder(folderA, datastore, userKey);
+    Folder folderBInDatastore = EntityTestingTool.populateDatastoreWithAFolder(folderB, datastore, userKey);
+    folders.add(folderAInDatastore);
+    folders.add(folderBInDatastore);
+
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    String expectedResponse = new Gson().toJson(getExpectedJsonInfo(/*folder=*/foldersInDatastore, /*showCreateFormStatus=*/true));
+    String expectedResponse = new Gson().toJson(getExpectedJsonInfo(/*folder=*/folders, /*showCreateFormStatus=*/true));
 
     assertTrue(compareJson(response, expectedResponse));
   }
@@ -164,7 +169,8 @@ public final class UserFoldersServletTest {
     Entity user = new Entity("User", "testId");
     String userKey = KeyFactory.keyToString(user.getKey());
     
-    List<Folder> foldersInDatastore = EntityTestingTool.populateDatastoreWithFolders(folderA, folderB, datastore, userKey);
+    Folder folderAInDatastore = EntityTestingTool.populateDatastoreWithAFolder(folderA, datastore, userKey);
+    Folder folderBInDatastore = EntityTestingTool.populateDatastoreWithAFolder(folderB, datastore, userKey);
 
     when(mockRequest.getParameter("folderName")).thenReturn("Folder1");
     when(mockRequest.getParameter("folderDefaultLanguage")).thenReturn("en");

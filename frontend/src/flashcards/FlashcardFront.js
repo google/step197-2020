@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
 /* Styling for the front of the flashcard*/
-const frontStyle={
+const frontStyle = {
   borderRadius: "30px",
   position: "absolute",
   width: "300px",
@@ -16,35 +16,40 @@ const frontStyle={
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
-  alignItems:"center"
+  alignItems: "center",
 };
 /*
   Styling for the image inside the flashcard
 */
-const imgStyle={
+const imgStyle = {
   display: "block",
   maxWidth: "150px",
-  maxHeight:"150px",
-  width:"auto",
+  maxHeight: "150px",
+  width: "auto",
   height: "auto",
-  margin:"10px",
+  margin: "10px",
 };
 
 class FlashcardFront extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-      }
-    }
-  
-    render() {
-      return (
-        <div className="FlashcardFront" style={frontStyle}>
-          <img src={this.props.image} alt={this.props.text} style={imgStyle}/>
-          {this.props.text}
-        </div>
-      );
-    }
+  constructor(props) {
+    super(props);
+    this.state = {};
   }
+
+  render() {
+    return (
+      <div className="FlashcardFront" style={frontStyle}>
+        {this.props.image ? (
+          <img
+            style={imgStyle}
+            src={this.props.image}
+            alt="Can not fetch image"
+          />
+        ) : null}
+        {this.props.text}
+      </div>
+    );
+  }
+}
 /*<img src={this.props.image}/>*/
 export default FlashcardFront;

@@ -1,10 +1,8 @@
 import React, { useState, Component } from "react";
-
 import ReactDOM from "react-dom";
 import NavBar from "./homePage/NavBar";
 import LandingPage from "./homePage/LandingPage";
 import About from "./homePage/About";
-
 
 class Home extends React.Component {
   constructor(props) {
@@ -33,11 +31,13 @@ class Home extends React.Component {
       });
   }
 
+
   // Handles buttons that login & logout user
   handleLoginClick = (e) => {
     const userInfo = fetch("/login")
       .then((response) => response.json())
       .then((info) => {
+
         // If the user has logged in before then the button will now be a logout button
         if (info["showTabStatus"] === true) {
           window.location = this.state.logoutUrl;

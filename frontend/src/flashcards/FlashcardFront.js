@@ -46,5 +46,4 @@ class FlashcardFront extends React.Component {
       );
     }
   }
-/*<img src={this.props.image}/>*/
 export default FlashcardFront;

@@ -22,16 +22,15 @@ const MyFoldersContent = (props) => {
   let folders;
 
   //Fetch data from the UserFolders servlets to get the user folders
-  //Currently there is no way to get the userid of the user
+  //UserKey is a temporary value for now.
   try {
-    fetch(`/userfolder?userKey=${userKey}`, { method: "GET" })
+    fetch(`/userfolders?userKey=${userKey}`, { method: "GET" })
       .then((result) => result.json())
       .then((data) => {
         console.log(data);
-        folderData = data;
-        const folders = folderData.map((folder) => (
+        folders = data.map((folder) => (
           <Folder
-            folderKey={folder.folderKey}
+            folderURL={folder.folderKey}
             name={folder.folderName}
             language={folder.folderDefaultLanguage}
             key={folder.folderKey}
@@ -43,12 +42,10 @@ const MyFoldersContent = (props) => {
   }
 
   // The page should show different text depending on whether or not folders are available
-  let headingText;
+  let headingText =
+    "You have no folders at the moment. Please make a new folder by clicking on the side menu.";
   if (folders) {
     headingText = `You have ${folders.length} Folders`;
-  } else {
-    headingText =
-      "You have no folders at the moment. Please make a new folder by clicking on the side menu.";
   }
 
   return (

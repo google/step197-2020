@@ -23,22 +23,20 @@ public class EntityTestingTool {
       card.getProperty("cardKey") != null);
   }
 
-  public static List<Folder> populateDatastoreWithFolders(Folder folderA, Folder folderB, DatastoreService datastore, String userKey) {
+  public static Folder populateDatastoreWithAFolder(Folder folder, DatastoreService datastore, String userKey) {
     
-    Entity folderEntityA = folderA.createEntity(KeyFactory.stringToKey(userKey));
-    Entity folderEntityB = folderB.createEntity(KeyFactory.stringToKey(userKey));
+    Entity folderEntity = folder.createEntity(KeyFactory.stringToKey(userKey));
 
     // Update entity in datastore 
-    datastore.put(folderEntityA);
-    datastore.put(folderEntityB);
+    datastore.put(folderEntity);
 
-    List<Folder> folders = new ArrayList<>();
-    folders.add(new Folder(folderEntityA));
-    folders.add(new Folder(folderEntityB));
-
-    return folders;
+    Folder folderObject = new Folder(folderEntity);
+    folderObject.setFolderKey(KeyFactory.keyToString(folderEntity.getKey()));
+    
+    return folderObject;
   }
-
+  
+  /*
   public static List<Card> populateDatastoreWithCards(Card cardA, Card cardB, DatastoreService datastore, String folderKey) {
     
     Entity cardEntityA = cardA.createEntity(KeyFactory.stringToKey(folderKey));
@@ -54,6 +52,7 @@ public class EntityTestingTool {
 
     return cards;
   }
+  */
 
     
 }

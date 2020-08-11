@@ -107,11 +107,16 @@ public final class UserCardsServletTest {
 
     when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
     
-    List<Card> cardsInDatastore = EntityTestingTool.populateDatastoreWithCards(cardA, cardB, datastore, folderKey);
+    List<Card> cards = new ArrayList<>();
+    Card cardAInDatastore = EntityTestingTool.populateDatastoreWithACard(cardA, datastore, folderKey);
+    Card cardBInDatastore = EntityTestingTool.populateDatastoreWithACard(cardB, datastore, folderKey);
+    cards.add(cardAInDatastore);
+    cards.add(cardBInDatastore);
+
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
     String expectedResponse = new Gson().toJson(EntityTestingTool.getExpectedJsonCardInfo(
-        /*card*/cardsInDatastore, /*showCreateFormStatus*/true));
+        /*card*/cards, /*showCreateFormStatus*/true));
 
     assertTrue(compareJson(response, expectedResponse));
   }
@@ -163,6 +168,7 @@ public final class UserCardsServletTest {
     when(mockRequest.getParameter("fromLang")).thenReturn("en");
     when(mockRequest.getParameter("toLang")).thenReturn("es");
     when(mockRequest.getParameter("rawText")).thenReturn("hello");
+    when(mockRequest.getParameter("translatedText")).thenReturn("hola");
 
     servlet.doPost(mockRequest, mockResponse);
     PreparedQuery responseEntity = datastore.prepare(new Query("Card").setAncestor(folder.getKey()));
@@ -189,8 +195,10 @@ public final class UserCardsServletTest {
     when(mockRequest.getParameter("fromLang")).thenReturn("en");
     when(mockRequest.getParameter("toLang")).thenReturn("es");
     when(mockRequest.getParameter("rawText")).thenReturn("hello");
+    when(mockRequest.getParameter("translatedText")).thenReturn("hola");
     
-    EntityTestingTool.populateDatastoreWithCards(cardA, cardB, datastore, folderKey);
+    EntityTestingTool.populateDatastoreWithACard(cardA, datastore, folderKey);
+    EntityTestingTool.populateDatastoreWithACard(cardB, datastore, folderKey);
     servlet.doPost(mockRequest, mockResponse);
     PreparedQuery responseEntity = datastore.prepare(new Query("Card").setAncestor(folder.getKey()));
 

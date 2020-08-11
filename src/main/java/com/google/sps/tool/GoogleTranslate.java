@@ -8,7 +8,6 @@ import com.google.cloud.translate.Translation;
 public class GoogleTranslate {
 
   public static String translateText(String textNotTranslated, String targetLanguage) {
-
     Translate translate = TranslateOptions.newBuilder().setProjectId("framecards").setQuotaProjectId("framecards").build().getService();
     Translation translation = 
         translate.translate(textNotTranslated, Translate.TranslateOption.targetLanguage(targetLanguage));
@@ -16,5 +15,4 @@ public class GoogleTranslate {
 
     return translatedText;
   }
-
 }

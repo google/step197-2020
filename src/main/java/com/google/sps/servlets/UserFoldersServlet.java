@@ -79,7 +79,8 @@ public class UserFoldersServlet extends HttpServlet {
       String userKey = request.getParameter("userKey");
 
       Folder folder = new Folder(folderName, folderDefaultLanguage);
-      Entity folderEntity = folder.createEntity(KeyFactory.stringToKey(userKey));
+      folder.setParentKey(userKey);
+      Entity folderEntity = folder.createEntity();
       
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(folderEntity);

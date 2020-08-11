@@ -38,7 +38,6 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.gson.Gson;
 import com.google.common.collect.ImmutableMap;
 import com.google.sps.data.Folder;
-import com.google.sps.tool.EntityTestingTool;
 import java.util.List; 
 import java.util.ArrayList;
 import java.util.Map;
@@ -83,7 +82,7 @@ public final class UserFoldersServletTest {
   }
   
   @Test
-  public void QueryUserFolders() throws Exception {
+  public void queryUserFolders() throws Exception {
     /* Returns array of Folders and signals front-end to show Create Folder Option */
 
     // Generate testing folders to store in datastore
@@ -97,20 +96,24 @@ public final class UserFoldersServletTest {
     when(mockRequest.getParameter("userKey")).thenReturn(userKey);
     
     List<Folder> folders = new ArrayList<>();
-    Folder folderAInDatastore = EntityTestingTool.populateDatastoreWithAFolder(folderA, datastore, userKey);
-    Folder folderBInDatastore = EntityTestingTool.populateDatastoreWithAFolder(folderB, datastore, userKey);
+    Folder folderAInDatastore = storeFolderInDatastore(folderA, datastore, userKey);
+    Folder folderBInDatastore = storeFolderInDatastore(folderB, datastore, userKey);
     folders.add(folderAInDatastore);
     folders.add(folderBInDatastore);
 
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    String expectedResponse = new Gson().toJson(EntityTestingTool.getExpectedJsonFolderInfo(/*folder=*/folders, /*showCreateFormStatus=*/true));
+    String expectedResponse = 
+      "{\"userFolders\":["
+        +  "{\"folderName\":\"FIRSTFOLDER\",\"folderDefaultLanguage\":\"en\",\"folderKey\":\""+ folderAInDatastore.getFolderKey() +"\"},"
+        +  "{\"folderName\":\"SECONDFOLDER\",\"folderDefaultLanguage\":\"en\",\"folderKey\":\""+ folderBInDatastore.getFolderKey() +"\"}],"
+        + "\"showCreateFormStatus\":true}";
 
     assertTrue(compareJson(response, expectedResponse));
   }
 
   @Test
-  public void UserHasNoCurrentFolder() throws Exception {
+  public void userHasNoCurrentFolder() throws Exception {
     /* Returns an empty array list and signals front-end to show Create Folder Option */
 
     List<Folder> noFoldersInDatastore = new ArrayList<>();
@@ -122,14 +125,13 @@ public final class UserFoldersServletTest {
     when(mockRequest.getParameter("userKey")).thenReturn(userKey);
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    String expectedResponse = new Gson().toJson(EntityTestingTool.getExpectedJsonFolderInfo(/*folder=*/noFoldersInDatastore, /*showCreateFormStatus=*/true));
-
+    String expectedResponse = "{\"userFolders\":[],\"showCreateFormStatus\":true}";
 
     assertTrue(compareJson(response, expectedResponse));
   }
 
   @Test
-  public void UserNotLoggedIn() throws Exception {
+  public void userNotLoggedIn() throws Exception {
     /* Returns an empty array list and signals front-end to not show Create Folder Option */
 
     helper.setEnvIsLoggedIn(false);
@@ -137,14 +139,13 @@ public final class UserFoldersServletTest {
 
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    String expectedResponse = new Gson().toJson(EntityTestingTool.getExpectedJsonFolderInfo(/*folder=*/noFoldersQueried, /*showCreateFormStatus=*/false));
-
+    String expectedResponse = "{\"userFolders\":[],\"showCreateFormStatus\":false}";
 
     assertTrue(compareJson(response, expectedResponse));
   }
 
   @Test
-  public void UserCreatesFirstFolder() throws Exception {
+  public void userCreatesFirstFolder() throws Exception {
     /* First time user is creating a folder, so current number of folders should be 1 */
     
     // Generate testing User
@@ -160,7 +161,7 @@ public final class UserFoldersServletTest {
   }
 
   @Test
-  public void UserCreatesAFolderAndHasMultipleFoldersAlready() throws Exception {
+  public void userCreatesAFolderAndHasMultipleFoldersAlready() throws Exception {
     /* Return the current number of folders that user has after creating a folder */
 
     // Generate testing folders to store in datastore
@@ -171,8 +172,8 @@ public final class UserFoldersServletTest {
     Entity user = new Entity("User", "testId");
     String userKey = KeyFactory.keyToString(user.getKey());
     
-    Folder folderAInDatastore = EntityTestingTool.populateDatastoreWithAFolder(folderA, datastore, userKey);
-    Folder folderBInDatastore = EntityTestingTool.populateDatastoreWithAFolder(folderB, datastore, userKey);
+    Folder folderAInDatastore = storeFolderInDatastore(folderA, datastore, userKey);
+    Folder folderBInDatastore = storeFolderInDatastore(folderB, datastore, userKey);
 
     when(mockRequest.getParameter("folderName")).thenReturn("Folder1");
     when(mockRequest.getParameter("folderDefaultLanguage")).thenReturn("en");
@@ -180,7 +181,18 @@ public final class UserFoldersServletTest {
 
     servlet.doPost(mockRequest, mockResponse);
     assertEquals(3, datastore.prepare(new Query("Folder").setAncestor(user.getKey())).countEntities(withLimit(10)));
-
   }
 
+<<<<<<< HEAD
+=======
+  private Folder storeFolderInDatastore(Folder folder, DatastoreService datastore, String userKey) {
+    folder.setParentKey(userKey);
+    Entity folderEntity = folder.createEntity();
+    datastore.put(folderEntity);
+
+    folder.setFolderKey(KeyFactory.keyToString(folderEntity.getKey()));
+    
+    return folder;
+  }
+>>>>>>> tdd4
 }

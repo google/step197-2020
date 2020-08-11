@@ -23,19 +23,6 @@ public class EntityTestingTool {
       card.getProperty("fromLang") != null &&
       card.getProperty("toLang") != null);
   }
-
-  public static Folder populateDatastoreWithAFolder(Folder folder, DatastoreService datastore, String userKey) {
-    
-    Entity folderEntity = folder.createEntity(KeyFactory.stringToKey(userKey));
-
-    // Update entity in datastore 
-    datastore.put(folderEntity);
-
-    Folder folderObject = new Folder(folderEntity);
-    folderObject.setFolderKey(KeyFactory.keyToString(folderEntity.getKey()));
-    
-    return folderObject;
-  }
   
   public static Card populateDatastoreWithACard(Card card, DatastoreService datastore, String folderKey) {
     
@@ -48,15 +35,6 @@ public class EntityTestingTool {
     cardObject.setCardKey(KeyFactory.keyToString(cardEntity.getKey()));
 
     return cardObject;
-  }
-
-  public static Map<String, Object> getExpectedJsonFolderInfo(List<Folder> folders, boolean showCreateFormStatus) {
-
-    Map<String, Object> expectedJsonInfo = new HashMap<>();
-    expectedJsonInfo.put("showCreateFormStatus", showCreateFormStatus);
-    expectedJsonInfo.put("userFolders", folders);
-
-    return expectedJsonInfo;
   }
 
   public static Map<String, Object> getExpectedJsonCardInfo(List<Card> cards, boolean showCreateFormStatus) {

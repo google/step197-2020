@@ -24,7 +24,6 @@ public class LoginServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
     UserService userService = UserServiceFactory.getUserService();
 
     String urlToRedirect = "/";
@@ -48,7 +47,7 @@ public class LoginServlet extends HttpServlet {
 
     user = new User(userId, userEmail);
 
-    if ((userId != "null") && (!isUserInDatastore(user))) {
+    if (userId != "null" && !isUserInDatastore(user)) {
       storeUserToDatastore(user);
     }
 
@@ -64,12 +63,10 @@ public class LoginServlet extends HttpServlet {
   }
 
   public boolean isUserInDatastore(User user) {
-
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Key userKey = KeyFactory.createKey("User", user.getUserId());
     Entity userEntity;
 
-    // Check if user is in datastore
     try {
       userEntity = datastore.get(userKey);
       user.setUserKey(KeyFactory.keyToString(userKey));
@@ -80,18 +77,13 @@ public class LoginServlet extends HttpServlet {
   }
 
   public void storeUserToDatastore(User user) {
-
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-    // Create new user entity 
     Entity newEntity = user.createEntity();
-
-    // Create User's key and add to object
     Key key = newEntity.getKey(); 
     String userKeyStr = KeyFactory.keyToString(key);
     user.setUserKey(userKeyStr);
 
     datastore.put(newEntity);
   }
-
 }

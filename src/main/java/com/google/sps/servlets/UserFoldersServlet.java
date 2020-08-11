@@ -24,26 +24,26 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
-
-/** **/
 @WebServlet("/userfolders")
 public class UserFoldersServlet extends HttpServlet {
-
-  /**
+  
+  private final String CREATE_FORM_HEADER = "showCreateFormStatus";
+  private final String USER_FOLDER_HEADER = "userFolders";
+  
+  /*
   * Query all folders from current user
   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
     UserService userService = UserServiceFactory.getUserService();
 
     Map<String, Object> jsonInfo = new HashMap<>();
-    jsonInfo.put("showCreateFormStatus", false);
+    jsonInfo.put(CREATE_FORM_HEADER, false);
     List<Folder> userFolders = new ArrayList<>();
 
     if (userService.isUserLoggedIn()) {
 
-      jsonInfo.put("showCreateFormStatus", true);
+      jsonInfo.put(CREATE_FORM_HEADER, true);
       String userKey = request.getParameter("userKey");
 
       Query folderQuery = new Query("Folder").setAncestor(KeyFactory.stringToKey(userKey));
@@ -60,18 +60,16 @@ public class UserFoldersServlet extends HttpServlet {
       }
     }
 
-    jsonInfo.put("userFolders", userFolders);
+    jsonInfo.put(USER_FOLDER_HEADER, userFolders);
     response.setContentType("application/json;");
     response.getWriter().println(new Gson().toJson(jsonInfo));
   }
   
-  /**
-  ** Store new folder into Datastore
-  **/
-
+  /*
+  * Store new folder into Datastore
+  */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) {
-
     UserService userService = UserServiceFactory.getUserService();
 
     if (userService.isUserLoggedIn()) {
@@ -81,7 +79,8 @@ public class UserFoldersServlet extends HttpServlet {
       String userKey = request.getParameter("userKey");
 
       Folder folder = new Folder(folderName, folderDefaultLanguage);
-      Entity folderEntity = folder.createEntity(KeyFactory.stringToKey(userKey));
+      folder.setParentKey(userKey);
+      Entity folderEntity = folder.createEntity();
       
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(folderEntity);

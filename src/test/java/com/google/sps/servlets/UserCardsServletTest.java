@@ -24,15 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
-import com.google.appengine.tools.development.testing.LocalBlobstoreServiceTestConfig;
 
-import com.google.appengine.api.blobstore.BlobInfo;
-import com.google.appengine.api.blobstore.BlobInfoFactory;
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
-
-import static com.google.appengine.api.datastore.FetchOptions.Builder.withLimit;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -44,7 +36,6 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Entity;
 
 import com.google.gson.Gson;
-import com.google.common.collect.ImmutableMap;
 import com.google.sps.data.Folder;
 import com.google.sps.data.Card;
 import com.google.sps.tool.EntityTestingTool;
@@ -84,7 +75,6 @@ public final class UserCardsServletTest {
 
     // Initialize datastore
     datastore = DatastoreServiceFactory.getDatastoreService();
-
   }
 
   @After

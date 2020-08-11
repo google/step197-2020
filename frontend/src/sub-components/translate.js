@@ -1,4 +1,4 @@
-import   privateInfo from "../../../../../credentials/token.json";
+import privateInfo from "../../../../../credentials/token.json";
 
 /**
  * Fetches translated text using the Google translate API
@@ -21,7 +21,6 @@ export function getTranslation(term, fromLang, toLang) {
   )
     .then((res) => res.json())
     .then((result) => {
-      console.log(result);
       return result.data.translations.translatedText;
     });
   

@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import styled from "@emotion/styled";
 import css from "./CreateCardContent.css";
-import { motion } from "framer-motion";
 import FrontCard from "../flashcards/FlashcardFrontPreview";
 import BackCard from "../flashcards/FlashcardBackPreview";
 import { getTranslation } from "../sub-components/translate";
@@ -16,16 +14,15 @@ class CreateCardContent extends Component {
       fromLang: "none",
       toLang: "none",
     };
-    this.TranslateText = this.TranslateText.bind(this);
+    this.translateText = this.translateText.bind(this);
     this.fromLangSelected = this.fromLangSelected.bind(this);
     this.toLangSelected = this.toLangSelected.bind(this);
   }
   /** 
-   * When the user has finished typing, the Google translate
+   * When the user has finished typing, the Google Translate
    * API is called to fetch the translated version of the text input.
    */
-  TranslateText(event) {
-    event.preventDefault();
+  translateText(event) {
     // Ensures that languages have been selected before translating
     if (this.state.fromLang !== "none" && this.state.toLang !== "none") {
       const translated = getTranslation(
@@ -92,7 +89,7 @@ class CreateCardContent extends Component {
                     id="mainText"
                     type="text"
                     placeholder={this.state.text}
-                    onBlur={this.TranslateText}
+                    onBlur={this.translateText}
                     required
                   ></input>
                 </li>

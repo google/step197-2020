@@ -3,7 +3,7 @@ import styled from "@emotion/styled"
 
 class FlashcardBack extends React.Component {
   render() {
-    const Contain = styled.div`
+    const FlashcardContainer = styled.div`
       border-radius: 30px;
       position: relative;
       width: 100%;
@@ -23,8 +23,8 @@ class FlashcardBack extends React.Component {
       @media (max-width: 700px) {
         width: 80%;
         height: 70%;
-      }
-    `;
+      }`;
+    
     return (
       <Contain className="FlashcardBack" >
         {this.props.text}

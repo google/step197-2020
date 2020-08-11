@@ -27,7 +27,7 @@ import com.google.gson.Gson;
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
-import com.google.sps.tool.GoogleTranslationAPI;
+import com.google.sps.tool.GoogleTranslate;
 
 import com.google.sps.data.Folder;
 import com.google.sps.data.Card;
@@ -65,6 +65,7 @@ public class UserCardsServlet extends HttpServlet {
         if (results != null) {
           for (Entity entity: results.asIterable()) {
             Card card = new Card(entity);
+            card.setCardKey(KeyFactory.keyToString(entity.getKey()));
             userCards.add(card);
           }   
         }
@@ -87,7 +88,7 @@ public class UserCardsServlet extends HttpServlet {
         String fromLang = request.getParameter("fromLang");
         String toLang = request.getParameter("toLang");
         String rawText = request.getParameter("rawText");
-        String textTranslated = GoogleTranslationAPI.translateText(rawText, toLang);
+        String textTranslated = request.getParameter("translatedText");
         String blobKey = getBlobKey(request);
 
         Card card = new Card(blobKey, labels, fromLang, toLang, rawText, textTranslated);

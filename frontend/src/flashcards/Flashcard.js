@@ -13,9 +13,8 @@ const flipStyle = {
 };
 
 /*
-  The Flashcard component takes in three props:
-  text, translation, and image.
-  It renders a flashcard with both a front and a back.
+  The Flashcard component renders a flipping
+  flashcard with both a front and a back.
   It also uses the react-card-flip library, so make 
   sure to install it if possible!
 */
@@ -31,7 +30,6 @@ class Flashcard extends React.Component {
       upon being clicked on.
     */
   handleClick(e) {
-    e.preventDefault();
     this.setState((prevState) => ({ isFlipped: !prevState.isFlipped }));
     console.log(e);
   }

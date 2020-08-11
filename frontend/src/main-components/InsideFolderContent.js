@@ -3,6 +3,14 @@ import styled from "@emotion/styled";
 import Flashcard from "../flashcards/Flashcard.js";
 import NewCard from "../flashcards/NewCard.js";
 
+const DebugMessage = (message, isOn) => {
+  if (isOn) {
+    console.log(message);
+  }
+};
+
+const debuggerMessageOn = false;
+
 const InsideFolderContent = (props) => {
   const Container = styled.div`
     flex: 9 1 auto;
@@ -14,9 +22,7 @@ const InsideFolderContent = (props) => {
     flex-direction: column;
   `;
 
-  //Ideally we would use a servlet to get cards, but for now here's an empty card container.
   let flashcards;
-  // Currently we don't have a way to parse the folder key from the url
   try {
     fetch(`/usercards?folderKey=${folderKey}`, { method: "GET" })
       .then((result) => result.json())
@@ -25,14 +31,14 @@ const InsideFolderContent = (props) => {
           <Flashcard
             key={flashcard.cardKey}
             image={flashcard.blobKey}
-            text={flashcard.textNotTranslated}
+            text={flashcard.rawText}
             translation={flashcard.textTranslated}
             labels={flashcard.labels}
           />
         ));
       });
   } catch (err) {
-    console.log("Can not fetch flashcards.");
+    DebugMessage("Can not fetch flashcards", debuggerMessageOn);
   }
 
   const CardContainer = {

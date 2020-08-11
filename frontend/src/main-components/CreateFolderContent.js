@@ -9,8 +9,6 @@ class CreateFolderContent extends Component {
       folderName: "None",
       folderLang: "English",
     };
-    // TODO: get userId
-    this.userId = "123";
     this.handleFolderName = this.handleFolderName.bind(this);
     this.handleFolderLang = this.handleFolderLang.bind(this);
   }
@@ -38,7 +36,7 @@ class CreateFolderContent extends Component {
 
           <div id='formBox'>
             <ul>
-              <form id='myForm' action='/folder' method='post'>
+              <form id='myForm' action='/userfolders' method='post'>
                 <li>
                   <label>Folder Name: </label>
                 </li>

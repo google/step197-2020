@@ -10,7 +10,6 @@ class Home extends React.Component {
     this.loginClick = this.handleLoginClick.bind(this);
     this.folderClick = this.handleFoldersClick.bind(this);
     this.state = {
-      userKey: "null",
       loginStatus: false,
       logoutUrl: "null",
       isDataFetched: false,
@@ -28,7 +27,6 @@ class Home extends React.Component {
             loginStatus: true,
             logoutUrl: info["logoutUrl"],
             isDataFetched: true,
-            userKey: info["userInfo"]["userKey"],
           });
         } else {
           this.setState({ loginStatus: false, isDataFetched: true });
@@ -51,14 +49,14 @@ class Home extends React.Component {
   };
 
   handleFoldersClick = (e) => {
-    window.location = "/userfolders?userKey=" + this.state.userKey;
+    window.location = "/userfolders";
   };
 
   render() {
     // Ensures that the loginServlet has been called before loading child components
     if (!this.state.isDataFetched) return null;
     return (
-      <div className="App">
+      <div className='App'>
         <NavBar
           loginStatus={this.state.loginStatus}
           loginClick={this.loginClick}

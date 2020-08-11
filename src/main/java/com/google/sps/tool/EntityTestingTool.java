@@ -22,14 +22,4 @@ public class EntityTestingTool {
       card.getProperty("toLang") != null &&
       card.getProperty("cardKey") != null);
   }
-
-  public static Folder storeFolderInDatastore(Folder folder, DatastoreService datastore, String userKey) {
-    folder.setParentKey(userKey);
-    Entity folderEntity = folder.createEntity();
-    datastore.put(folderEntity);
-
-    folder.setFolderKey(KeyFactory.keyToString(folderEntity.getKey()));
-    
-    return folder;
-  }
 }

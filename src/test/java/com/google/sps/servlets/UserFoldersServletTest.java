@@ -38,7 +38,6 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.gson.Gson;
 import com.google.common.collect.ImmutableMap;
 import com.google.sps.data.Folder;
-import com.google.sps.tool.EntityTestingTool;
 import java.util.List; 
 import java.util.ArrayList;
 import java.util.Map;
@@ -97,8 +96,8 @@ public final class UserFoldersServletTest {
     when(mockRequest.getParameter("userKey")).thenReturn(userKey);
     
     List<Folder> folders = new ArrayList<>();
-    Folder folderAInDatastore = EntityTestingTool.storeFolderInDatastore(folderA, datastore, userKey);
-    Folder folderBInDatastore = EntityTestingTool.storeFolderInDatastore(folderB, datastore, userKey);
+    Folder folderAInDatastore = storeFolderInDatastore(folderA, datastore, userKey);
+    Folder folderBInDatastore = storeFolderInDatastore(folderB, datastore, userKey);
     folders.add(folderAInDatastore);
     folders.add(folderBInDatastore);
 
@@ -173,8 +172,8 @@ public final class UserFoldersServletTest {
     Entity user = new Entity("User", "testId");
     String userKey = KeyFactory.keyToString(user.getKey());
     
-    Folder folderAInDatastore = EntityTestingTool.storeFolderInDatastore(folderA, datastore, userKey);
-    Folder folderBInDatastore = EntityTestingTool.storeFolderInDatastore(folderB, datastore, userKey);
+    Folder folderAInDatastore = storeFolderInDatastore(folderA, datastore, userKey);
+    Folder folderBInDatastore = storeFolderInDatastore(folderB, datastore, userKey);
 
     when(mockRequest.getParameter("folderName")).thenReturn("Folder1");
     when(mockRequest.getParameter("folderDefaultLanguage")).thenReturn("en");
@@ -182,5 +181,15 @@ public final class UserFoldersServletTest {
 
     servlet.doPost(mockRequest, mockResponse);
     assertEquals(3, datastore.prepare(new Query("Folder").setAncestor(user.getKey())).countEntities(withLimit(10)));
+  }
+
+  private Folder storeFolderInDatastore(Folder folder, DatastoreService datastore, String userKey) {
+    folder.setParentKey(userKey);
+    Entity folderEntity = folder.createEntity();
+    datastore.put(folderEntity);
+
+    folder.setFolderKey(KeyFactory.keyToString(folderEntity.getKey()));
+    
+    return folder;
   }
 }

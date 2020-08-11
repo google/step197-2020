@@ -41,8 +41,7 @@ import com.google.sps.data.Folder;
 import com.google.sps.tool.EntityTestingTool;
 import java.util.List; 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
+
 
 
 @RunWith(JUnit4.class)
@@ -105,8 +104,10 @@ public final class EditFolderServletTest {
     servlet.doPut(mockRequest, mockResponse);
 
     Entity editedFolder = datastore.get(KeyFactory.stringToKey(folderKey));
+    Folder editedFolderObj = new Folder(editedFolder);
+    editedFolderObj.setFolderKey(folderKey);
 
-    String response = new Gson().toJson(new Folder(editedFolder));
+    String response = new Gson().toJson(editedFolderObj);
     String expectedResponse = new Gson().toJson(expectedFolder);
 
     assertEquals(response, expectedResponse);

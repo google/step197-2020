@@ -11,7 +11,6 @@ const MyFoldersContent = (props) => {
     margin: 1%;
   `;
 
-
   return (
     <Container>
       <h1>You have 0 Folders </h1>

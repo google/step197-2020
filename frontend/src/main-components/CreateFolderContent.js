@@ -9,8 +9,6 @@ class CreateFolderContent extends Component {
       folderName: "None",
       folderLang: "English",
     };
-    // TODO: get userKey
-    this.userKey ="ahFzdTE5LWNvZGV1LTgtNTQ3MnIfCxIEVXNlciIVMTcxNzQ5MTA2ODUxNTcxMzcxNTkxDA";
     this.handleFolderName = this.handleFolderName.bind(this);
     this.handleFolderLang = this.handleFolderLang.bind(this);
   }
@@ -29,45 +27,45 @@ class CreateFolderContent extends Component {
    */
   render() {
     return (
-      <div id="container">
-        <div id="innerContainer">
-          <div id="folderPreview">
-            <h2 id="previewFolderName">{this.state.folderName}</h2>
-            <h4 id="previewFolderLang">{this.state.folderLang}</h4>
+      <div id='container'>
+        <div id='innerContainer'>
+          <div id='folderPreview'>
+            <h2 id='previewFolderName'>{this.state.folderName}</h2>
+            <h4 id='previewFolderLang'>{this.state.folderLang}</h4>
           </div>
 
-          <div id="formBox">
+          <div id='formBox'>
             <ul>
-              <form id="myForm" action={`/folder?userKey=${this.userKey}`} method="POST">
+              <form id='myForm' action='/userfolders' method='POST'>
                 <li>
                   <label>Folder Name: </label>
                 </li>
                 <li>
                   <input
-                    id="folderName"
-                    name="folderName"
-                    type="text"
+                    id='folderName'
+                    name='folderName'
+                    type='text'
                     placeholder={this.state.folderName}
                     onBlur={this.handleFolderName}
-                    required
-                  ></input>
+                    required></input>
                 </li>
-
                 <li>
                   <label>Folder Language:</label>
                 </li>
                 <li>
-                  <div id="scroll">
+                  <div id='scroll'>
                     <select
-                      id="language"
-                      name="language"
+                      id='language'
+                      name='language'
                       value={this.state.folderLang}
                       onChange={this.handleFolderLang}
-                      required
-                    >
-                      <option value="English">English</option>
+                      required>
+                      <option value='English'>English</option>
                       {
-                        // Parse json and display supported languages in scroll list
+                        /*
+                        * Instead of using the languageScroll sub-component, we parse the supported languages so
+                        * the value/language-name can be displayed on the folder preview.
+                        */
                         supportedLang.languages.map((lang) => {
                           return (
                             <option value={lang.language}>
@@ -80,7 +78,7 @@ class CreateFolderContent extends Component {
                   </div>
                 </li>
                 <li>
-                  <input id="submission" type="submit" value="Submit" />
+                  <input id='submission' type='submit' value='Submit' />
                 </li>
               </form>
             </ul>

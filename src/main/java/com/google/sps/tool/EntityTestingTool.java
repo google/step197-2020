@@ -21,24 +21,7 @@ public class EntityTestingTool {
       card.getProperty("textTranslated") != null &&
       card.getProperty("rawText") != null &&
       card.getProperty("fromLang") != null &&
-      card.getProperty("toLang") != null &&
-      card.getProperty("cardKey") != null);
-  }
-
-  public static List<Folder> populateDatastoreWithFolders(Folder folderA, Folder folderB, DatastoreService datastore, String userKey) {
-    
-    Entity folderEntityA = folderA.createEntity(KeyFactory.stringToKey(userKey));
-    Entity folderEntityB = folderB.createEntity(KeyFactory.stringToKey(userKey));
-
-    // Update entity in datastore 
-    datastore.put(folderEntityA);
-    datastore.put(folderEntityB);
-
-    List<Folder> folders = new ArrayList<>();
-    folders.add(new Folder(folderEntityA));
-    folders.add(new Folder(folderEntityB));
-
-    return folders;
+      card.getProperty("toLang") != null);
   }
 
   public static Folder populateDatastoreWithAFolder(Folder folder, DatastoreService datastore, String userKey) {
@@ -48,24 +31,23 @@ public class EntityTestingTool {
     // Update entity in datastore 
     datastore.put(folderEntity);
 
-    return new Folder(folderEntity);
-  }
-
-  public static List<Card> populateDatastoreWithCards(Card cardA, Card cardB, DatastoreService datastore, String folderKey) {
-
+    Folder folderObject = new Folder(folderEntity);
+    folderObject.setFolderKey(KeyFactory.keyToString(folderEntity.getKey()));
     
-    Entity cardEntityA = cardA.createEntity(KeyFactory.stringToKey(folderKey));
-    Entity cardEntityB = cardB.createEntity(KeyFactory.stringToKey(folderKey));
+    return folderObject;
+  }
+  
+  public static Card populateDatastoreWithACard(Card card, DatastoreService datastore, String folderKey) {
+    
+    Entity cardEntity = card.createEntity(KeyFactory.stringToKey(folderKey));
 
     // Update entity in datastore 
-    datastore.put(cardEntityA);
-    datastore.put(cardEntityB);
+    datastore.put(cardEntity);
 
-    List<Card> cards = new ArrayList<>();
-    cards.add(new Card(cardEntityA));
-    cards.add(new Card(cardEntityB));
+    Card cardObject = new Card(cardEntity);
+    cardObject.setCardKey(KeyFactory.keyToString(cardEntity.getKey()));
 
-    return cards;
+    return cardObject;
   }
 
   public static Map<String, Object> getExpectedJsonFolderInfo(List<Folder> folders, boolean showCreateFormStatus) {

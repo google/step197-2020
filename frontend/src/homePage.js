@@ -37,7 +37,6 @@ class Home extends React.Component {
     const userInfo = fetch("/login")
       .then((response) => response.json())
       .then((info) => {
-
         // If the user is logged in then the button will become a logout button
         if (info["showTabStatus"] === true) {
           window.location = this.state.logoutUrl;

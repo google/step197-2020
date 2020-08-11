@@ -37,7 +37,7 @@ class folderScroll extends Component {
         name="languages"
       >
         {
-          // Parse json and display supported languages in scroll list
+          // Parses JSON and displays all the users folders
           data.usersFolders.map((folder) => {
             return (
               <option key={folder.folderName} value={folder.folderKey}>

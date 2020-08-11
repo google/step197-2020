@@ -7,7 +7,6 @@ class languageScroll extends Component {
     super(props);
   }
 
-
   render() {
     const Options = styled.select`
       width: 30%;
@@ -20,11 +19,10 @@ class languageScroll extends Component {
       font-size: 1.75rem;
     `;
 
-
     return (
-      <Options onChange={this.props.clickFunc} value={this.props.selected}name="languages">
+      <Options onChange={this.props.clickFunc} value={this.props.selected} name="languages">
         {
-          // Parse json and display supported languages in scroll list
+          // // Parses JSON and displays the supported languages in a scroll list
           supportedLang.languages.map((lang) => {
            
             return <option key={lang.code}

@@ -1,7 +1,7 @@
 import privateInfo from "../../../../../credentials/token.json";
 
 /**
- * Fetches translated text using the Google translate API
+ * Fetches translated text using the Google Translate API
  */
 export function getTranslation(term, fromLang, toLang) {
 

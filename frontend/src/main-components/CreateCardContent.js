@@ -71,14 +71,16 @@ class CreateCardContent extends Component {
                     <LangaugeScroll
                       clickFunc={this.fromLangSelected}
                       selected={this.state.fromLang}
-                      key='from'></LangaugeScroll>
+                      key='from'>
+                    </LangaugeScroll>
                   </span>
                   <span className='inline'>
                     <label className='block'>To:</label>
                     <LangaugeScroll
                       clickFunc={this.toLangSelected}
                       selected={this.state.toLang}
-                      key='to'></LangaugeScroll>
+                      key='to'>
+                    </LangaugeScroll>
                   </span>
                 </li>
                 <li>
@@ -88,7 +90,8 @@ class CreateCardContent extends Component {
                     type='text'
                     placeholder={this.state.text}
                     onBlur={this.translateText}
-                    required></input>
+                    required>
+                  </input>
                 </li>
                 <li>
                   <label className='block'>Translation:</label>
@@ -96,7 +99,8 @@ class CreateCardContent extends Component {
                     id='translate'
                     type='text'
                     placeholder={this.state.translation}
-                    readOnly></input>
+                    readOnly>
+                  </input>
                 </li>
                 <li>
                   <span className='inline'>

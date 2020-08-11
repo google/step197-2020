@@ -3,43 +3,43 @@ html {
 }
 
 #folderPreview {
-  flex: 3;
-  border-radius: 30px;
-  width: 80%;
-  height: 50%;
+  align-items: center;
   background-color: white;
-  color: black;
+  border-radius: 30px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 8px;
+  color: black;
+  display: flex;
+  flex: 3;
+  flex-direction: column;
   font-family: "Montserrat", sans-serif;
   font-size: 30px;
   font-weight: 600;
+  height: 50%;
   justify-content: center;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
+  width: 80%;
 }
 
 #container {
-  flex: 9;
-  display: flex;
+  background-color: white;
   border: 1rem solid white;
   border-radius: 1rem;
-  background-color: white;
-  margin: 1%;
+  display: flex;
+  flex: 9;
   justify-content: center;
+  margin: 1%;
 }
 
 #innerContainer {
-  margin-top: 10%;
   display: flex;
-  width: 80%;
   flex-direction: row;
+  margin-top: 10%;
+  width: 80%;
 }
 
 #previewFolderName {
   display: flex;
-  text-decoration: underline;
   margin-bottom: unset;
+  text-decoration: underline;
 }
 
 #previewFolderLang {
@@ -48,19 +48,19 @@ html {
 }
 
 #formBox {
+  align-items: flex-start;
   flex: 8;
-  width: 100%;
   flex-direction: column;
   flex-wrap: nowrap;
   justify-content: flex-start;
-  align-items: flex-start;
+  width: 100%;
 }
 
 ul {
-  list-style-type: none;
-  font-size: 2.5rem;
-  width: 100%;
   font-family: "Montserrat", sans-serif;
+  font-size: 2.5rem;
+  list-style-type: none;
+  width: 100%;
 }
 
 li {
@@ -68,34 +68,34 @@ li {
 }
 
 #folderName {
-  width: 50%;
-  height: 2.5rem;
   border: 0.2rem solid #136f9f;
   border-radius: 0.5rem;
   font-size: 1.75rem;
+  height: 2.5rem;
+  width: 50%;
 }
 
 #language {
-  width: 30%;
-  min-width: 12rem;
-  height: 2.5rem;
-  border: 0.2rem solid #136f9f;
   background-color: white;
-  color: black;
+  border: 0.2rem solid #136f9f;
   border-radius: 0.5rem;
+  color: black;
   font-size: 1.75rem;
+  height: 2.5rem;
+  min-width: 12rem;
+  width: 30%;
 }
 
 #submission {
-  margin-top: 1.5rem;
   background-color: #136f9f;
   border: none;
+  border-radius: 1rem;
   color: white;
+  font-size: 2rem;
+  margin-top: 1.5rem;
   padding: 1.2rem 2.5rem;
   text-align: center;
   text-decoration: none;
-  border-radius: 1rem;
-  font-size: 2rem;
 }
 
 #submission:hover {
@@ -111,9 +111,9 @@ li {
 
   #folderPreview {
     flex: 1;
-    margin-right: auto;
-    margin-left: auto;
     height: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   #innerContainer {

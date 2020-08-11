@@ -104,6 +104,7 @@ li {
 
 /* Mobile layout */
 @media (max-width: 700px) {
+  
   #formBox {
     flex: 1;
   }

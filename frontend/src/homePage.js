@@ -18,19 +18,23 @@ class Home extends React.Component {
     this.checkLogin();
   }
 
-  // Calls the login Servlet when the page loads for the first time
+  // Calls the login servlet to check if the user is logged in
   checkLogin(e) {
     const userInfo = fetch("/login")
       .then((response) => response.json())
       .then((info) => {
         if (info["showTabStatus"] === true) {
-          this.setState({ loginStatus: true, logoutUrl: info["logoutUrl"], isDataFetched: true, userKey: info['userInfo']['userKey'] });
+          this.setState({
+            loginStatus: true,
+            logoutUrl: info["logoutUrl"],
+            isDataFetched: true,
+            userKey: info["userInfo"]["userKey"],
+          });
         } else {
           this.setState({ loginStatus: false, isDataFetched: true });
         }
       });
   }
-
 
   // Handles buttons that login & logout user
   handleLoginClick = (e) => {
@@ -46,13 +50,12 @@ class Home extends React.Component {
       });
   };
 
-
   handleFoldersClick = (e) => {
     window.location = "/userfolders?userKey=" + this.state.userKey;
   };
 
   render() {
-    // Ensures that the loginServlet has been called before loading child components 
+    // Ensures that the loginServlet has been called before loading child components
     if (!this.state.isDataFetched) return null;
     return (
       <div className="App">

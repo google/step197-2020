@@ -92,6 +92,7 @@ li {
 
 /* Mobile layout */
 @media (max-width: 700px) {
+  
   .inline {
     margin-right: none;
   }

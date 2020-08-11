@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import styled from "@emotion/styled";
 import css from "./CreateCardContent.css";
-import { motion } from "framer-motion";
 import FrontCard from "../flashcards/FlashcardFrontPreview";
 import BackCard from "../flashcards/FlashcardBackPreview";
 import { getTranslation } from "../sub-components/translate";
@@ -18,22 +16,19 @@ class CreateCardContent extends Component {
       toLang: "none",
       folder: "",
     };
-    this.TranslateText = this.TranslateText.bind(this);
+    this.translateText = this.translateText.bind(this);
     this.fromLangSelected = this.fromLangSelected.bind(this);
     this.toLangSelected = this.toLangSelected.bind(this);
     // TODO: Implement a way for the userKey to be passed between all pages for now it will be hardcoded
     this.userKey =
       "ahFzdTE5LWNvZGV1LTgtNTQ3MnIfCxIEVXNlciIVMTIxODQwMTczNDMzMDE4NzUzNDMxDA";
   }
-  /**
-   * When the user has finished typing the Google translate
-   * API iss called to fetch the translated version    of text
+
+  /** 
+   * When the user has finished typing, the Google Translate
+   * API is called to fetch the translated version of the text input.
    */
-  TranslateText(event) {
-    event.preventDefault();
-    console.log(this.state.fromLang);
-    console.log(this.state.toLang);
-    console.log(event.target.value);
+  translateText(event) {
     // Ensures that languages have been selected before translating
     if (this.state.fromLang !== "none" && this.state.toLang !== "none") {
       const translated = getTranslation(
@@ -109,7 +104,7 @@ class CreateCardContent extends Component {
                     id="mainText"
                     type="text"
                     placeholder={this.state.text}
-                    onBlur={this.TranslateText}
+                    onBlur={this.translateText}
                     required
                   ></input>
                 </li>

@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import styled from "@emotion/styled";
 import css from "./CreateFolderContent.css";
-import { motion } from "framer-motion";
 import supportedLang from "../sub-components/SupportedLang.json";
 
 class CreateFolderContent extends Component {
@@ -18,8 +16,6 @@ class CreateFolderContent extends Component {
   }
 
   handleFolderName(event) {
-    event.preventDefault();
-    console.log(this.userKey);
     this.setState({ folderName: event.target.value });
   }
 

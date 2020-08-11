@@ -17,7 +17,7 @@ html {
   display: flex;
   width: 80%;
   flex-direction: row;
-  display:flex;
+  display: flex;
 }
 
 #CardPreview {
@@ -38,7 +38,7 @@ html {
   align-items: flex-start;
 }
 
-.inline{
+.inline {
   display: inline-block;
   margin-right: 3rem;
 }
@@ -59,17 +59,16 @@ li {
 }
 
 #translated {
-  border: .2rem solid #136f9f;
+  border: 0.2rem solid #136f9f;
   background-color: #c4c4c4;
   color: black;
   width: 60%;
   font-size: 2.2rem;
   height: 3rem;
-  margin-top: .1rem;
-  margin-bottom: .1rem;
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
   padding-left: 1rem;
 }
-
 
 #submission {
   margin-top: 1.5rem;
@@ -93,18 +92,20 @@ li {
 
 /* Mobile layout */
 @media (max-width: 700px) {
-  .inline  {
+  .inline {
     margin-right: none;
   }
+
   #innerContainer {
     flex-direction: column;
   }
+
   ul {
     padding: 0;
     list-style-type: none;
   }
+
   #formBox {
     justify-content: center;
   }
-  
 }

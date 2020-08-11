@@ -1,10 +1,8 @@
 import React, { useState, Component } from "react";
-
 import ReactDOM from "react-dom";
 import NavBar from "./homePage/NavBar";
 import LandingPage from "./homePage/LandingPage";
 import About from "./homePage/About";
-
 
 class Home extends React.Component {
   constructor(props) {
@@ -33,12 +31,14 @@ class Home extends React.Component {
       });
   }
 
+
   // Handles buttons that login & logout user
   handleLoginClick = (e) => {
     const userInfo = fetch("/login")
       .then((response) => response.json())
       .then((info) => {
-        // If the user has logged in before then the button will now be a logout button
+
+        // If the user is logged in then the button will become a logout button
         if (info["showTabStatus"] === true) {
           window.location = this.state.logoutUrl;
         } else {
@@ -49,7 +49,7 @@ class Home extends React.Component {
 
 
   handleFoldersClick = (e) => {
-    window.location = "/myFolders?userKey=" + this.state.userKey;
+    window.location = "/userfolders?userKey=" + this.state.userKey;
   };
 
   render() {

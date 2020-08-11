@@ -15,6 +15,7 @@ class LandingPage extends React.Component {
         this.clickHandling = this.props.folderClick;
       }
 
+      
     }
   
     render() {

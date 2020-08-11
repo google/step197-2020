@@ -13,7 +13,7 @@ html {
   font-family: "Montserrat", sans-serif;
   font-size: 30px;
   font-weight: 600;
-  justify-content:center;
+  justify-content: center;
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -107,23 +107,24 @@ li {
   #formBox {
     flex: 1;
   }
+
   #folderPreview {
     flex: 1;
-    margin-right:auto;
-    margin-left:auto;
-    height:100%;
+    margin-right: auto;
+    margin-left: auto;
+    height: 100%;
   }
+
   #innerContainer {
     flex-direction: column;
     margin-bottom: 10rem;
   }
 
   #previewFolderName {
-  font-size:3rem;
-}
+    font-size: 3rem;
+  }
 
-#previewFolderLang {
-  font-size: 2.25rem;
-}
-
+  #previewFolderLang {
+    font-size: 2.25rem;
+  }
 }

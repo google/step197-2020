@@ -104,7 +104,7 @@ public final class UserFoldersServletTest {
 
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    String expectedResponse = new Gson().toJson(EntityTestingTool.getExpectedJsonFolderInfo(/*folder=*/foldersInDatastore, /*showCreateFormStatus=*/true));
+    String expectedResponse = new Gson().toJson(EntityTestingTool.getExpectedJsonFolderInfo(/*folder=*/folders, /*showCreateFormStatus=*/true));
 
     assertTrue(compareJson(response, expectedResponse));
   }

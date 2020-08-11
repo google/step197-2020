@@ -25,6 +25,7 @@ import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 
+import static com.google.appengine.api.datastore.FetchOptions.Builder.withLimit;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -36,6 +37,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Entity;
 
 import com.google.gson.Gson;
+import com.google.common.collect.ImmutableMap;
 import com.google.sps.data.Folder;
 import com.google.sps.data.Card;
 import com.google.sps.tool.EntityTestingTool;
@@ -51,8 +53,7 @@ public final class UserCardsServletTest {
     new LocalServiceTestHelper(
       new LocalDatastoreServiceTestConfig()
         .setDefaultHighRepJobPolicyUnappliedJobPercentage(0),
-      new LocalUserServiceTestConfig(),
-      new LocalBlobstoreServiceTestConfig())
+      new LocalUserServiceTestConfig())
       .setEnvIsAdmin(true).setEnvIsLoggedIn(true)
       .setEnvEmail("test@gmail.com").setEnvAuthDomain("gmail.com");
   
@@ -75,6 +76,7 @@ public final class UserCardsServletTest {
 
     // Initialize datastore
     datastore = DatastoreServiceFactory.getDatastoreService();
+
   }
 
   @After

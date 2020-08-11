@@ -56,8 +56,9 @@ public final class LoginServletTest {
 
   private static final User LOGGED_IN_USER = new User(USER_ID, "test@gmail.com");
   private static final User LOGGED_OUT_USER = new User("null", "null");
-  private static final String LOGOUTURL = "/_ah/logout?continue\u003d%2F";
-  private static final String LOGINURL = "/_ah/login?continue\u003d%2F";
+  private static final String USER_KEY = "agR0ZXN0chALEgRVc2VyIgZ0ZXN0SUQM"; 
+  private static final String LOGOUTURL = "/_ah/logout?continue\\u003d%2F";
+  private static final String LOGINURL = "/_ah/login?continue\\u003d%2F";
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
   private StringWriter responseWriter;
@@ -92,11 +93,16 @@ public final class LoginServletTest {
 
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    
-    Key key = LOGGED_IN_USER.createEntity().getKey(); 
-    LOGGED_IN_USER.setUserKey(KeyFactory.keyToString(key));
-    String expectedResponse = new Gson().toJson(getExpectedJsonInfo(
-       /*user*/LOGGED_IN_USER, /*tabStatus*/true, /*logoutUrl*/LOGOUTURL, /*loginUrl*/"null"));
+    String expectedResponse = 
+      "{\"userInfo\":" 
+        + "{" 
+        +  "\"userId\":\"testID\"," 
+        +  "\"email\":\"test@gmail.com\"," 
+        +  "\"userKey\":\"" + USER_KEY 
+        + "\"}," 
+      + "\"logoutUrl\":\"" + LOGOUTURL + "\","
+      + "\"loginUrl\":\"null\","
+      + "\"showTabStatus\":true}";
 
     assertTrue(compareJson(response, expectedResponse));
   }
@@ -105,11 +111,19 @@ public final class LoginServletTest {
   public void userLoggedInButNotInDatastore() throws Exception {
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-
-    Key key = LOGGED_IN_USER.createEntity().getKey(); 
-    LOGGED_IN_USER.setUserKey(KeyFactory.keyToString(key));
-    String expectedResponse = new Gson().toJson(getExpectedJsonInfo(
-        /*user*/LOGGED_IN_USER, /*tabStatus*/true, /*logoutUrl*/LOGOUTURL, /*loginUrl*/"null"));
+    String expectedResponse = 
+      "{\"userInfo\":" 
+        + "{" 
+        +  "\"userId\":\"testID\"," 
+        +  "\"email\":\"test@gmail.com\"," 
+        +  "\"userKey\":\"" + USER_KEY 
+        + "\"}," 
+      + "\"logoutUrl\":\"" + LOGOUTURL + "\","
+      + "\"loginUrl\":\"null\","
+      + "\"showTabStatus\":true}";
+    
+    System.out.println(response);
+    System.out.println(expectedResponse);
 
     assertTrue(compareJson(response, expectedResponse));
   }
@@ -119,20 +133,18 @@ public final class LoginServletTest {
     helper.setEnvIsLoggedIn(false);
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    String expectedResponse = new Gson().toJson(getExpectedJsonInfo(
-        /*user*/LOGGED_OUT_USER, /*tabStatus*/false, /*logoutUrl*/"null", /*loginUrl*/LOGINURL));
+    String expectedResponse = 
+      "{\"userInfo\":"
+        + "{"
+        +   "\"userId\":\"null\","
+        +   "\"email\":\"null\","
+        +    "\"userKey\":\"null\""
+        +  "},"
+      + "\"logoutUrl\":\"null\","
+      + "\"loginUrl\":\"" + LOGINURL + "\","
+      + "\"showTabStatus\":false}";
 
     assertTrue(compareJson(response, expectedResponse));
-  }
-  
-  public Map<String, Object> getExpectedJsonInfo(User user, boolean tabStatus, String logoutUrl, String loginUrl) {
-    Map<String, Object> expectedJsonInfo = new HashMap<>();
-    expectedJsonInfo.put("userInfo", user);
-    expectedJsonInfo.put("showTabStatus", tabStatus);
-    expectedJsonInfo.put("logoutUrl", logoutUrl);
-    expectedJsonInfo.put("loginUrl", loginUrl);
-
-    return expectedJsonInfo;
   }
 
   public void storeUsertoDatastore(DatastoreService datastore, User user) {

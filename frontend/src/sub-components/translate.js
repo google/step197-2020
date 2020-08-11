@@ -26,4 +26,3 @@ export function getTranslation(term, fromLang, toLang) {
   
   return response;
 }
-

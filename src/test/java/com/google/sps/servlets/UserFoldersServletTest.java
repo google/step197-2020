@@ -97,8 +97,8 @@ public final class UserFoldersServletTest {
     when(mockRequest.getParameter("userKey")).thenReturn(userKey);
     
     List<Folder> folders = new ArrayList<>();
-    Folder folderAInDatastore = EntityTestingTool.populateDatastoreWithAFolder(folderA, datastore, userKey);
-    Folder folderBInDatastore = EntityTestingTool.populateDatastoreWithAFolder(folderB, datastore, userKey);
+    Folder folderAInDatastore = EntityTestingTool.storeFolderInDatastore(folderA, datastore, userKey);
+    Folder folderBInDatastore = EntityTestingTool.storeFolderInDatastore(folderB, datastore, userKey);
     folders.add(folderAInDatastore);
     folders.add(folderBInDatastore);
 
@@ -173,8 +173,8 @@ public final class UserFoldersServletTest {
     Entity user = new Entity("User", "testId");
     String userKey = KeyFactory.keyToString(user.getKey());
     
-    Folder folderAInDatastore = EntityTestingTool.populateDatastoreWithAFolder(folderA, datastore, userKey);
-    Folder folderBInDatastore = EntityTestingTool.populateDatastoreWithAFolder(folderB, datastore, userKey);
+    Folder folderAInDatastore = EntityTestingTool.storeFolderInDatastore(folderA, datastore, userKey);
+    Folder folderBInDatastore = EntityTestingTool.storeFolderInDatastore(folderB, datastore, userKey);
 
     when(mockRequest.getParameter("folderName")).thenReturn("Folder1");
     when(mockRequest.getParameter("folderDefaultLanguage")).thenReturn("en");

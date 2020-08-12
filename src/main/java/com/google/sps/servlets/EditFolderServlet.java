@@ -23,7 +23,6 @@ public class EditFolderServlet extends HttpServlet{
   
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
     UserService userService = UserServiceFactory.getUserService();
 
     if (userService.isUserLoggedIn()) {
@@ -37,6 +36,11 @@ public class EditFolderServlet extends HttpServlet{
   private void updateFolder(HttpServletResponse response, String newFolderName, String newFolderDefaultLanguage, String folderKey) throws IOException {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Entity folder = getExistingFolderInDatastore(response, datastore, folderKey);
+    
+    if (folder == null) {
+        ResponseHandler.sendErrorMessage(response, "Cannot edit Folder at the moment");
+    }
+    
     setFolderWithRequestedEdits(folder, newFolderName, newFolderDefaultLanguage);
     datastore.put(folder);
   }
@@ -44,13 +48,10 @@ public class EditFolderServlet extends HttpServlet{
   private Entity getExistingFolderInDatastore(HttpServletResponse response, DatastoreService datastore, String folderKey) throws IOException {
     Entity folder;
     try {
-      folder = datastore.get(KeyFactory.stringToKey(folderKey));
+      return datastore.get(KeyFactory.stringToKey(folderKey));
     } catch (EntityNotFoundException e) {
-      ResponseHandler.sendErrorMessage(response, "Cannot edit Folder at the moment");
-      folder = null;
+      return null;
     }
-
-    return folder;
   }
 
   private void setFolderWithRequestedEdits(Entity folderEntity, String newFolderName, String newFolderDefaultLanguage) throws IOException {

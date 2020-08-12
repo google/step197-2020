@@ -13,17 +13,17 @@ class folderScroll extends Component {
   }
 
   grabFolders(e) {
+    // Mount boolean ensures that grabFolders is only called once
     this.mount = true;
     if (this.mount) {
       try {
         fetch(`/folder?userKey=${this.props.userKey}`, { method: "GET" })
           .then((result) => result.json())
           .then((data) => {
-            console.log(data);
             this.setState({ isDataFetched: true, folders: data });
           });
       } catch (err) {
-        console.log("Error: Could not fetch folders");
+        alert("Page could not load your folders, try refreshing");
       }
     }
   }
@@ -50,12 +50,11 @@ class folderScroll extends Component {
       <Options
         onChange={this.props.clickFunc}
         value={this.props.selected}
-        name="languages"
-        id={this.props.key}
-      >
+        name='languages'
+        id={this.props.key}>
         {
-          // Parse json and display all folders
-          this.state.folders.map((folder) => {
+          // Parses JSON and displays all the users folders
+          data.usersFolders.map((folder) => {
             return (
               <option key={folder.folderName} value={folder.folderKey}>
                 {folder.folderName}

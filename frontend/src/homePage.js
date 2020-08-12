@@ -1,10 +1,8 @@
 import React, { useState, Component } from "react";
-
 import ReactDOM from "react-dom";
 import NavBar from "./homePage/NavBar";
 import LandingPage from "./homePage/LandingPage";
 import About from "./homePage/About";
-
 
 class Home extends React.Component {
   constructor(props) {
@@ -12,7 +10,6 @@ class Home extends React.Component {
     this.loginClick = this.handleLoginClick.bind(this);
     this.folderClick = this.handleFoldersClick.bind(this);
     this.state = {
-      userKey: "null",
       loginStatus: false,
       logoutUrl: "null",
       isDataFetched: false,
@@ -20,13 +17,17 @@ class Home extends React.Component {
     this.checkLogin();
   }
 
-  // Calls the login Servlet when the page loads for the first time
+  // Calls the login servlet to check if the user is logged in
   checkLogin(e) {
     const userInfo = fetch("/login")
       .then((response) => response.json())
       .then((info) => {
         if (info["showTabStatus"] === true) {
-          this.setState({ loginStatus: true, logoutUrl: info["logoutUrl"], isDataFetched: true, userKey: info['userInfo']['userKey'] });
+          this.setState({
+            loginStatus: true,
+            logoutUrl: info["logoutUrl"],
+            isDataFetched: true,
+          });
         } else {
           this.setState({ loginStatus: false, isDataFetched: true });
         }
@@ -38,7 +39,7 @@ class Home extends React.Component {
     const userInfo = fetch("/login")
       .then((response) => response.json())
       .then((info) => {
-        // If the user has logged in before then the button will now be a logout button
+        // If the user is logged in then the button will become a logout button
         if (info["showTabStatus"] === true) {
           window.location = this.state.logoutUrl;
         } else {
@@ -47,16 +48,15 @@ class Home extends React.Component {
       });
   };
 
-
   handleFoldersClick = (e) => {
-    window.location = "/myFolders?userKey=" + this.state.userKey;
+    window.location = "/userfolders";
   };
 
   render() {
-    // Ensures that the loginServlet has been called before loading child components 
+    // Ensures that the loginServlet has been called before loading child components
     if (!this.state.isDataFetched) return null;
     return (
-      <div className="App">
+      <div className='App'>
         <NavBar
           loginStatus={this.state.loginStatus}
           loginClick={this.loginClick}
@@ -75,4 +75,3 @@ class Home extends React.Component {
 }
 
 ReactDOM.render(<Home />, document.getElementById("root"));
-

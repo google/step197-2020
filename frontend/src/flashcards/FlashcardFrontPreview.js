@@ -21,26 +21,26 @@ class FlashcardFront extends React.Component {
 
   render() {
     const Contain = styled.div`
-      border-radius: 30px;
-      position: relative;
-      width: 100%;
-      height: 350px;
+      align-items: center;
       background-color: white;
-      color: black;
+      border-radius: 30px;
       box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 8px;
+      color: black;
+      display: flex;
+      flex-direction: column;
       font-family: "Montserrat", sans-serif;
       font-size: 30px;
       font-weight: 600;
+      height: 350px;
+      position: relative;
+      width: 100%;
       text-align: center;
-      display: flex;
-      flex-direction: column;
       justify-content: center;
-      align-items: center;
       @media (max-width: 700px) {
-          width: 80%;
-          height: 70%;
-      }
-    `;
+        height: 100%;
+        width: 100%;
+      }`;
+    
     return (
       <Contain className="FlashcardFront">
         <img src={this.props.image} alt="image" style={imgStyle} />
@@ -49,5 +49,5 @@ class FlashcardFront extends React.Component {
     );
   }
 }
-/*<img src={this.props.image}/>*/
+
 export default FlashcardFront;

@@ -78,7 +78,7 @@ public class UserCardsServlet extends HttpServlet {
         // if blobKey is null, user did not add an image
         String folderKey = request.getParameter("folderKey");
         String blobKey = getBlobKeyfromBlobstore(request, "image");
-        //String labels = request.getParameter("labels");
+        String labels = request.getParameter("labels");
         String fromLang = request.getParameter("fromLang");
         String toLang = request.getParameter("toLang");
         String textNotTranslated = request.getParameter("textNotTranslated");

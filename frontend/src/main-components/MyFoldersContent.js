@@ -2,6 +2,14 @@ import React from "react";
 import styled from "@emotion/styled";
 import Folder from "../flashcards/Folder.js";
 
+const debugMessage= (message, isOn){
+  if(isOn){
+    console.log(message);
+  }
+}
+
+const debugMessageOn = false;
+
 const MyFoldersContent = (props) => {
   const Container = styled.div`
     flex: 9;
@@ -22,12 +30,10 @@ const MyFoldersContent = (props) => {
   let folders;
 
   //Fetch data from the UserFolders servlets to get the user folders
-  //UserKey is a temporary value for now.
   try {
-    fetch(`/userfolders?userKey=${userKey}`, { method: "GET" })
+    fetch(`/userfolders?userKey=${props.userKey}`, { method: "GET" })
       .then((result) => result.json())
       .then((data) => {
-        console.log(data);
         folders = data.map((folder) => (
           <Folder
             folderURL={folder.folderKey}
@@ -38,10 +44,9 @@ const MyFoldersContent = (props) => {
         ));
       });
   } catch (err) {
-    console.log("Folders can not be fetched right now.");
+    debugMessage("Folders can not be fetched", debugMessageOn);
   }
 
-  // The page should show different text depending on whether or not folders are available
   let headingText =
     "You have no folders at the moment. Please make a new folder by clicking on the side menu.";
   if (folders) {

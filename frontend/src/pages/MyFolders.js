@@ -1,9 +1,10 @@
-import React, { useState, Component } from "react";
+import React, { useState, Component, useEffect } from "react";
 import Header from "../main-components/Header";
 import Sidebar from "../main-components/Sidebar";
 import MyFoldersContent from "../main-components/MyFoldersContent";
+import queryString from "query-string";
 
-function MyFolders() {
+function MyFolders(props) {
   // Handles mobile menu button and updates sidebar view
   const [sideSetting, setSideSetting] = useState("f");
   const handleClick = (e) => {
@@ -15,12 +16,18 @@ function MyFolders() {
     }
   };
 
+  let userKey;
+  useEffect(() => {
+    const values = queryString.parse(props.location.search);
+    userKey = values.userKey;
+  });
+
   return (
     <div className="App">
       <Header id="head" handleClick={handleClick}></Header>
       <div id="main">
         <Sidebar bool={sideSetting}></Sidebar>
-        <MyFoldersContent></MyFoldersContent>
+        <MyFoldersContent userKey={userKey}></MyFoldersContent>
       </div>
     </div>
   );

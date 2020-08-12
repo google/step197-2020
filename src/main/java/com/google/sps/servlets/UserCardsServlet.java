@@ -119,7 +119,7 @@ public class UserCardsServlet extends HttpServlet {
     return blobKey;
   } 
 
-  private String getBlobKeyfromBlobstore(HttpServletRequest request, String formInputElementName) {
+  private String getBlobKeyFromBlobstore(HttpServletRequest request, String formInputElementName) {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get("image");

@@ -79,7 +79,7 @@ public final class EditFolderServletTest {
   }
 
   @Test
-  public void EditFolder() throws Exception {
+  public void editFolder() throws Exception {
     Folder currentFolder = new Folder("FIRSTFOLDER", "en");
     Folder expectedFolder = new Folder("EDITEDFOLDER", "es_edited");
     

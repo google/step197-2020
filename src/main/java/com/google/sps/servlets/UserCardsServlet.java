@@ -111,7 +111,7 @@ public class UserCardsServlet extends HttpServlet {
     String blobKey;
 
     if (request.getParameter("testStatus") == null) {
-      blobKey = getBlobKeyfromBlobstore(request, "image");
+      blobKey = getBlobKeyFromBlobstore(request, "image");
     } else {
       blobKey = "null";
     }

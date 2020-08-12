@@ -38,12 +38,8 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.gson.Gson;
 import com.google.common.collect.ImmutableMap;
 import com.google.sps.data.Folder;
-import com.google.sps.tool.EntityTestingTool;
 import java.util.List; 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-
 
 @RunWith(JUnit4.class)
 public final class EditFolderServletTest {
@@ -83,19 +79,19 @@ public final class EditFolderServletTest {
   }
 
   @Test
-  public void EditFolder() throws Exception {
-
+  public void editFolder() throws Exception {
     Folder currentFolder = new Folder("FIRSTFOLDER", "en");
     Folder expectedFolder = new Folder("EDITEDFOLDER", "es_edited");
     
-    // Generate testing User
+    // Generate a user entity to obtain a user key
+    // which would be used to set as the parent of the folder entity
     Entity user = new Entity("User", "testId");
     String userKey = KeyFactory.keyToString(user.getKey());
 
-    Folder folderInDatastore = EntityTestingTool.populateDatastoreWithAFolder(currentFolder, datastore, userKey);
+    Folder folderInDatastore = storeFolderInDatastore(currentFolder, datastore, userKey);
     String folderKey = folderInDatastore.getFolderKey();
 
-    // Make sure the expected Folder has the same key
+    // Make sure the expected Folder has the same key as the folder in datastore
     expectedFolder.setFolderKey(folderKey);
 
     when(mockRequest.getParameter("folderName")).thenReturn("EDITEDFOLDER");
@@ -104,12 +100,22 @@ public final class EditFolderServletTest {
 
     servlet.doPut(mockRequest, mockResponse);
 
-    Entity editedFolder = datastore.get(KeyFactory.stringToKey(folderKey));
+    Entity editedFolderEntity = datastore.get(KeyFactory.stringToKey(folderKey));
+    Folder editedFolder = new Folder(editedFolderEntity, folderKey);
 
-    String response = new Gson().toJson(new Folder(editedFolder));
-    String expectedResponse = new Gson().toJson(expectedFolder);
+    String response = new Gson().toJson(editedFolder);
+    String expectedResponse = "{\"folderName\":\"EDITEDFOLDER\",\"folderDefaultLanguage\":\"es_edited\",\"folderKey\":\"agR0ZXN0chwLEgRVc2VyIgZ0ZXN0SWQMCxIGRm9sZGVyGAEM\"}";
 
     assertEquals(response, expectedResponse);
   }
 
+  private Folder storeFolderInDatastore(Folder folder, DatastoreService datastore, String userKey) {
+    folder.setParentKey(userKey);
+    Entity folderEntity = folder.createEntity();
+    datastore.put(folderEntity);
+
+    folder.setFolderKey(KeyFactory.keyToString(folderEntity.getKey()));
+    
+    return folder;
+  }
 }

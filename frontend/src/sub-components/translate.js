@@ -18,7 +18,6 @@ export function getTranslation(term, fromLang, toLang) {
   })
     .then((res) => res.json())
     .then((result) => {
-      console.log(result);
       return result.translation;
     })
     .catch((error) => {

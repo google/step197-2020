@@ -24,7 +24,7 @@ import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import com.google.sps.tool.GoogleTranslationAPI;
+import com.google.sps.tool.GoogleTranslate;
 import com.google.sps.tool.Tool;
 import com.google.gson.Gson;
 import java.util.Map;
@@ -63,8 +63,7 @@ public class TranslationServletTest {
   }
 
   @Test
-  public void TranslateHelloToSpanish() throws Exception {
-
+  public void translateHelloToSpanish() throws Exception {
     when(mockRequest.getParameter("rawText")).thenReturn("hello");
     when(mockRequest.getParameter("toLang")).thenReturn("es");
     when(mockRequest.getParameter("fromLang")).thenReturn("en");

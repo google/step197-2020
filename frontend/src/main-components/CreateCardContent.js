@@ -16,25 +16,26 @@ class CreateCardContent extends Component {
       toLang: "none",
       folder: "",
       uploadUrlFetched: false,
+      imageUploadUrl: "",
     };
     this.translateText = this.translateText.bind(this);
     this.fromLangSelected = this.fromLangSelected.bind(this);
     this.toLangSelected = this.toLangSelected.bind(this);
     this.imageSelected = this.imageSelected.bind(this);
     this.imageUploadUrl = "";
-    this.grabImageUploadURL();
   }
 
-  grabImageUploadURL(event) {
+  async componentDidMount() {
     try {
-      this.imageUploadUrl = fetch("/upload").then((response) => {
-        {
-          return response.text();
-        }
-      });
-      this.setState({ uploadUrlFetched: true });
+      const uploadUrl = await fetch("/upload")
+        .then((response) => { return response.text() });
+      // Throws error if the /upload servlet is not found
+      if (!uploadUrl.ok) {
+        throw Error(uploadUrl.statusText);
+      }
+      this.setState({ imageUploadUrl: uploadUrl, uploadUrlFetched: true });
     } catch (error) {
-      this.setState({ uploadUrlFetched: false });
+      alert("Refresh page to create a card");
     }
   }
 
@@ -42,17 +43,29 @@ class CreateCardContent extends Component {
    * When the user has finished typing, the Google Translate
    * API is called to fetch the translated version of the text input.
    */
-  translateText(event) {
+  async translateText(event) {
+    event.persist();
+    const target = event.target.value;
     // Ensures that languages have been selected before translating
     if (this.state.fromLang !== "none" && this.state.toLang !== "none") {
-      const translated = getTranslation(
-        event.target.value,
-        this.state.fromLang,
-        this.state.toLang
-      );
-      this.setState({ translation: translated, text: event.target.value });
+      try {
+        const translated = await getTranslation(
+          target,
+          this.state.fromLang,
+          this.state.toLang
+        );
+        // Checks if the getTranslation function encountered an error
+        if (!translated.ok) {
+          throw Error(translated.statusText)
+        }
+        this.setState({ translation: translated, text: target });
+      } catch (error) {
+          this.setState({ translation: "Could not Translate", text: target });
+      }
+    } else {
+        this.setState({ text: target});
     }
-    this.setState({ text: event.target.value });
+
   }
 
   // Updates the selected language code for future calls to the translateText function
@@ -72,7 +85,7 @@ class CreateCardContent extends Component {
   }
 
   imageSelected(event) {
-    this.setState({imgSrc: URL.createObjectURL(event.target.files[0])});
+    this.setState({ imgSrc: URL.createObjectURL(event.target.files[0]) });
   }
 
   render() {
@@ -100,7 +113,7 @@ class CreateCardContent extends Component {
             <ul>
               <form
                 id='myForm'
-                action={this.imageUploadUrl}
+                action={this.state.imageUploadUrl}
                 method='POST'
                 encType='multipart/form-data'>
                 <li>
@@ -139,7 +152,11 @@ class CreateCardContent extends Component {
                 <li>
                   <span className='inline'>
                     <label className='block'>Image:</label>
-                    <input type='file' id='image' name='imageSelect' onChange={this.imageSelected}></input>
+                    <input
+                      type='file'
+                      id='image'
+                      name='imageSelect'
+                      onChange={this.imageSelected}></input>
                   </span>
                   <span className='inline'>
                     <label className='block'>Folder:</label>

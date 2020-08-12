@@ -21,6 +21,6 @@ export function getTranslation(term, fromLang, toLang) {
       return result.translation;
     })
     .catch((error) => {
-      return "Could not Translate";
+      return error;
     });
 }

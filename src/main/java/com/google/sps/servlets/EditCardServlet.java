@@ -85,7 +85,7 @@ public class EditCardServlet extends HttpServlet{
     }
   }
 
-  private String getBlobKey(HttpServletRequest request){
+  private String getBlobKey(HttpServletRequest request) {
     // Method to determine whether or not this is a unit test or live server
     // Unit tests will always set blobKey to "null"
     // There should be no paramater testStatus in the live server thus returns null

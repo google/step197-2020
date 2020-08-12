@@ -2,11 +2,11 @@ import React from "react";
 import styled from "@emotion/styled";
 import Folder from "../flashcards/Folder.js";
 
-const debugMessage= (message, isOn){
+const debugMessage = (message, isOn) => {
   if(isOn){
     console.log(message);
   }
-}
+};
 
 const debugMessageOn = false;
 

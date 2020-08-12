@@ -16,15 +16,12 @@ class folderScroll extends Component {
     // Mount boolean ensures that grabFolders is only called once
     this.mount = true;
     if (this.mount) {
-      try {
-        fetch(`/folder?userKey=${this.props.userKey}`, { method: "GET" })
-          .then((result) => result.json())
-          .then((data) => {
-            this.setState({ isDataFetched: true, folders: data });
-          });
-      } catch (err) {
-        alert("Page could not load your folders, try refreshing");
-      }
+      fetch("/userfolders")
+        .then((result) => result.json())
+        .then((data) => {
+          this.setState({ isDataFetched: true, folders: data });
+        })
+        .catch(error => alert("Could not load folders, try refreshing page"));
     }
   }
 

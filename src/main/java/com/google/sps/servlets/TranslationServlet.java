@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import com.google.sps.tool.GoogleTranslationAPI;
+import com.google.sps.tool.GoogleTranslate;
 import java.util.Map;
 import java.util.HashMap;
 import com.google.gson.Gson;
@@ -27,9 +27,8 @@ public class TranslationServlet extends HttpServlet {
       String toLang = request.getParameter("toLang");
       String fromLang = request.getParameter("fromLang");
 
-      String textTranslated = GoogleTranslationAPI.translateText(rawText, toLang);
+      String textTranslated = GoogleTranslate.translateText(rawText, toLang);
 
-      // Aggregate information as a json 
       Map<String, String> jsonInfo = new HashMap<>();
       jsonInfo.put("translation", textTranslated);
       response.setContentType("application/json;");

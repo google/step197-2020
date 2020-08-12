@@ -30,7 +30,6 @@ public final class UploadOnBlobstoreServletTest {
   private final LocalServiceTestHelper helper = 
     new LocalServiceTestHelper(new LocalBlobstoreServiceTestConfig());
 
-  private String BLOBSTORE_HEADER_URL = "http://localhost:8080/_ah/upload/";
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
   private StringWriter responseWriter;
@@ -54,11 +53,13 @@ public final class UploadOnBlobstoreServletTest {
   }
 
   @Test
-  public void GetBlobstoreUploadUrl() throws Exception {
+  public void getBlobstoreUploadUrl() throws Exception {
     // Note: blobstore url changes during local testing
     //       so we're just checking if there is a response
+    String blobstoreHeaderUrl = "http://localhost:8080/_ah/upload/";
+
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    assertTrue(response.contains(BLOBSTORE_HEADER_URL));
+    assertTrue(response.contains(blobstoreHeaderUrl));
   }
 }

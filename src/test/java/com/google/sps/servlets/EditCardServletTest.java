@@ -38,11 +38,6 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.gson.Gson;
 import com.google.common.collect.ImmutableMap;
 import com.google.sps.data.Card;
-import com.google.sps.tool.EntityTestingTool;
-import java.util.List; 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
 
 public final class EditCardServletTest {
 
@@ -71,7 +66,6 @@ public final class EditCardServletTest {
     responseWriter = new StringWriter();
     when(mockResponse.getWriter()).thenReturn(new PrintWriter(responseWriter));
 
-    // Initialize datastore
     datastore = DatastoreServiceFactory.getDatastoreService();
   }
 
@@ -81,19 +75,33 @@ public final class EditCardServletTest {
   }
 
   @Test
-  public void EditCard() throws Exception {
-
-    Card currentCard = new Card("null", "spanish", "en", "es", "hello", "hola");
-    Card expectedCard = new Card("null", "vietnamese", "en", "vi", "hello", "xin chào");
+  public void editCard() throws Exception {
+    Card currentCard = new Card.Builder()
+        .setBlobKey("null")
+        .setLabels("spanish")
+        .setFromLang("en")
+        .setToLang("es")
+        .setRawText("hello")
+        .setTextTranslated("hola")
+        .build();
+    Card expectedCard = new Card.Builder()
+        .setBlobKey("null")
+        .setLabels("vietnamese")
+        .setFromLang("en")
+        .setToLang("vi")
+        .setRawText("hello")
+        .setTextTranslated("xin chào")
+        .build();
     
-    // Generate a dummy Folder Entity
+    // Generate a folder entity to obtain a folder key
+    // which would be used to set as the parent of the card entities
     Entity folder = new Entity("Folder", "testID");
     String folderKey = KeyFactory.keyToString(folder.getKey());
 
-    Card cardInDatastore = EntityTestingTool.populateDatastoreWithACard(currentCard, datastore, folderKey);
+    Card cardInDatastore = storeCardInDatastore(currentCard, datastore, folderKey);
     String cardKey = cardInDatastore.getCardKey();
 
-    // Make sure the expected Card has the same key
+    // Make sure the expected card has the same key
     expectedCard.setCardKey(cardKey);
 
     when(mockRequest.getParameter("labels")).thenReturn("vietnamese");
@@ -102,14 +110,24 @@ public final class EditCardServletTest {
     when(mockRequest.getParameter("cardKey")).thenReturn(cardKey);
     when(mockRequest.getParameter("rawText")).thenReturn("hello");
     when(mockRequest.getParameter("testStatus")).thenReturn("True");
+    when(mockRequest.getParameter("textTranslated")).thenReturn("xin chào");
 
     servlet.doPut(mockRequest, mockResponse);
 
     Entity editedCard = datastore.get(KeyFactory.stringToKey(cardKey));
 
-    String response = new Gson().toJson(new Card(editedCard));
-    String expectedResponse = new Gson().toJson(expectedCard);
-
+    String response = new Gson().toJson(new Card(editedCard, cardKey));
+    String expectedResponse = "{\"blobKey\":\"null\",\"labels\":\"vietnamese\",\"fromLang\":\"en\",\"toLang\":\"vi\",\"rawText\":\"hello\",\"textTranslated\":\"xin chào\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAEM\"}";
     assertEquals(response, expectedResponse);
+  }
+
+  public Card storeCardInDatastore(Card card, DatastoreService datastore, String folderKey) {
+    card.setParentKey(folderKey);
+    Entity cardEntity = card.createEntity();
+    datastore.put(cardEntity);
+    
+    card.setCardKey(KeyFactory.keyToString(cardEntity.getKey()));
+
+    return card;
   }
 }

@@ -24,7 +24,6 @@ import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.sps.tool.ResponseHandler;
 import com.google.sps.data.Folder;
-import com.google.sps.tool.GoogleTranslationAPI;
 import java.util.Map;
 import java.util.List;
 
@@ -33,7 +32,6 @@ public class EditCardServlet extends HttpServlet{
   
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
     UserService userService = UserServiceFactory.getUserService();
 
     if (userService.isUserLoggedIn()) {
@@ -42,14 +40,24 @@ public class EditCardServlet extends HttpServlet{
       String newToLang = request.getParameter("toLang");
       String cardKey = request.getParameter("cardKey");
       String newRawText = request.getParameter("rawText");
-      String newTextTranslated = GoogleTranslationAPI.translateText(newRawText, newToLang);
+      String newTextTranslated = request.getParameter("textTranslated");
       String newBlobKey = getBlobKey(request);
-      updateCard(response, newLabels, newfromLang, newToLang, cardKey, newRawText, newTextTranslated, newBlobKey);
+      
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      Entity card = getExistingCardInDatastore(response, datastore, cardKey);
+
+      if (card == null) {
+        ResponseHandler.sendErrorMessage(response, "Cannot edit Card at the moment");
+      } else {
+        updateCard(response, card, datastore, newLabels, newfromLang, newToLang, cardKey, newRawText, newTextTranslated, newBlobKey);
+      }
     }
   }
 
   private void updateCard(
       HttpServletResponse response, 
+      Entity card,
+      DatastoreService datastore,
       String newLabels,
       String newFromLang, 
       String newToLang, 
@@ -57,50 +65,34 @@ public class EditCardServlet extends HttpServlet{
       String newRawText,
       String newTextTranslated,
       String newBlobKey) throws IOException {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Entity card = getExistingCardInDatastore(response, datastore, cardKey);
-    setCardWithRequestedEdits(card, newLabels, newFromLang, newToLang, cardKey, newRawText, newTextTranslated, newBlobKey);
+
+    card.setProperty("labels", newLabels);
+    card.setProperty("fromLang", newFromLang);
+    card.setProperty("toLang", newToLang);
+    card.setProperty("cardKey", cardKey);
+    card.setProperty("rawText", newRawText);
+    card.setProperty("textTranslated", newTextTranslated);
+    card.setProperty("blobKey", newBlobKey);
     datastore.put(card);
   }
 
   private Entity getExistingCardInDatastore(HttpServletResponse response, DatastoreService datastore, String cardKey) throws IOException {
     Entity card;
     try {
-      card = datastore.get(KeyFactory.stringToKey(cardKey));
+      return datastore.get(KeyFactory.stringToKey(cardKey));
     } catch (EntityNotFoundException e) {
-      ResponseHandler.sendErrorMessage(response, "Cannot edit Card at the moment");
-      card = null;
+      return null;
     }
-
-    return card;
   }
 
-  private void setCardWithRequestedEdits(
-      Entity cardEntity,
-      String newLabels,
-      String newFromLang, 
-      String newToLang, 
-      String cardKey,
-      String newRawText,
-      String newTextTranslated,
-      String newBlobKey) throws IOException {
-    cardEntity.setProperty("labels", newLabels);
-    cardEntity.setProperty("fromLang", newFromLang);
-    cardEntity.setProperty("toLang", newToLang);
-    cardEntity.setProperty("cardKey", cardKey);
-    cardEntity.setProperty("rawText", newRawText);
-    cardEntity.setProperty("textTranslated", newTextTranslated);
-    cardEntity.setProperty("blobKey", newBlobKey);
-  }
-
-  private String getBlobKey(HttpServletRequest request){
+  private String getBlobKey(HttpServletRequest request) {
     // Method to determine whether or not this is a unit test or live server
     // Unit tests will always set blobKey to "null"
     // There should be no paramater testStatus in the live server thus returns null
     String blobKey;
 
     if (request.getParameter("testStatus") == null) {
-      blobKey = getBlobKeyfromBlobstore(request, "image");
+      blobKey = getBlobKeyFromBlobstore(request, "image");
     } else {
       blobKey = "null";
     }
@@ -108,7 +100,7 @@ public class EditCardServlet extends HttpServlet{
     return blobKey;
   } 
 
-  private String getBlobKeyfromBlobstore(HttpServletRequest request, String formInputElementName) {
+  private String getBlobKeyFromBlobstore(HttpServletRequest request, String formInputElementName) {
     
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);

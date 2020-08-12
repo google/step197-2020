@@ -11,6 +11,7 @@ public final class Folder {
     private String folderName;
     private String folderDefaultLanguage;
     private String folderKey;
+    private String parentKey;
 
     public Folder(
         String folderName,
@@ -21,10 +22,10 @@ public final class Folder {
         this.folderKey = "null";
     }
 
-    public Folder(Entity entity) {
+    public Folder(Entity entity, String key) {
         this.folderName = (String) entity.getProperty("folderName");
         this.folderDefaultLanguage = (String) entity.getProperty("folderDefaultLanguage");
-        this.folderKey = (String) entity.getProperty("folderKey");
+        this.folderKey = key;
     }
 
     public String getFolderName() {
@@ -51,21 +52,17 @@ public final class Folder {
         this.folderKey = folderKey;
     }
 
-    public Entity createEntity(Key userKey) {
-        
-        // Set owner of folder 
-        Entity folder = new Entity("Folder", userKey);
+    public void setParentKey(String key) {
+        this.parentKey = key;
+    }
 
-        // Store initial folder entity without properties to generate auto ID for entity
-        // This is necessary to obtain a "complete" key
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        datastore.put(folder);
+    public Entity createEntity() {
+        // Set owner of folder 
+        Entity folder = new Entity("Folder", KeyFactory.stringToKey(this.parentKey));
 
         folder.setProperty("folderName", this.folderName);
         folder.setProperty("folderDefaultLanguage", this.folderDefaultLanguage);
-        folder.setProperty("folderKey", KeyFactory.keyToString(folder.getKey()));
 
         return folder;
     }
-
 }

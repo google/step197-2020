@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-@WebServlet("/blobstore-upload-url-gallery")
+@WebServlet("/upload")
 public class UploadOnBlobstoreServlet extends HttpServlet {
   
   // Create an upload URL for the user to upload their images to BlobStore

@@ -20,6 +20,7 @@ class CreateCardContent extends Component {
     this.translateText = this.translateText.bind(this);
     this.fromLangSelected = this.fromLangSelected.bind(this);
     this.toLangSelected = this.toLangSelected.bind(this);
+    this.imageSelected = this.imageSelected.bind(this);
     this.imageUploadUrl = "";
     this.grabImageUploadURL();
   }
@@ -68,6 +69,10 @@ class CreateCardContent extends Component {
   folderSelected(domEvent) {
     const selectedValue = domEvent.target[domEvent.target.selectedIndex].value;
     this.setState({ folder: selectedValue });
+  }
+
+  imageSelected(event) {
+    this.setState({imgSrc: URL.createObjectURL(event.target.files[0])});
   }
 
   render() {
@@ -134,7 +139,7 @@ class CreateCardContent extends Component {
                 <li>
                   <span className='inline'>
                     <label className='block'>Image:</label>
-                    <input type='file' id='image' name='imageSelect'></input>
+                    <input type='file' id='image' name='imageSelect' onChange={this.imageSelected}></input>
                   </span>
                   <span className='inline'>
                     <label className='block'>Folder:</label>

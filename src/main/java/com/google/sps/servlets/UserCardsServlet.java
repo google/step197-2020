@@ -42,12 +42,9 @@ public class UserCardsServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
-    // Ensures user is authenticated
     UserService userService = UserServiceFactory.getUserService();
     List<Card> userCards = new ArrayList<>();
 
-    // Aggregate information as a json
     Map<String, Object> jsonInfo = new HashMap<>();
     jsonInfo.put("showCreateFormStatus", false);
 
@@ -64,8 +61,8 @@ public class UserCardsServlet extends HttpServlet {
 
         if (results != null) {
           for (Entity entity: results.asIterable()) {
-            Card card = new Card(entity);
-            card.setCardKey(KeyFactory.keyToString(entity.getKey()));
+            String key = KeyFactory.keyToString(entity.getKey());
+            Card card = new Card(entity, key);
             userCards.add(card);
           }   
         }
@@ -78,7 +75,6 @@ public class UserCardsServlet extends HttpServlet {
   
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
     UserService userService = UserServiceFactory.getUserService();
 
     if (userService.isUserLoggedIn()) {
@@ -91,8 +87,17 @@ public class UserCardsServlet extends HttpServlet {
         String textTranslated = request.getParameter("translatedText");
         String blobKey = getBlobKey(request);
 
-        Card card = new Card(blobKey, labels, fromLang, toLang, rawText, textTranslated);
-        Entity cardEntity = card.createEntity(KeyFactory.stringToKey(folderKey));
+        Card card = new Card.Builder()
+            .setBlobKey(blobKey)
+            .setLabels(labels)
+            .setFromLang(fromLang)
+            .setToLang(toLang)
+            .setRawText(rawText)
+            .setTextTranslated(textTranslated)
+            .setParentKey(folderKey)
+            .build();
+    
+        Entity cardEntity = card.createEntity();
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(cardEntity);
@@ -115,7 +120,6 @@ public class UserCardsServlet extends HttpServlet {
   } 
 
   private String getBlobKeyfromBlobstore(HttpServletRequest request, String formInputElementName) {
-    
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get("image");

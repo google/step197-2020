@@ -69,7 +69,6 @@ public final class EditFolderServletTest {
     responseWriter = new StringWriter();
     when(mockResponse.getWriter()).thenReturn(new PrintWriter(responseWriter));
 
-    // Initialize datastore
     datastore = DatastoreServiceFactory.getDatastoreService();
   }
 

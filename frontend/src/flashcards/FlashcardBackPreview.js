@@ -1,34 +1,32 @@
 import React from "react";
-import styled from "@emotion/styled"
+import styled from "@emotion/styled";
 
 class FlashcardBack extends React.Component {
   render() {
-    const Contain = styled.div`
+    const FlashcardContainer = styled.div`
+      background-color: #3385e4;
       border-radius: 30px;
-      position: relative;
-      width: 100%;
-      height: 350px;
-      background-color: white;
-      color: black;
       box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 8px;
+      color: white;
+      display: flex;
       font-family: "Montserrat", sans-serif;
       font-size: 30px;
       font-weight: 600;
-      text-align: center;
-      display: flex;
       flex-direction: column;
+      height: 350px;
       justify-content: center;
-      background-color: #3385e4;
-      color: white;
+      position: relative;
+      text-align: center;
+      width: 100%;
       @media (max-width: 700px) {
-        width: 80%;
         height: 70%;
-      }
-    `;
+        width: 80%;
+      }`;
+
     return (
-      <Contain className="FlashcardBack" >
+      <FlashcardContainer className="FlashcardBack">
         {this.props.text}
-      </Contain>
+      </FlashcardContainer>
     );
   }
 }

@@ -16,9 +16,9 @@ function App() {
   return (
     <div>
       <Switch>
-        <Route exact path="/CreateCard" component={CreateCard}></Route>
-        <Route  exact path="/myFolders" component={MyFolders} />
-        <Route  exact path="/ImageInterface" component={ImageInterface} />
+        <Route exact path="/CreateCard" component={CreateCard} />
+        <Route exact path="/MyFolders" component={MyFolders} />
+        <Route exact path="/ImageInterface" component={ImageInterface} />
         <Route exact path="/YoutubeInterface" component={YoutubeDetect} />
         <Route exact path="/CreateFolder" component={CreateFolder} />
         <Route exact path="/InsideFolder" component={InsideFolder} />

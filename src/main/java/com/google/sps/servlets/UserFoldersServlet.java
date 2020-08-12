@@ -53,8 +53,8 @@ public class UserFoldersServlet extends HttpServlet {
 
       if (results != null) {
         for (Entity entity: results.asIterable()) {
-          Folder folder = new Folder(entity);
-          folder.setFolderKey(KeyFactory.keyToString(entity.getKey()));
+          String folderKey = KeyFactory.keyToString(entity.getKey());
+          Folder folder = new Folder(entity, folderKey);
           userFolders.add(folder);
         }
       }
@@ -80,6 +80,7 @@ public class UserFoldersServlet extends HttpServlet {
 
       Folder folder = new Folder(folderName, folderDefaultLanguage);
       folder.setParentKey(userKey);
+
       Entity folderEntity = folder.createEntity();
       
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

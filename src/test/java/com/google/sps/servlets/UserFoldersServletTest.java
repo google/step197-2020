@@ -72,7 +72,6 @@ public final class UserFoldersServletTest {
     responseWriter = new StringWriter();
     when(mockResponse.getWriter()).thenReturn(new PrintWriter(responseWriter));
 
-    // Initialize datastore
     datastore = DatastoreServiceFactory.getDatastoreService();
   }
 
@@ -83,13 +82,12 @@ public final class UserFoldersServletTest {
   
   @Test
   public void queryUserFolders() throws Exception {
-    /* Returns array of Folders and signals front-end to show Create Folder Option */
-
     // Generate testing folders to store in datastore
     Folder folderA = new Folder("FIRSTFOLDER", "en");
     Folder folderB = new Folder("SECONDFOLDER", "en");
     
-    // Generate testing User
+    // Generate a user entity to obtain a user key
+    // which would be used to set as the parent of the folder entity
     Entity user = new Entity("User", "testId");
     String userKey = KeyFactory.keyToString(user.getKey());
 
@@ -114,11 +112,10 @@ public final class UserFoldersServletTest {
 
   @Test
   public void userHasNoCurrentFolder() throws Exception {
-    /* Returns an empty array list and signals front-end to show Create Folder Option */
-
     List<Folder> noFoldersInDatastore = new ArrayList<>();
     
-    // Generate testing User
+    // Generate a user entity to obtain a user key
+    // which would be used to set as the parent of the folder entity
     Entity user = new Entity("User", "testId");
     String userKey = KeyFactory.keyToString(user.getKey());
 
@@ -132,8 +129,6 @@ public final class UserFoldersServletTest {
 
   @Test
   public void userNotLoggedIn() throws Exception {
-    /* Returns an empty array list and signals front-end to not show Create Folder Option */
-
     helper.setEnvIsLoggedIn(false);
     List<Folder> noFoldersQueried = new ArrayList<>();
 
@@ -146,9 +141,8 @@ public final class UserFoldersServletTest {
 
   @Test
   public void userCreatesFirstFolder() throws Exception {
-    /* First time user is creating a folder, so current number of folders should be 1 */
-    
-    // Generate testing User
+    // Generate a user entity to obtain a user key
+    // which would be used to set as the parent of the folder entity
     Entity user = new Entity("User", "testId");
     String userKey = KeyFactory.keyToString(user.getKey());
 
@@ -162,13 +156,12 @@ public final class UserFoldersServletTest {
 
   @Test
   public void userCreatesAFolderAndHasMultipleFoldersAlready() throws Exception {
-    /* Return the current number of folders that user has after creating a folder */
-
     // Generate testing folders to store in datastore
     Folder folderA = new Folder("FIRSTFOLDER", "en");
     Folder folderB = new Folder("SECONDFOLDER", "en");
     
-    // Generate testing User
+    // Generate a user entity to obtain a user key
+    // which would be used to set as the parent of the folder entity
     Entity user = new Entity("User", "testId");
     String userKey = KeyFactory.keyToString(user.getKey());
     
@@ -183,8 +176,6 @@ public final class UserFoldersServletTest {
     assertEquals(3, datastore.prepare(new Query("Folder").setAncestor(user.getKey())).countEntities(withLimit(10)));
   }
 
-<<<<<<< HEAD
-=======
   private Folder storeFolderInDatastore(Folder folder, DatastoreService datastore, String userKey) {
     folder.setParentKey(userKey);
     Entity folderEntity = folder.createEntity();
@@ -194,5 +185,4 @@ public final class UserFoldersServletTest {
     
     return folder;
   }
->>>>>>> tdd4
 }

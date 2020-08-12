@@ -83,7 +83,7 @@ public final class UserCardsServletTest {
   }
 
   @Test
-  public void QueryUserCards() throws Exception {
+  public void queryUserCards() throws Exception {
     // Generate testing card objects to store in datastore
     Card cardA = new Card.Builder()
         .setBlobKey("null")
@@ -129,7 +129,7 @@ public final class UserCardsServletTest {
   }
 
   @Test
-  public void UserHasNoCurrentCard() throws Exception {
+  public void userHasNoCurrentCard() throws Exception {
     List<Card> noCardsInDatastore = new ArrayList<>();
 
     // Generate a folder entity to obtain a folder key
@@ -146,7 +146,7 @@ public final class UserCardsServletTest {
   }
 
   @Test
-  public void UserNotLoggedIn() throws Exception {
+  public void userNotLoggedIn() throws Exception {
     helper.setEnvIsLoggedIn(false);
     List<Card> noCardsQueried = new ArrayList<>();
 
@@ -158,7 +158,7 @@ public final class UserCardsServletTest {
   }
 
   @Test
-  public void UserCreatesAHelloSpanishCard() throws Exception {
+  public void userCreatesAHelloSpanishCard() throws Exception {
     // Generate a folder entity to obtain a folder key
     // which would be used to set as the parent of the card entities
     Entity folder = new Entity("Folder", "testID");
@@ -188,7 +188,7 @@ public final class UserCardsServletTest {
   }
 
   @Test
-  public void UserCreatesACardAndHasOtherCardsBefore() throws Exception {
+  public void userCreatesACardAndHasOtherCardsBefore() throws Exception {
     // Generate testing card objects to store in datastore
     Card cardA = new Card.Builder()
         .setBlobKey("null")

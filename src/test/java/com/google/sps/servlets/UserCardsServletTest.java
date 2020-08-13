@@ -1,16 +1,17 @@
 package com.google.sps.servlets;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.After;
-
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import static com.google.sps.tool.Tool.compareJson;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
+import static com.google.appengine.api.datastore.FetchOptions.Builder.withLimit;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.After;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -25,7 +26,6 @@ import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 
-import static com.google.appengine.api.datastore.FetchOptions.Builder.withLimit;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -49,12 +49,12 @@ import java.util.HashMap;
 public final class UserCardsServletTest {
 
   private final LocalServiceTestHelper helper = 
-    new LocalServiceTestHelper(
-      new LocalDatastoreServiceTestConfig()
-        .setDefaultHighRepJobPolicyUnappliedJobPercentage(0),
-      new LocalUserServiceTestConfig())
-      .setEnvIsAdmin(true).setEnvIsLoggedIn(true)
-      .setEnvEmail("test@gmail.com").setEnvAuthDomain("gmail.com");
+      new LocalServiceTestHelper(
+        new LocalDatastoreServiceTestConfig()
+          .setDefaultHighRepJobPolicyUnappliedJobPercentage(0),
+        new LocalUserServiceTestConfig())
+        .setEnvIsAdmin(true).setEnvIsLoggedIn(true)
+        .setEnvEmail("test@gmail.com").setEnvAuthDomain("gmail.com");
   
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
@@ -87,17 +87,11 @@ public final class UserCardsServletTest {
     // Generate testing card objects to store in datastore
     Card cardA = new Card.Builder()
         .setBlobKey("null")
-        .setLabels("viet")
-        .setFromLang("en")
-        .setToLang("vi")
         .setRawText("test")
         .setTextTranslated("test")
         .build();
     Card cardB = new Card.Builder()
         .setBlobKey("null")
-        .setLabels("viet")
-        .setFromLang("en")
-        .setToLang("vi")
         .setRawText("test")
         .setTextTranslated("test")
         .build();
@@ -118,12 +112,12 @@ public final class UserCardsServletTest {
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
     String expectedResponse = 
-      "{\"userCards\":"
-      + "["
-        + "{\"blobKey\":\"null\",\"labels\":\"viet\",\"fromLang\":\"en\",\"toLang\":\"vi\",\"rawText\":\"test\",\"textTranslated\":\"test\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAEM\"},"
-        + "{\"blobKey\":\"null\",\"labels\":\"viet\",\"fromLang\":\"en\",\"toLang\":\"vi\",\"rawText\":\"test\",\"textTranslated\":\"test\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAIM\"}"
-      + "],"
-      + "\"showCreateFormStatus\":true}";
+        "{\"userCards\":"
+        + "["
+          + "{\"blobKey\":\"null\",\"rawText\":\"test\",\"textTranslated\":\"test\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAEM\"},"
+          + "{\"blobKey\":\"null\",\"rawText\":\"test\",\"textTranslated\":\"test\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAIM\"}"
+        + "],"
+        + "\"showCreateFormStatus\":true}";
 
     assertTrue(compareJson(response, expectedResponse));
   }
@@ -166,9 +160,6 @@ public final class UserCardsServletTest {
     
     when(mockRequest.getParameter("testStatus")).thenReturn("True");
     when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
-    when(mockRequest.getParameter("labels")).thenReturn("spanish");
-    when(mockRequest.getParameter("fromLang")).thenReturn("en");
-    when(mockRequest.getParameter("toLang")).thenReturn("es");
     when(mockRequest.getParameter("rawText")).thenReturn("hello");
     when(mockRequest.getParameter("translatedText")).thenReturn("hola");
 
@@ -178,11 +169,8 @@ public final class UserCardsServletTest {
 
     // Ensures the created card has all the properties in datastore
     assertTrue((card.getProperty("blobKey") != null &&
-      card.getProperty("labels") != null &&
-      card.getProperty("textTranslated") != null &&
-      card.getProperty("rawText") != null &&
-      card.getProperty("fromLang") != null &&
-      card.getProperty("toLang") != null));
+        card.getProperty("textTranslated") != null &&
+        card.getProperty("rawText") != null));
 
     assertEquals(1, responseEntity.countEntities(withLimit(10)));
   }
@@ -192,17 +180,11 @@ public final class UserCardsServletTest {
     // Generate testing card objects to store in datastore
     Card cardA = new Card.Builder()
         .setBlobKey("null")
-        .setLabels("viet")
-        .setFromLang("en")
-        .setToLang("vi")
         .setRawText("test")
         .setTextTranslated("test")
         .build();
     Card cardB = new Card.Builder()
         .setBlobKey("null")
-        .setLabels("viet")
-        .setFromLang("en")
-        .setToLang("vi")
         .setRawText("test")
         .setTextTranslated("test")
         .build();
@@ -214,14 +196,12 @@ public final class UserCardsServletTest {
     
     when(mockRequest.getParameter("testStatus")).thenReturn("True");
     when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
-    when(mockRequest.getParameter("labels")).thenReturn("spanish");
-    when(mockRequest.getParameter("fromLang")).thenReturn("en");
-    when(mockRequest.getParameter("toLang")).thenReturn("es");
     when(mockRequest.getParameter("rawText")).thenReturn("hello");
     when(mockRequest.getParameter("translatedText")).thenReturn("hola");
     
     storeCardInDatastore(cardA, datastore, folderKey);
     storeCardInDatastore(cardB, datastore, folderKey);
+
     servlet.doPost(mockRequest, mockResponse);
     PreparedQuery responseEntity = datastore.prepare(new Query("Card").setAncestor(folder.getKey()));
 

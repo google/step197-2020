@@ -10,6 +10,9 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
@@ -27,8 +30,8 @@ import java.util.HashMap;
 @WebServlet("/userfolders")
 public class UserFoldersServlet extends HttpServlet {
   
-  private final String CREATE_FORM_HEADER = "showCreateFormStatus";
-  private final String USER_FOLDER_HEADER = "userFolders";
+  private static final String CREATE_FORM_HEADER = "showCreateFormStatus";
+  private static final String USER_FOLDER_HEADER = "userFolders";
   
   /*
   * Query all folders from current user
@@ -38,26 +41,30 @@ public class UserFoldersServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
 
     Map<String, Object> jsonInfo = new HashMap<>();
+	  List<Folder> userFolders = new ArrayList<>();
     jsonInfo.put(CREATE_FORM_HEADER, false);
-    List<Folder> userFolders = new ArrayList<>();
 
     if (userService.isUserLoggedIn()) {
-
-      jsonInfo.put(CREATE_FORM_HEADER, true);
-      String userKey = request.getParameter("userKey");
-
-      Query folderQuery = new Query("Folder").setAncestor(KeyFactory.stringToKey(userKey));
-
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+      String userEmail = userService.getCurrentUser().getEmail();
+      Query userQuery = new Query("User").setFilter(new FilterPredicate("email", FilterOperator.EQUAL, userEmail));
+			Entity userEntity = datastore.prepare(userQuery).asSingleEntity();
+      Key userKey = userEntity.getKey();
+
+      Query folderQuery = new Query("Folder").setAncestor(userKey);
       PreparedQuery results = datastore.prepare(folderQuery);
 
       if (results != null) {
-        for (Entity entity: results.asIterable()) {
+        for (Entity entity : results.asIterable()) {
           String folderKey = KeyFactory.keyToString(entity.getKey());
           Folder folder = new Folder(entity, folderKey);
+
           userFolders.add(folder);
         }
       }
+		
+		jsonInfo.put(CREATE_FORM_HEADER, true);
     }
 
     jsonInfo.put(USER_FOLDER_HEADER, userFolders);
@@ -73,17 +80,21 @@ public class UserFoldersServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
 
     if (userService.isUserLoggedIn()) {
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       
       String folderName = request.getParameter("folderName");
       String folderDefaultLanguage = request.getParameter("folderDefaultLanguage");
-      String userKey = request.getParameter("userKey");
+
+      String userEmail = userService.getCurrentUser().getEmail();
+      Query userQuery = new Query("User").setFilter(new FilterPredicate("email", FilterOperator.EQUAL, userEmail));
+			Entity userEntity = datastore.prepare(userQuery).asSingleEntity();
+      String userKey = KeyFactory.keyToString(userEntity.getKey());
 
       Folder folder = new Folder(folderName, folderDefaultLanguage);
       folder.setParentKey(userKey);
 
       Entity folderEntity = folder.createEntity();
       
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(folderEntity);
     }
   } 

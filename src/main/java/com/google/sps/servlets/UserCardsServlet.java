@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
-/** **/
 @WebServlet("/usercards")
 public class UserCardsServlet extends HttpServlet {
 
@@ -49,23 +48,22 @@ public class UserCardsServlet extends HttpServlet {
     jsonInfo.put("showCreateFormStatus", false);
 
     if (userService.isUserLoggedIn()) {
+      String folderKey = request.getParameter("folderKey");
 
-        jsonInfo.put("showCreateFormStatus", true);
+      Query cardQuery = new Query("Card").setAncestor(KeyFactory.stringToKey(folderKey));
 
-        String folderKey = request.getParameter("folderKey");
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      PreparedQuery results = datastore.prepare(cardQuery);
 
-        Query cardQuery = new Query("Card").setAncestor(KeyFactory.stringToKey(folderKey));
+      if (results != null) {
+        for (Entity entity : results.asIterable()) {
+          String key = KeyFactory.keyToString(entity.getKey());
+          Card card = new Card(entity, key);
+          userCards.add(card);
+        }   
+      }
 
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        PreparedQuery results = datastore.prepare(cardQuery);
-
-        if (results != null) {
-          for (Entity entity: results.asIterable()) {
-            String key = KeyFactory.keyToString(entity.getKey());
-            Card card = new Card(entity, key);
-            userCards.add(card);
-          }   
-        }
+      jsonInfo.put("showCreateFormStatus", true);
     }
     
     jsonInfo.put("userCards", userCards);
@@ -78,34 +76,27 @@ public class UserCardsServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
 
     if (userService.isUserLoggedIn()) {
+      String folderKey = request.getParameter("folderKey");
+      String rawText = request.getParameter("rawText");
+      String textTranslated = request.getParameter("translatedText");
+      String blobKey = getBlobKey(request);
 
-        String folderKey = request.getParameter("folderKey");
-        String labels = request.getParameter("labels");
-        String fromLang = request.getParameter("fromLang");
-        String toLang = request.getParameter("toLang");
-        String rawText = request.getParameter("rawText");
-        String textTranslated = request.getParameter("translatedText");
-        String blobKey = getBlobKey(request);
+      Card card = new Card.Builder()
+          .setBlobKey(blobKey)
+          .setRawText(rawText)
+          .setTextTranslated(textTranslated)
+          .setParentKey(folderKey)
+          .build();
+  
+      Entity cardEntity = card.createEntity();
 
-        Card card = new Card.Builder()
-            .setBlobKey(blobKey)
-            .setLabels(labels)
-            .setFromLang(fromLang)
-            .setToLang(toLang)
-            .setRawText(rawText)
-            .setTextTranslated(textTranslated)
-            .setParentKey(folderKey)
-            .build();
-    
-        Entity cardEntity = card.createEntity();
-
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        datastore.put(cardEntity);
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.put(cardEntity);
     }
   }
   
   private String getBlobKey(HttpServletRequest request){
-    // Method to determine whether or not this is a unit test or live server
+    // TODO(ngothomas): There is a bug with getting getBlobKey to work on test server
     // Unit tests will always set blobKey to "null"
     // There should be no paramater testStatus in the live server thus returns null
     String blobKey;

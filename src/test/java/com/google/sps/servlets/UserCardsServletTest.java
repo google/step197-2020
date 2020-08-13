@@ -49,12 +49,12 @@ import java.util.HashMap;
 public final class UserCardsServletTest {
 
   private final LocalServiceTestHelper helper = 
-    new LocalServiceTestHelper(
-      new LocalDatastoreServiceTestConfig()
-        .setDefaultHighRepJobPolicyUnappliedJobPercentage(0),
-      new LocalUserServiceTestConfig())
-      .setEnvIsAdmin(true).setEnvIsLoggedIn(true)
-      .setEnvEmail("test@gmail.com").setEnvAuthDomain("gmail.com");
+      new LocalServiceTestHelper(
+        new LocalDatastoreServiceTestConfig()
+          .setDefaultHighRepJobPolicyUnappliedJobPercentage(0),
+        new LocalUserServiceTestConfig())
+        .setEnvIsAdmin(true).setEnvIsLoggedIn(true)
+        .setEnvEmail("test@gmail.com").setEnvAuthDomain("gmail.com");
   
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
@@ -112,12 +112,12 @@ public final class UserCardsServletTest {
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
     String expectedResponse = 
-      "{\"userCards\":"
-      + "["
-        + "{\"blobKey\":\"null\",\"rawText\":\"test\",\"textTranslated\":\"test\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAEM\"},"
-        + "{\"blobKey\":\"null\",\"rawText\":\"test\",\"textTranslated\":\"test\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAIM\"}"
-      + "],"
-      + "\"showCreateFormStatus\":true}";
+        "{\"userCards\":"
+        + "["
+          + "{\"blobKey\":\"null\",\"rawText\":\"test\",\"textTranslated\":\"test\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAEM\"},"
+          + "{\"blobKey\":\"null\",\"rawText\":\"test\",\"textTranslated\":\"test\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAIM\"}"
+        + "],"
+        + "\"showCreateFormStatus\":true}";
 
     assertTrue(compareJson(response, expectedResponse));
   }
@@ -169,8 +169,8 @@ public final class UserCardsServletTest {
 
     // Ensures the created card has all the properties in datastore
     assertTrue((card.getProperty("blobKey") != null &&
-      card.getProperty("textTranslated") != null &&
-      card.getProperty("rawText") != null));
+        card.getProperty("textTranslated") != null &&
+        card.getProperty("rawText") != null));
 
     assertEquals(1, responseEntity.countEntities(withLimit(10)));
   }

@@ -41,7 +41,7 @@ public class UserFoldersServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
 
     Map<String, Object> jsonInfo = new HashMap<>();
-		List<Folder> userFolders = new ArrayList<>();
+	    List<Folder> userFolders = new ArrayList<>();
     jsonInfo.put(CREATE_FORM_HEADER, false);
 
     if (userService.isUserLoggedIn()) {

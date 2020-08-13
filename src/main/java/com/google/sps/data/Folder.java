@@ -53,7 +53,6 @@ public final class Folder {
   }
 
   public Entity createEntity() {
-    // Set owner of folder 
     Entity folder = new Entity("Folder", KeyFactory.stringToKey(parentKey));
 
     folder.setProperty("folderName", this.folderName);

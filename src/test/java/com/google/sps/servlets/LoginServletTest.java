@@ -51,7 +51,7 @@ public final class LoginServletTest {
       	.setEnvIsAdmin(true).setEnvIsLoggedIn(true)
       	.setEnvEmail("test@gmail.com").setEnvAuthDomain("gmail.com")
       	.setEnvAttributes(
-        	new HashMap(
+            new HashMap(
           	ImmutableMap.of(
             	"com.google.appengine.api.users.UserService.user_id_key", USER_ID)));
 

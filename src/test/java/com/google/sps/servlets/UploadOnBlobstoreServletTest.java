@@ -1,16 +1,16 @@
 package com.google.sps.servlets;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.After;
-
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import static com.google.sps.tool.Tool.compareJson;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.After;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -54,8 +54,8 @@ public final class UploadOnBlobstoreServletTest {
 
   @Test
   public void getBlobstoreUploadUrl() throws Exception {
-    // Note: blobstore url changes during local testing
-    //       so we're just checking if there is a response
+    // Blobstore url changes during local testing
+    // So we're just checking if there is a response
     String blobstoreHeaderUrl = "http://localhost:8080/_ah/upload/";
 
     servlet.doGet(mockRequest, mockResponse);

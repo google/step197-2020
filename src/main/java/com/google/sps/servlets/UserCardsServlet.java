@@ -79,10 +79,10 @@ public class UserCardsServlet extends HttpServlet {
       String folderKey = request.getParameter("folderKey");
       String rawText = request.getParameter("rawText");
       String textTranslated = request.getParameter("translatedText");
-      String blobKey = getBlobKey(request);
+      String imageBlobKey = getImageBlobKey(request);
 
       Card card = new Card.Builder()
-          .setBlobKey(blobKey)
+          .setImageBlobKey(imageBlobKey)
           .setRawText(rawText)
           .setTextTranslated(textTranslated)
           .setParentKey(folderKey)
@@ -95,7 +95,7 @@ public class UserCardsServlet extends HttpServlet {
     }
   }
   
-  private String getBlobKey(HttpServletRequest request){
+  private String getImageBlobKey(HttpServletRequest request){
     // TODO(ngothomas): There is a bug with getting getBlobKey to work on test server
     // Unit tests will always set blobKey to "null"
     // There should be no paramater testStatus in the live server thus returns null

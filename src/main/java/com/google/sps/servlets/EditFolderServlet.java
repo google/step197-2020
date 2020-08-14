@@ -29,17 +29,23 @@ public class EditFolderServlet extends HttpServlet{
       String newFolderName = request.getParameter("folderName");
       String newFolderDefaultLanguage = request.getParameter("folderDefaultLanguage");
       String folderKey = request.getParameter("folderKey");
-      updateFolder(response, newFolderName, newFolderDefaultLanguage, folderKey);
+
+      Entity folderEntity = getExistingFolderInDatastore(response, datastore, folderKey);
+
+      if (folderEntity == null) {
+        ResponseHandler.sendErrorMessage(response, "Cannot edit Folder at the moment");
+      } else {
+        updateFolder(response, datastore, newFolderName, newFolderDefaultLanguage, folderKey);
+      }
     }
   }
 
-  private void updateFolder(HttpServletResponse response, String newFolderName, String newFolderDefaultLanguage, String folderKey) throws IOException {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Entity folderEntity = getExistingFolderInDatastore(response, datastore, folderKey);
-    
-    if (folderEntity == null) {
-        ResponseHandler.sendErrorMessage(response, "Cannot edit Folder at the moment");
-    }
+  private void updateFolder(
+        HttpServletResponse response, 
+        DatastoreService datastore, 
+        String newFolderName,
+        String newFolderDefaultLanguage, 
+        String folderKey) throws IOException {
     
     folderEntity.setProperty("folderName", newFolderName);
     folderEntity.setProperty("folderDefaultLanguage", newFolderDefaultLanguage);

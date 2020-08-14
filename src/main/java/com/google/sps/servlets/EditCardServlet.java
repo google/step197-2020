@@ -52,13 +52,13 @@ public class EditCardServlet extends HttpServlet{
   }
 
   private void updateCard(
-      HttpServletResponse response, 
-      Entity card,
-      DatastoreService datastore,
-      String cardKey,
-      String newRawText,
-      String newTextTranslated,
-      String newImageBlobKey) throws IOException {
+        HttpServletResponse response, 
+        Entity card,
+        DatastoreService datastore,
+        String cardKey,
+        String newRawText,
+        String newTextTranslated,
+        String newImageBlobKey) throws IOException {
 
     card.setProperty("cardKey", cardKey);
     card.setProperty("rawText", newRawText);

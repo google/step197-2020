@@ -60,7 +60,7 @@ class CreateCardContent extends Component {
         }
         this.setState({ translation: translated, text: target });
       } catch (error) {
-          this.setState({ translation: "Could not Translate", text: target });
+          this.setState({ translation: "Text could not be translated", text: target });
       }
     } else {
         this.setState({ text: target});

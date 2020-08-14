@@ -61,7 +61,6 @@ class CreateFolderContent extends Component {
                       onChange={this.handleFolderLang}
                       required>
                       {
-                        // Parse json and display supported languages in scroll list
                         supportedLang.languages.map((lang, i) => {
                           return (
                             <option key={i} value={lang.language}>

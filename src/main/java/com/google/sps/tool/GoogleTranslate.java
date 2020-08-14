@@ -9,8 +9,7 @@ public class GoogleTranslate {
 
   public static String translateText(String textNotTranslated, String targetLanguage) {
     Translate translate = TranslateOptions.newBuilder().setProjectId("framecards").setQuotaProjectId("framecards").build().getService();
-    Translation translation = 
-        translate.translate(textNotTranslated, Translate.TranslateOption.targetLanguage(targetLanguage));
+    Translation translation = translate.translate(textNotTranslated, Translate.TranslateOption.targetLanguage(targetLanguage));
     String translatedText = translation.getTranslatedText();
 
     return translatedText;

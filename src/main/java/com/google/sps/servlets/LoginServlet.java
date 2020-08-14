@@ -31,8 +31,6 @@ public class LoginServlet extends HttpServlet {
     String logoutUrl = "null";
     String loginUrl = "null";
     String userEmail = "null";
-
-    // Boolean to update User's main page 
     Boolean showNewTab = false;
 
     User user;
@@ -51,9 +49,7 @@ public class LoginServlet extends HttpServlet {
       storeUserToDatastore(user);
     }
 
-    // Aggregate response information
     Map<String, Object> jsonInfo = new HashMap<>();
-    jsonInfo.put("userInfo", user);
     jsonInfo.put("showTabStatus", showNewTab);
     jsonInfo.put("logoutUrl", logoutUrl);
     jsonInfo.put("loginUrl", loginUrl);
@@ -65,10 +61,9 @@ public class LoginServlet extends HttpServlet {
   public boolean isUserInDatastore(User user) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Key userKey = KeyFactory.createKey("User", user.getUserId());
-    Entity userEntity;
 
     try {
-      userEntity = datastore.get(userKey);
+      datastore.get(userKey);
       user.setUserKey(KeyFactory.keyToString(userKey));
       return true;
     } catch (EntityNotFoundException e) {

@@ -4,29 +4,22 @@ import styled from "@emotion/styled";
 class folderScroll extends Component {
   constructor(props) {
     super(props);
-    this.mount = false;
     this.state = {
       isDataFetched: false,
       folders: "",
     };
-    this.grabFolders();
   }
 
-  grabFolders(e) {
-    // Mount boolean ensures that grabFolders is only called once
-    this.mount = true;
-    if (this.mount) {
-      fetch("/userfolders")
-        .then((result) => result.json())
-        .then((data) => {
-          this.setState({ isDataFetched: true, folders: data });
-        })
-        .catch(error => alert("Could not load folders, try refreshing page"));
+  async componentDidMount() {
+    try {
+      const foldersData = await fetch("/userfolders").then((result) => result.json());
+      if (!foldersData.ok) {
+        throw Error(foldersData.statusText);
+      }
+      this.setState({ isDataFetched: true, folders: foldersData });
+    } catch (error) {
+      alert("Could not load folders, try refreshing page");
     }
-  }
-
-  componentWillUnmount() {
-    this.mount = false;
   }
 
   render() {

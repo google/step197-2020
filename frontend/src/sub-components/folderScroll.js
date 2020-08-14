@@ -2,7 +2,7 @@ import React, { Component, useState } from "react";
 import supportedLang from "./SupportedLang.json";
 import styled from "@emotion/styled";
 
-class folderScroll extends Component {
+class FolderScroll extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,4 +51,4 @@ class folderScroll extends Component {
   }
 }
 
-export default folderScroll;
+export default FolderScroll;

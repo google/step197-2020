@@ -22,7 +22,7 @@ class CreateFolderContent extends Component {
   }
 
   /**
-   * This react component renders a form that makes a post
+   * This React component renders a form that makes a post
    * request to UserFoldersServlet for folder creation.
    */
   render() {

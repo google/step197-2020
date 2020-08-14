@@ -16,7 +16,7 @@ const InsideFolderContent = (props) => {
 	`;
 
 	let flashcards = [];
-	const FetchPromise = fetch(`/usercards?folderKey=${folderKey}`, { method: 'GET' });
+	const FetchPromise = fetch(`/usercards?folderKey=${props.folderKey}`, { method: 'GET' });
 	FetchPromise.then((result) => result.json())
 		.then((data) => {
 			flashcards = data.map((flashcard) => (
@@ -30,7 +30,7 @@ const InsideFolderContent = (props) => {
 			));
 		})
 		.catch((error) => {
-			LogDebugMessage('Can not fetch flashcards');
+			LogDebugMessage('Can not fetch flashcards.');
 		});
 
 	const CardContainer = {

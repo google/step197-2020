@@ -86,12 +86,12 @@ public final class UserCardsServletTest {
   public void queryUserCards() throws Exception {
     // Generate testing card objects to store in datastore
     Card cardA = new Card.Builder()
-        .setBlobKey("null")
+        .setImageBlobKey("null")
         .setRawText("test")
         .setTextTranslated("test")
         .build();
     Card cardB = new Card.Builder()
-        .setBlobKey("null")
+        .setImageBlobKey("null")
         .setRawText("test")
         .setTextTranslated("test")
         .build();
@@ -114,8 +114,8 @@ public final class UserCardsServletTest {
     String expectedResponse = 
         "{\"userCards\":"
         + "["
-          + "{\"blobKey\":\"null\",\"rawText\":\"test\",\"textTranslated\":\"test\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAEM\"},"
-          + "{\"blobKey\":\"null\",\"rawText\":\"test\",\"textTranslated\":\"test\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAIM\"}"
+          + "{\"imageBlobKey\":\"null\",\"rawText\":\"test\",\"textTranslated\":\"test\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAEM\"},"
+          + "{\"imageBlobKey\":\"null\",\"rawText\":\"test\",\"textTranslated\":\"test\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAIM\"}"
         + "],"
         + "\"showCreateFormStatus\":true}";
 
@@ -168,7 +168,7 @@ public final class UserCardsServletTest {
     Entity card = responseEntity.asSingleEntity();
 
     // Ensures the created card has all the properties in datastore
-    assertTrue((card.getProperty("blobKey") != null &&
+    assertTrue((card.getProperty("imageBlobKey") != null &&
         card.getProperty("textTranslated") != null &&
         card.getProperty("rawText") != null));
 
@@ -179,12 +179,12 @@ public final class UserCardsServletTest {
   public void userCreatesACardAndHasOtherCardsBefore() throws Exception {
     // Generate testing card objects to store in datastore
     Card cardA = new Card.Builder()
-        .setBlobKey("null")
+        .setImageBlobKey("null")
         .setRawText("test")
         .setTextTranslated("test")
         .build();
     Card cardB = new Card.Builder()
-        .setBlobKey("null")
+        .setImageBlobKey("null")
         .setRawText("test")
         .setTextTranslated("test")
         .build();

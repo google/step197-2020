@@ -77,18 +77,12 @@ public final class EditCardServletTest {
   @Test
   public void editCard() throws Exception {
     Card currentCard = new Card.Builder()
-        .setBlobKey("null")
-        .setLabels("spanish")
-        .setFromLang("en")
-        .setToLang("es")
+        .setImageBlobKey("null")
         .setRawText("hello")
         .setTextTranslated("hola")
         .build();
     Card expectedCard = new Card.Builder()
-        .setBlobKey("null")
-        .setLabels("vietnamese")
-        .setFromLang("en")
-        .setToLang("vi")
+        .setImageBlobKey("null")
         .setRawText("hello")
         .setTextTranslated("xin chào")
         .build();
@@ -104,9 +98,6 @@ public final class EditCardServletTest {
     // Make sure the expected card has the same key
     expectedCard.setCardKey(cardKey);
 
-    when(mockRequest.getParameter("labels")).thenReturn("vietnamese");
-    when(mockRequest.getParameter("fromLang")).thenReturn("en");
-    when(mockRequest.getParameter("toLang")).thenReturn("vi");
     when(mockRequest.getParameter("cardKey")).thenReturn(cardKey);
     when(mockRequest.getParameter("rawText")).thenReturn("hello");
     when(mockRequest.getParameter("testStatus")).thenReturn("True");
@@ -117,7 +108,7 @@ public final class EditCardServletTest {
     Entity editedCard = datastore.get(KeyFactory.stringToKey(cardKey));
 
     String response = new Gson().toJson(new Card(editedCard, cardKey));
-    String expectedResponse = "{\"blobKey\":\"null\",\"labels\":\"vietnamese\",\"fromLang\":\"en\",\"toLang\":\"vi\",\"rawText\":\"hello\",\"textTranslated\":\"xin chào\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAEM\"}";
+    String expectedResponse = "{\"imageBlobKey\":\"null\",\"rawText\":\"hello\",\"textTranslated\":\"xin chào\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAEM\"}";
     assertEquals(response, expectedResponse);
   }
 

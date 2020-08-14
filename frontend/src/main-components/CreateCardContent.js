@@ -28,8 +28,7 @@ class CreateCardContent extends Component {
   async componentDidMount() {
     try {
       const uploadUrl = await fetch("/upload")
-        .then((response) => { return response.text() });
-      // Throws error if the /upload servlet is not found
+        .then(response => response.text());
       if (!uploadUrl.ok) {
         throw Error(uploadUrl.statusText);
       }
@@ -45,12 +44,12 @@ class CreateCardContent extends Component {
    */
   async translateText(event) {
     event.persist();
-    const target = event.target.value;
+    const text = event.target.value;
     // Ensures that languages have been selected before translating
     if (this.state.fromLang !== "none" && this.state.toLang !== "none") {
       try {
         const translated = await getTranslation(
-          target,
+          text,
           this.state.fromLang,
           this.state.toLang
         );
@@ -58,12 +57,12 @@ class CreateCardContent extends Component {
         if (!translated.ok) {
           throw Error(translated.statusText)
         }
-        this.setState({ translation: translated, text: target });
+        this.setState({ translation: translated, text: text });
       } catch (error) {
           this.setState({ translation: "Text could not be translated", text: target });
       }
     } else {
-        this.setState({ text: target});
+        this.setState({ text: text });
     }
 
   }

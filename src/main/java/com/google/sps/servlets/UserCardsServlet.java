@@ -22,15 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import com.google.gson.Gson;
 
-<<<<<<< HEAD
-import com.google.cloud.translate.Translate;
-import com.google.cloud.translate.TranslateOptions;
-import com.google.cloud.translate.Translation;
-import com.google.sps.tool.GoogleTranslate;
-
-import com.google.sps.data.Folder;
-=======
->>>>>>> tdd4
 import com.google.sps.data.Card;
 import java.util.List; 
 import java.util.ArrayList;

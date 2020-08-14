@@ -9,7 +9,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 public final class Card {
 
   public static class Builder {
-    private String blobKey = "null";
+    private String imageBlobKey = "null";
     private String rawText = "null";
     private String textTranslated = "null";
     private String key;
@@ -17,8 +17,8 @@ public final class Card {
 
     public Builder() {}
 
-    public Builder setBlobKey(String blobKey) {
-      this.blobKey = blobKey;
+    public Builder setImageBlobKey(String imageBlobKey) {
+      this.imageBlobKey = imageBlobKey;
       return this;
     }
 
@@ -44,7 +44,7 @@ public final class Card {
 
     public Card build() {
       Card card = new Card();
-      card.blobKey = this.blobKey;
+      card.imageBlobKey = this.imageBlobKey;
       card.rawText = this.rawText;
       card.textTranslated = this.textTranslated;
       card.parentKey = this.parentKey;
@@ -53,7 +53,7 @@ public final class Card {
     }
   }
 
-  private String blobKey = "null";
+  private String imageBlobKey = "null";
   private String rawText = "null";
   private String textTranslated = "null";
   private String key;
@@ -61,25 +61,15 @@ public final class Card {
   
   private Card() {}
 
-  public Card (
-    String blobKey,
-    String rawText,
-    String textTranslated) {
-        
-    this.blobKey = blobKey;
-    this.rawText = rawText;
-    this.textTranslated = textTranslated;
-  }
-
   public Card(Entity entity, String key){
-    this.blobKey = (String) entity.getProperty("blobKey");
+    this.imageBlobKey = (String) entity.getProperty("imageBlobKey");
     this.rawText = (String) entity.getProperty("rawText");
     this.textTranslated = (String) entity.getProperty("textTranslated");
     this.key = key;
   }
 
-  public String getBlobKey() {
-    return this.blobKey;
+  public String getImageBlobKey() {
+    return this.imageBlobKey;
   }
 
   public String getRawText() {
@@ -94,8 +84,8 @@ public final class Card {
     return this.key;
   }
 
-  public void setBlobKey(String newBlobKey) {
-    this.blobKey = blobKey;
+  public void setImageBlobKey(String newImageBlobKey) {
+    this.imageBlobKey = newImageBlobKey;
   }
 
   public void setNewText(String newText) {
@@ -116,7 +106,7 @@ public final class Card {
 
   public Entity createEntity() {
     Entity card = new Entity("Card", KeyFactory.stringToKey(this.parentKey));
-    card.setProperty("blobKey", this.blobKey);
+    card.setProperty("imageBlobKey", this.imageBlobKey);
     card.setProperty("rawText", this.rawText);
     card.setProperty("textTranslated", this.textTranslated);
 

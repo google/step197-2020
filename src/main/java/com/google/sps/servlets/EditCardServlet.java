@@ -35,13 +35,10 @@ public class EditCardServlet extends HttpServlet{
     UserService userService = UserServiceFactory.getUserService();
 
     if (userService.isUserLoggedIn()) {
-      String newLabels = request.getParameter("labels");
-      String newfromLang = request.getParameter("fromLang");
-      String newToLang = request.getParameter("toLang");
       String cardKey = request.getParameter("cardKey");
       String newRawText = request.getParameter("rawText");
       String newTextTranslated = request.getParameter("textTranslated");
-      String newBlobKey = getBlobKey(request);
+      String newImageBlobKey = getImageBlobKey(request);
       
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       Entity card = getExistingCardInDatastore(response, datastore, cardKey);
@@ -49,7 +46,7 @@ public class EditCardServlet extends HttpServlet{
       if (card == null) {
         ResponseHandler.sendErrorMessage(response, "Cannot edit Card at the moment");
       } else {
-        updateCard(response, card, datastore, newLabels, newfromLang, newToLang, cardKey, newRawText, newTextTranslated, newBlobKey);
+        updateCard(response, card, datastore, cardKey, newRawText, newTextTranslated, newImageBlobKey);
       }
     }
   }
@@ -58,21 +55,15 @@ public class EditCardServlet extends HttpServlet{
       HttpServletResponse response, 
       Entity card,
       DatastoreService datastore,
-      String newLabels,
-      String newFromLang, 
-      String newToLang, 
       String cardKey,
       String newRawText,
       String newTextTranslated,
-      String newBlobKey) throws IOException {
+      String newImageBlobKey) throws IOException {
 
-    card.setProperty("labels", newLabels);
-    card.setProperty("fromLang", newFromLang);
-    card.setProperty("toLang", newToLang);
     card.setProperty("cardKey", cardKey);
     card.setProperty("rawText", newRawText);
     card.setProperty("textTranslated", newTextTranslated);
-    card.setProperty("blobKey", newBlobKey);
+    card.setProperty("imageBlobKey", newImageBlobKey);
     datastore.put(card);
   }
 
@@ -85,7 +76,7 @@ public class EditCardServlet extends HttpServlet{
     }
   }
 
-  private String getBlobKey(HttpServletRequest request) {
+  private String getImageBlobKey(HttpServletRequest request) {
     // Method to determine whether or not this is a unit test or live server
     // Unit tests will always set blobKey to "null"
     // There should be no paramater testStatus in the live server thus returns null

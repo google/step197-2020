@@ -16,7 +16,6 @@ const imgStyle = {
 class FlashcardFront extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
   }
 
   render() {

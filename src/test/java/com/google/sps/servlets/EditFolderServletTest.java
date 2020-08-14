@@ -80,8 +80,8 @@ public final class EditFolderServletTest {
 
   @Test
   public void editFolder() throws Exception {
-    Folder currentFolder = new Folder("FIRSTFOLDER", "en");
-    Folder expectedFolder = new Folder("EDITEDFOLDER", "es_edited");
+    Folder currentFolder = new Folder("Folder", "en");
+    Folder expectedFolder = new Folder("Edited Folder", "es");
     
     // Generate a user entity to obtain a user key
     // which would be used to set as the parent of the folder entity
@@ -94,8 +94,8 @@ public final class EditFolderServletTest {
     // Make sure the expected Folder has the same key as the folder in datastore
     expectedFolder.setFolderKey(folderKey);
 
-    when(mockRequest.getParameter("folderName")).thenReturn("EDITEDFOLDER");
-    when(mockRequest.getParameter("folderDefaultLanguage")).thenReturn("es_edited");
+    when(mockRequest.getParameter("folderName")).thenReturn("Edited Folder");
+    when(mockRequest.getParameter("folderDefaultLanguage")).thenReturn("es");
     when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
 
     servlet.doPut(mockRequest, mockResponse);
@@ -104,7 +104,7 @@ public final class EditFolderServletTest {
     Folder editedFolder = new Folder(editedFolderEntity, folderKey);
 
     String response = new Gson().toJson(editedFolder);
-    String expectedResponse = "{\"folderName\":\"EDITEDFOLDER\",\"folderDefaultLanguage\":\"es_edited\",\"folderKey\":\"agR0ZXN0chwLEgRVc2VyIgZ0ZXN0SWQMCxIGRm9sZGVyGAEM\"}";
+    String expectedResponse = "{\"folderName\":\"Edited Folder\",\"folderDefaultLanguage\":\"es\",\"folderKey\":\"agR0ZXN0chwLEgRVc2VyIgZ0ZXN0SWQMCxIGRm9sZGVyGAEM\"}";
 
     assertEquals(response, expectedResponse);
   }

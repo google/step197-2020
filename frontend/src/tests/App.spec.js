@@ -1,6 +1,5 @@
-import React from 'react';
+import React from "react";
 import renderer from "react-test-renderer";
-
 import About from "../homePage/About";
 import LandingPage from "../homePage/LandingPage";
 import NavBar from "../homePage/NavBar";
@@ -11,27 +10,27 @@ import CreateFolder from "../pages/CreateFolder";
 import MyFolders from "../pages/MyFolders";
 import InsideFolder from "../pages/InsideFolder";
 import NotFound from "../pages/404";
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from "react-router-dom";
 
 /**
  * Snapshot testing for home page
  */
-describe('Home page', () => {
-  test('snapshot About renders', () => {
-    const component = renderer.create(<About/>);
-    let tree = component.toJSON();
+describe("Home page", () => {
+  test("snapshot About renders", () => {
+    const component = renderer.create(<About />);
+    const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   test("snapshot Landing Page renders", () => {
     const component = renderer.create(<LandingPage />);
-    let tree = component.toJSON();
+    const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   test("snapshot Navigation Bar renders", () => {
     const component = renderer.create(<NavBar />);
-    let tree = component.toJSON();
+    const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
 });
@@ -42,7 +41,7 @@ describe('Home page', () => {
 describe("mainComponents", () => {
   test("snapshot header renders", () => {
     const component = renderer.create(<Header />);
-    let tree = component.toJSON();
+    const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
 
@@ -52,7 +51,7 @@ describe("mainComponents", () => {
         <SideBar />
       </MemoryRouter>
     );
-    let tree = component.toJSON();
+    const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
 });
@@ -60,14 +59,14 @@ describe("mainComponents", () => {
 /**
  * Snapshot testing for main App pages
  */
-describe('mainApp', () => {
+describe("mainApp", () => {
   test("snapshot My Folders renders", () => {
     const component = renderer.create(
       <MemoryRouter>
         <MyFolders />
       </MemoryRouter>
     );
-    let tree = component.toJSON();
+    const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
 
@@ -77,38 +76,40 @@ describe('mainApp', () => {
         <CreateCard />
       </MemoryRouter>
     );
-    let tree = component.toJSON();
+    const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
 
-   test("snapshot Create Folder renders", () => {
-     const component = renderer.create(
-       <MemoryRouter>
-         <CreateFolder />
-       </MemoryRouter>
-     );
-     let tree = component.toJSON();
-     expect(tree).toMatchSnapshot();
-   });
+  // Must define window.alert for jest
+  window.alert = jest.fn();
+  test("snapshot Create Folder renders", () => {
+    window.alert.mockClear();
+    const component = renderer.create(
+      <MemoryRouter>
+        <CreateFolder />
+      </MemoryRouter>
+    );
+    const tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+  });
 
-   test("snapshot Inside Folder renders", () => {
-     const component = renderer.create(
-       <MemoryRouter>
-         <InsideFolder />
-       </MemoryRouter>
-     );
-     let tree = component.toJSON();
-     expect(tree).toMatchSnapshot();
-   });
-  
+  test("snapshot Inside Folder renders", () => {
+    const component = renderer.create(
+      <MemoryRouter>
+        <InsideFolder />
+      </MemoryRouter>
+    );
+    const tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
   test("snapshot 404 renders", () => {
     const component = renderer.create(
       <MemoryRouter>
-        <NotFound/>
+        <NotFound />
       </MemoryRouter>
     );
-    let tree = component.toJSON();
+    const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
 });
-

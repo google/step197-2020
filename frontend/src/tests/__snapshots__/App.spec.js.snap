@@ -374,9 +374,9 @@ exports[`mainApp snapshot Create Folder renders 1`] = `
         >
           <ul>
             <form
-              action="/folder?userKey=ahFzdTE5LWNvZGV1LTgtNTQ3MnIfCxIEVXNlciIVMTcxNzQ5MTA2ODUxNTcxMzcxNTkxDA"
+              action="/userfolders"
               id="myForm"
-              method="post"
+              method="POST"
             >
               <li>
                 <label>
@@ -649,7 +649,7 @@ exports[`mainApp snapshot CreateCard renders 1`] = `
             className="holdCard"
           >
             <div
-              className="FlashcardFront css-liv8jr"
+              className="FlashcardFront css-1xi97vb"
             >
               <img
                 alt="image"
@@ -672,7 +672,7 @@ exports[`mainApp snapshot CreateCard renders 1`] = `
             className="holdCard"
           >
             <div
-              className="FlashcardBack css-17ceb37"
+              className="FlashcardBack css-jov65y"
             >
               none
             </div>
@@ -683,9 +683,9 @@ exports[`mainApp snapshot CreateCard renders 1`] = `
         >
           <ul>
             <form
-              action="/usercards?userKey=ahFzdTE5LWNvZGV1LTgtNTQ3MnIfCxIEVXNlciIVMTIxODQwMTczNDMzMDE4NzUzNDMxDA"
+              action="/usercards"
               id="myForm"
-              method="post"
+              method="POST"
             >
               <li>
                 <span

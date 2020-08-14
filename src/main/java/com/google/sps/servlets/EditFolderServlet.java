@@ -5,7 +5,6 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 
@@ -14,9 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import com.google.gson.Gson;
 import com.google.sps.tool.ResponseHandler;
-import com.google.sps.data.Folder;
 
 @WebServlet("/editfolder")
 public class EditFolderServlet extends HttpServlet{
@@ -56,7 +53,6 @@ public class EditFolderServlet extends HttpServlet{
   }
 
   private Entity getExistingFolderInDatastore(HttpServletResponse response, DatastoreService datastore, String folderKey) throws IOException {
-    Entity folder;
     try {
       return datastore.get(KeyFactory.stringToKey(folderKey));
     } catch (EntityNotFoundException e) {

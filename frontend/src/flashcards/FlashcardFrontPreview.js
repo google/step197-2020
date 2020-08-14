@@ -14,10 +14,6 @@ const imgStyle = {
 };
 
 class FlashcardFront extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const Contain = styled.div`
       align-items: center;

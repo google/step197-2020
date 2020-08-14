@@ -29,6 +29,7 @@ class CreateFolderContent extends Component {
     return (
       <div id='container'>
         <div id='innerContainer'>
+
           <div id='folderPreview'>
             <h2 id='previewFolderName'>{this.state.folderName}</h2>
             <h4 id='previewFolderLang'>{this.state.folderLang}</h4>
@@ -50,7 +51,6 @@ class CreateFolderContent extends Component {
                     required>
                   </input>
                 </li>
-
                 <li>
                   <label>Folder Language:</label>
                 </li>
@@ -81,6 +81,7 @@ class CreateFolderContent extends Component {
               </form>
             </ul>
           </div>
+          
         </div>
       </div>
     );

@@ -52,6 +52,7 @@ class CreateCardContent extends Component {
     return (
       <div id='container'>
         <div id='innerContainer'>
+
           <div id='CardPreview'>
             <div className='holdCard'>
               <FrontCard
@@ -109,13 +110,13 @@ class CreateCardContent extends Component {
                     <input type='file' id='folder' name='folderSelect'></input>
                   </span>
                 </li>
-
                 <li>
                   <input id='submission' type='submit' value='Submit' />
                 </li>
               </form>
             </ul>
           </div>
+
         </div>
       </div>
     );

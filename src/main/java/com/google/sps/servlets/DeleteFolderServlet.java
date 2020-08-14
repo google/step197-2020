@@ -54,7 +54,7 @@ public class DeleteFolderServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(cardQuery);
 
     if (results != null) {
-      for (Entity card: results.asIterable()) {
+      for (Entity card : results.asIterable()) {
         String blobKey = (String) card.getProperty("blobKey");
         if (blobKey != "null") {
           deleteBlob(blobKey);

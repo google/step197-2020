@@ -41,18 +41,14 @@ public class UserFoldersServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
 
     Map<String, Object> jsonInfo = new HashMap<>();
-	    List<Folder> userFolders = new ArrayList<>();
+	List<Folder> userFolders = new ArrayList<>();
     jsonInfo.put(CREATE_FORM_HEADER, false);
 
     if (userService.isUserLoggedIn()) {
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      String userKey = getUserKey(userService, datastore);
 
-      String userEmail = userService.getCurrentUser().getEmail();
-      Query userQuery = new Query("User").setFilter(new FilterPredicate("email", FilterOperator.EQUAL, userEmail));
-			Entity userEntity = datastore.prepare(userQuery).asSingleEntity();
-      Key userKey = userEntity.getKey();
-
-      Query folderQuery = new Query("Folder").setAncestor(userKey);
+      Query folderQuery = new Query("Folder").setAncestor(KeyFactory.stringToKey(userKey));
       PreparedQuery results = datastore.prepare(folderQuery);
 
       if (results != null) {
@@ -63,7 +59,7 @@ public class UserFoldersServlet extends HttpServlet {
         }
       }
 		
-		jsonInfo.put(CREATE_FORM_HEADER, true);
+	  jsonInfo.put(CREATE_FORM_HEADER, true);
     }
 
     jsonInfo.put(USER_FOLDER_HEADER, userFolders);
@@ -79,15 +75,11 @@ public class UserFoldersServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
 
     if (userService.isUserLoggedIn()) {
-			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+	  DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       
       String folderName = request.getParameter("folderName");
       String folderDefaultLanguage = request.getParameter("folderDefaultLanguage");
-
-      String userEmail = userService.getCurrentUser().getEmail();
-      Query userQuery = new Query("User").setFilter(new FilterPredicate("email", FilterOperator.EQUAL, userEmail));
-			Entity userEntity = datastore.prepare(userQuery).asSingleEntity();
-      String userKey = KeyFactory.keyToString(userEntity.getKey());
+      String userKey = getUserKey(userService, datastore);
 
       Folder folder = new Folder(folderName, folderDefaultLanguage);
       folder.setParentKey(userKey);
@@ -95,5 +87,14 @@ public class UserFoldersServlet extends HttpServlet {
       
       datastore.put(folderEntity);
     }
+  }
+
+  public String getUserKey(UserService userService, DatastoreService datastore) {
+    String userEmail = userService.getCurrentUser().getEmail();
+    Query userQuery = new Query("User").setFilter(new FilterPredicate("email", FilterOperator.EQUAL, userEmail));
+	Entity userEntity = datastore.prepare(userQuery).asSingleEntity();
+    String userKey = KeyFactory.keyToString(userEntity.getKey());
+
+    return userKey;
   } 
 }

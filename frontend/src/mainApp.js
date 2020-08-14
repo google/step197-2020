@@ -15,12 +15,12 @@ function App() {
   return (
     <div>
       <Switch>
-        <Route exact path="/createCard" component={CreateCard} />
-        <Route exact path="/myFolders" component={MyFolders} />
-        <Route exact path="/imageInterface" component={ImageInterface} />
-        <Route exact path="/youtubeInterface" component={YoutubeDetect} />
-        <Route exact path="/createFolder" component={CreateFolder} />
-        <Route exact path="/insideFolder" component={InsideFolder} />
+        <Route exact path="/CreateCard" component={CreateCard} />
+        <Route exact path="/MyFolders" component={MyFolders} />
+        <Route exact path="/ImageInterface" component={ImageInterface} />
+        <Route exact path="/YoutubeInterface" component={YoutubeDetect} />
+        <Route exact path="/CreateFolder" component={CreateFolder} />
+        <Route exact path="/InsideFolder" component={InsideFolder} />
         <Route component={PageError} />
       </Switch>
     </div>

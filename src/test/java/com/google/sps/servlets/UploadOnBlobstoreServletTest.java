@@ -1,11 +1,8 @@
 package com.google.sps.servlets;
 
-import static com.google.sps.tool.Tool.compareJson;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.After;
@@ -14,10 +11,7 @@ import org.junit.runners.JUnit4;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.io.IOException;
 
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 

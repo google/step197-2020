@@ -13,7 +13,7 @@ const YoutubeDetectContent = (props) => {
 
   return (
     <Container>
-     <h1>Youtube Detection</h1>
+     <h1>YouTube Detection</h1>
     </Container>
   );
 };

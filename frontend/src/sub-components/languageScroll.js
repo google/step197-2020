@@ -1,12 +1,8 @@
 import React, { Component } from "react";
 import supportedLang from "./SupportedLang.json";
-import styled from "@emotion/styled"
+import styled from "@emotion/styled";
 
-class languageScroll extends Component {
-  constructor(props) {
-    super(props);
-  }
-
+class LanguageScroll extends Component {
   render() {
     const Options = styled.select`
       width: 30%;
@@ -20,18 +16,20 @@ class languageScroll extends Component {
     `;
 
     return (
-      <Options onChange={this.props.clickFunc} value={this.props.selected} name="languages">
-        {
-          // // Parses JSON and displays the supported languages in a scroll list
-          supportedLang.languages.map((lang) => {
-           
-            return <option key={lang.code}
-              value={lang.code}>{lang.language}</option>;
-          })
-        }
+      <Options
+        onChange={this.props.clickFunc}
+        value={this.props.selected}
+        name='languages'>
+        {supportedLang.languages.map((lang) => {
+          return (
+            <option key={lang.code} value={lang.code}>
+              {lang.language}
+            </option>
+          );
+        })}
       </Options>
     );
   }
 }
 
-export default languageScroll;
+export default LanguageScroll;

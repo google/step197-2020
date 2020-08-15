@@ -22,13 +22,14 @@ class CreateFolderContent extends Component {
   }
 
   /**
-   * This react component renders a form that makes a post
+   * This React component renders a form that makes a post
    * request to UserFoldersServlet for folder creation.
    */
   render() {
     return (
       <div id='container'>
         <div id='innerContainer'>
+
           <div id='folderPreview'>
             <h2 id='previewFolderName'>{this.state.folderName}</h2>
             <h4 id='previewFolderLang'>{this.state.folderLang}</h4>
@@ -83,6 +84,7 @@ class CreateFolderContent extends Component {
               </form>
             </ul>
           </div>
+          
         </div>
       </div>
     );

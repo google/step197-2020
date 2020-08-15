@@ -4,7 +4,11 @@ import FrontCard from "../flashcards/FlashcardFrontPreview";
 import BackCard from "../flashcards/FlashcardBackPreview";
 import { getTranslation } from "../sub-components/translate";
 import LangaugeScroll from "../sub-components/languageScroll";
+<<<<<<< HEAD
 import FolderScroll from "../sub-components/folderScroll";
+=======
+
+>>>>>>> 4f6b808fb71a606600278b59b586cff7e0149ba2
 class CreateCardContent extends Component {
   constructor(props) {
     super(props);
@@ -125,6 +129,7 @@ class CreateCardContent extends Component {
               </form>
             </ul>
           </div>
+
         </div>
       </div>
     );

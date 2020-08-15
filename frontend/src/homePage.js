@@ -49,7 +49,7 @@ class Home extends React.Component {
   };
 
   handleFoldersClick = (e) => {
-    window.location = "/myFolders";
+    window.location = "/MyFolders";
   };
 
   render() {

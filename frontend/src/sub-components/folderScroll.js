@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "@emotion/styled";
 
-class folderScroll extends Component {
+class FolderScroll extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -57,4 +57,4 @@ class folderScroll extends Component {
   }
 }
 
-export default folderScroll;
+export default FolderScroll;

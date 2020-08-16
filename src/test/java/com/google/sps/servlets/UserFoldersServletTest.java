@@ -29,40 +29,36 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Entity;
 
 import com.google.sps.data.Folder;
-import java.util.List; 
+import java.util.List;
 import java.util.ArrayList;
 
 @RunWith(JUnit4.class)
 public final class UserFoldersServletTest {
 
-  private static final String USER_KIND = "User";
-  private static final String USER_ID = "testId";
-  private static final String FOLDER_A = "First Folder";
-  private static final String FOLDER_B = "Second Folder";
-  private static final String FOLDER_LANGUAGE = "en";
-
-  private final LocalServiceTestHelper helper = 
-    	new LocalServiceTestHelper(
-      	new LocalDatastoreServiceTestConfig()
-          .setDefaultHighRepJobPolicyUnappliedJobPercentage(0),
-      	new LocalUserServiceTestConfig())
-      	.setEnvIsAdmin(true).setEnvIsLoggedIn(true)
-      	.setEnvEmail("test@gmail.com").setEnvAuthDomain("gmail.com");
+  private final LocalServiceTestHelper helper =
+      new LocalServiceTestHelper(
+              new LocalDatastoreServiceTestConfig()
+                  .setDefaultHighRepJobPolicyUnappliedJobPercentage(0),
+              new LocalUserServiceTestConfig())
+          .setEnvIsAdmin(true)
+          .setEnvIsLoggedIn(true)
+          .setEnvEmail("test@gmail.com")
+          .setEnvAuthDomain("gmail.com");
 
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
   private StringWriter responseWriter;
   private UserFoldersServlet servlet;
   private DatastoreService datastore;
-    
+
   @Before
   public void setUp() throws Exception {
     helper.setUp();
     servlet = new UserFoldersServlet();
     mockRequest = mock(HttpServletRequest.class);
     mockResponse = mock(HttpServletResponse.class);
-    
-    // Set up a fake HTTP response 
+
+    // Set up a fake HTTP response
     responseWriter = new StringWriter();
     when(mockResponse.getWriter()).thenReturn(new PrintWriter(responseWriter));
 
@@ -73,20 +69,20 @@ public final class UserFoldersServletTest {
   public void tearDown() throws Exception {
     helper.tearDown();
   }
-  
+
   @Test
   public void queryUserFolders() throws Exception {
     // Generate testing folders to store in datastore
-    Folder folderA = new Folder(FOLDER_A, FOLDER_LANGUAGE);
-    Folder folderB = new Folder(FOLDER_B, FOLDER_LANGUAGE);
-    
+    Folder folderA = new Folder("First Folder", "en");
+    Folder folderB = new Folder("Second Folder", "en");
+
     // Generate testing user entity to query by email
-	  // And generate a userKey to set as the parent of the testing folders
-    Entity user = new Entity(USER_KIND, USER_ID);
+    // And generate a userKey to set as the parent of the testing folders
+    Entity user = new Entity("User", "testId");
     String userKey = KeyFactory.keyToString(user.getKey());
     user.setProperty("email", "test@gmail.com");
     datastore.put(user);
-    
+
     List<Folder> folders = new ArrayList<>();
     Folder folderAInDatastore = storeFolderInDatastore(folderA, datastore, userKey);
     Folder folderBInDatastore = storeFolderInDatastore(folderB, datastore, userKey);
@@ -95,11 +91,15 @@ public final class UserFoldersServletTest {
 
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    String expectedResponse = 
-      	"{\"userFolders\":["
-          +  "{\"folderName\":\"First Folder\",\"folderDefaultLanguage\":\"en\",\"folderKey\":\""+ folderAInDatastore.getFolderKey() +"\"},"
-          +  "{\"folderName\":\"Second Folder\",\"folderDefaultLanguage\":\"en\",\"folderKey\":\""+ folderBInDatastore.getFolderKey() +"\"}],"
-          + "\"showCreateFormStatus\":true}";
+    String expectedResponse =
+        "{\"userFolders\":["
+            + "{\"folderName\":\"First Folder\",\"folderDefaultLanguage\":\"en\",\"folderKey\":\""
+            + folderAInDatastore.getFolderKey()
+            + "\"},"
+            + "{\"folderName\":\"Second Folder\",\"folderDefaultLanguage\":\"en\",\"folderKey\":\""
+            + folderBInDatastore.getFolderKey()
+            + "\"}],"
+            + "\"showCreateFormStatus\":true}";
 
     assertTrue(compareJson(response, expectedResponse));
   }
@@ -107,8 +107,8 @@ public final class UserFoldersServletTest {
   @Test
   public void userHasNoCurrentFolder() throws Exception {
     // Generate testing user entity to query by email
-	  // And generate a userKey to set as the parent of the testing folders
-    Entity user = new Entity(USER_KIND, USER_ID);
+    // And generate a userKey to set as the parent of the testing folders
+    Entity user = new Entity("User", "testId");
     user.setProperty("email", "test@gmail.com");
     datastore.put(user);
 
@@ -134,7 +134,7 @@ public final class UserFoldersServletTest {
   public void userCreatesFirstFolder() throws Exception {
     // Generate testing user entity to query by email
     // And generate a userKey to set as the parent of the testing folders
-    Entity user = new Entity(USER_KIND, USER_ID);
+    Entity user = new Entity("User", "testId");
     user.setProperty("email", "test@gmail.com");
     datastore.put(user);
 
@@ -142,22 +142,26 @@ public final class UserFoldersServletTest {
     when(mockRequest.getParameter("folderDefaultLanguage")).thenReturn("en");
 
     servlet.doPost(mockRequest, mockResponse);
-    assertEquals(1, datastore.prepare(new Query("Folder").setAncestor(user.getKey())).countEntities(withLimit(10)));
+    assertEquals(
+        1,
+        datastore
+            .prepare(new Query("Folder").setAncestor(user.getKey()))
+            .countEntities(withLimit(10)));
   }
 
   @Test
   public void userCreatesAFolderAndHasMultipleFoldersAlready() throws Exception {
     // Generate testing folders to store in datastore
-    Folder folderA = new Folder(FOLDER_A, FOLDER_LANGUAGE);
-    Folder folderB = new Folder(FOLDER_B, FOLDER_LANGUAGE);
-    
+    Folder folderA = new Folder("First Folder", "en");
+    Folder folderB = new Folder("Second Folder", "en");
+
     // Generate testing user entity to query by email
     // And generate a userKey to set as the parent of the testing folders
-    Entity user = new Entity(USER_KIND, USER_ID);
+    Entity user = new Entity("User", "testId");
     String userKey = KeyFactory.keyToString(user.getKey());
     user.setProperty("email", "test@gmail.com");
     datastore.put(user);
-    
+
     storeFolderInDatastore(folderA, datastore, userKey);
     storeFolderInDatastore(folderB, datastore, userKey);
 
@@ -165,7 +169,11 @@ public final class UserFoldersServletTest {
     when(mockRequest.getParameter("folderDefaultLanguage")).thenReturn("en");
 
     servlet.doPost(mockRequest, mockResponse);
-    assertEquals(3, datastore.prepare(new Query("Folder").setAncestor(user.getKey())).countEntities(withLimit(10)));
+    assertEquals(
+        3,
+        datastore
+            .prepare(new Query("Folder").setAncestor(user.getKey()))
+            .countEntities(withLimit(10)));
   }
 
   private Folder storeFolderInDatastore(Folder folder, DatastoreService datastore, String userKey) {
@@ -174,7 +182,7 @@ public final class UserFoldersServletTest {
     datastore.put(folderEntity);
 
     folder.setFolderKey(KeyFactory.keyToString(folderEntity.getKey()));
-    
+
     return folder;
   }
 }

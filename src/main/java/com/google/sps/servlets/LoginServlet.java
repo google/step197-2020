@@ -75,7 +75,7 @@ public class LoginServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     Entity newEntity = user.createEntity();
-    Key key = newEntity.getKey(); 
+    Key key = newEntity.getKey();
     String userKeyStr = KeyFactory.keyToString(key);
     user.setUserKey(userKeyStr);
 

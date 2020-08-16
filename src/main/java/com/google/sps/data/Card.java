@@ -48,7 +48,7 @@ public final class Card {
       card.rawText = this.rawText;
       card.textTranslated = this.textTranslated;
       card.parentKey = this.parentKey;
-      
+
       return card;
     }
   }
@@ -58,10 +58,10 @@ public final class Card {
   private String textTranslated = "null";
   private String key;
   private String parentKey;
-  
+
   private Card() {}
 
-  public Card(Entity entity, String key){
+  public Card(Entity entity, String key) {
     this.imageBlobKey = (String) entity.getProperty("imageBlobKey");
     this.rawText = (String) entity.getProperty("rawText");
     this.textTranslated = (String) entity.getProperty("textTranslated");

@@ -10,50 +10,47 @@ public final class Folder {
   private String folderKey;
   private String parentKey;
 
-  public Folder(
-	String folderName,
-	String folderDefaultLanguage) {
-		
-	this.folderName = folderName;
-	this.folderDefaultLanguage = folderDefaultLanguage;
-	this.folderKey = "null";
+  public Folder(String folderName, String folderDefaultLanguage) {
+    this.folderName = folderName;
+    this.folderDefaultLanguage = folderDefaultLanguage;
+    this.folderKey = "null";
   }
 
   public Folder(Entity entity, String key) {
-	this.folderName = (String) entity.getProperty("folderName");
-	this.folderDefaultLanguage = (String) entity.getProperty("folderDefaultLanguage");
-	this.folderKey = key;
+    this.folderName = (String) entity.getProperty("folderName");
+    this.folderDefaultLanguage = (String) entity.getProperty("folderDefaultLanguage");
+    this.folderKey = key;
   }
 
   public String getFolderName() {
-	return this.folderName;
+    return this.folderName;
   }
 
   public String getFolderDefaultLanguage() {
-	return this.folderDefaultLanguage;
+    return this.folderDefaultLanguage;
   }
 
   public String getFolderKey() {
-	return this.folderKey;
+    return this.folderKey;
   }
 
   public void setFolderName(String newFolderName) {
-	this.folderName = newFolderName;
+    this.folderName = newFolderName;
   }
 
   public void setFolderKey(String folderKey) {
-	this.folderKey = folderKey;
+    this.folderKey = folderKey;
   }
 
   public void setParentKey(String key) {
-	this.parentKey = key;
+    this.parentKey = key;
   }
 
-  public Entity createEntity() { 
-	Entity folder = new Entity("Folder", KeyFactory.stringToKey(this.parentKey));
-	folder.setProperty("folderName", this.folderName);
-	folder.setProperty("folderDefaultLanguage", this.folderDefaultLanguage);
+  public Entity createEntity() {
+    Entity folder = new Entity("Folder", KeyFactory.stringToKey(this.parentKey));
+    folder.setProperty("folderName", this.folderName);
+    folder.setProperty("folderDefaultLanguage", this.folderDefaultLanguage);
 
-	return folder;
+    return folder;
   }
 }

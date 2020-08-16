@@ -5,7 +5,6 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 
@@ -22,14 +21,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import com.google.gson.Gson;
-import com.google.sps.tool.ResponseHandler;
-import com.google.sps.data.Folder;
+import com.google.sps.tool.ResponseParser;
 import java.util.Map;
 import java.util.List;
 
 @WebServlet("/editcard")
-public class EditCardServlet extends HttpServlet{
-  
+public class EditCardServlet extends HttpServlet {
+
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
@@ -39,26 +37,30 @@ public class EditCardServlet extends HttpServlet{
       String newRawText = request.getParameter("rawText");
       String newTextTranslated = request.getParameter("textTranslated");
       String newImageBlobKey = getImageBlobKey(request);
-      
+
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       Entity card = getExistingCardInDatastore(response, datastore, cardKey);
 
       if (card == null) {
-        ResponseHandler.sendErrorMessage(response, "Cannot edit Card at the moment");
+        String jsonErrorInfo = ResponseParser.getErrorJson("Cannot edit Card at the moment");
+        response.setContentType("application/json;");
+        response.getWriter().println(new Gson().toJson(jsonErrorInfo));
       } else {
-        updateCard(response, card, datastore, cardKey, newRawText, newTextTranslated, newImageBlobKey);
+        updateCard(
+            response, card, datastore, cardKey, newRawText, newTextTranslated, newImageBlobKey);
       }
     }
   }
 
   private void updateCard(
-        HttpServletResponse response, 
-        Entity card,
-        DatastoreService datastore,
-        String cardKey,
-        String newRawText,
-        String newTextTranslated,
-        String newImageBlobKey) throws IOException {
+      HttpServletResponse response,
+      Entity card,
+      DatastoreService datastore,
+      String cardKey,
+      String newRawText,
+      String newTextTranslated,
+      String newImageBlobKey)
+      throws IOException {
 
     card.setProperty("cardKey", cardKey);
     card.setProperty("rawText", newRawText);
@@ -67,8 +69,8 @@ public class EditCardServlet extends HttpServlet{
     datastore.put(card);
   }
 
-  private Entity getExistingCardInDatastore(HttpServletResponse response, DatastoreService datastore, String cardKey) throws IOException {
-    Entity card;
+  private Entity getExistingCardInDatastore(
+      HttpServletResponse response, DatastoreService datastore, String cardKey) throws IOException {
     try {
       return datastore.get(KeyFactory.stringToKey(cardKey));
     } catch (EntityNotFoundException e) {
@@ -89,10 +91,10 @@ public class EditCardServlet extends HttpServlet{
     }
 
     return blobKey;
-  } 
+  }
 
   private String getBlobKeyFromBlobstore(HttpServletRequest request, String formInputElementName) {
-    
+
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get("image");

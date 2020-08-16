@@ -14,10 +14,9 @@ import java.util.Map;
 import java.util.HashMap;
 import com.google.gson.Gson;
 
-
 @WebServlet("/translation")
 public class TranslationServlet extends HttpServlet {
-  
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();

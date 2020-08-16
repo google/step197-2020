@@ -18,22 +18,22 @@ import com.google.appengine.tools.development.testing.LocalBlobstoreServiceTestC
 
 public final class UploadOnBlobstoreServletTest {
 
-  private final LocalServiceTestHelper helper = 
-    new LocalServiceTestHelper(new LocalBlobstoreServiceTestConfig());
+  private final LocalServiceTestHelper helper =
+      new LocalServiceTestHelper(new LocalBlobstoreServiceTestConfig());
 
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
   private StringWriter responseWriter;
   private UploadOnBlobstoreServlet servlet;
-    
+
   @Before
   public void setUp() throws Exception {
     helper.setUp();
     servlet = new UploadOnBlobstoreServlet();
     mockRequest = mock(HttpServletRequest.class);
     mockResponse = mock(HttpServletResponse.class);
-    
-    // Set up a fake HTTP response 
+
+    // Set up a fake HTTP response
     responseWriter = new StringWriter();
     when(mockResponse.getWriter()).thenReturn(new PrintWriter(responseWriter));
   }

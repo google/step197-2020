@@ -6,7 +6,7 @@ public final class User {
   private final String userId;
   private String email;
   private String userKey;
-    
+
   public User(String userId, String email) {
     this.userId = userId;
     this.email = email;
@@ -35,4 +35,3 @@ public final class User {
     return user;
   }
 }
-

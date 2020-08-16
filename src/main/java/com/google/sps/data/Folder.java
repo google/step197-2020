@@ -10,10 +10,7 @@ public final class Folder {
   private String folderKey;
   private String parentKey;
 
-  public Folder(
-    String folderName,
-    String folderDefaultLanguage) {
-    
+  public Folder(String folderName, String folderDefaultLanguage) {
     this.folderName = folderName;
     this.folderDefaultLanguage = folderDefaultLanguage;
     this.folderKey = "null";
@@ -46,7 +43,7 @@ public final class Folder {
   }
 
   public void setParentKey(String key) {
-    parentKey = key;
+    this.parentKey = key;
   }
 
   public Entity createEntity() {

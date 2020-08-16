@@ -20,27 +20,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.sps.data.Folder;
-import java.util.List; 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
 @WebServlet("/userfolders")
 public class UserFoldersServlet extends HttpServlet {
-  
-  private static final String CREATE_FORM_HEADER = "showCreateFormStatus";
-  private static final String USER_FOLDER_HEADER = "userFolders";
-  
+
+  private static final String CREATE_FORM_KEY = "showCreateFormStatus";
+  private static final String USER_FOLDER_KEY = "userFolders";
+
   /*
-  * Query all folders from current user
-  */
+   * Query all folders from current user
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
 
     Map<String, Object> jsonInfo = new HashMap<>();
-	List<Folder> userFolders = new ArrayList<>();
-    jsonInfo.put(CREATE_FORM_HEADER, false);
+    List<Folder> userFolders = new ArrayList<>();
+    jsonInfo.put(CREATE_FORM_KEY, false);
 
     if (userService.isUserLoggedIn()) {
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -56,25 +56,25 @@ public class UserFoldersServlet extends HttpServlet {
           userFolders.add(folder);
         }
       }
-		
-	  jsonInfo.put(CREATE_FORM_HEADER, true);
+
+      jsonInfo.put(CREATE_FORM_KEY, true);
     }
 
-    jsonInfo.put(USER_FOLDER_HEADER, userFolders);
+    jsonInfo.put(USER_FOLDER_KEY, userFolders);
     response.setContentType("application/json;");
     response.getWriter().println(new Gson().toJson(jsonInfo));
   }
-  
+
   /*
-  * Store new folder into Datastore
-  */
+   * Store new folder into Datastore
+   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) {
     UserService userService = UserServiceFactory.getUserService();
 
     if (userService.isUserLoggedIn()) {
-	  DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
       String folderName = request.getParameter("folderName");
       String folderDefaultLanguage = request.getParameter("folderDefaultLanguage");
       String userKey = getUserKey(userService, datastore);
@@ -82,17 +82,18 @@ public class UserFoldersServlet extends HttpServlet {
       Folder folder = new Folder(folderName, folderDefaultLanguage);
       folder.setParentKey(userKey);
       Entity folderEntity = folder.createEntity();
-      
+
       datastore.put(folderEntity);
     }
   }
 
   public String getUserKey(UserService userService, DatastoreService datastore) {
     String userEmail = userService.getCurrentUser().getEmail();
-    Query userQuery = new Query("User").setFilter(new FilterPredicate("email", FilterOperator.EQUAL, userEmail));
-	Entity userEntity = datastore.prepare(userQuery).asSingleEntity();
+    Query userQuery =
+        new Query("User").setFilter(new FilterPredicate("email", FilterOperator.EQUAL, userEmail));
+    Entity userEntity = datastore.prepare(userQuery).asSingleEntity();
     String userKey = KeyFactory.keyToString(userEntity.getKey());
 
     return userKey;
-  } 
+  }
 }

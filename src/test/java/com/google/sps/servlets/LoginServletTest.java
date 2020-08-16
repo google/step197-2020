@@ -33,16 +33,18 @@ public final class LoginServletTest {
   private static final User LOGGED_OUT_USER = new User("null", "null");
 
   private final LocalServiceTestHelper helper =
-    	new LocalServiceTestHelper(
-      	new LocalDatastoreServiceTestConfig()
-        	.setDefaultHighRepJobPolicyUnappliedJobPercentage(0),
-      	new LocalUserServiceTestConfig())
-      	.setEnvIsAdmin(true).setEnvIsLoggedIn(true)
-      	.setEnvEmail("test@gmail.com").setEnvAuthDomain("gmail.com")
-      	.setEnvAttributes(
-            new HashMap(
-          	ImmutableMap.of(
-            	"com.google.appengine.api.users.UserService.user_id_key", USER_ID)));
+      new LocalServiceTestHelper(
+              new LocalDatastoreServiceTestConfig()
+                  .setDefaultHighRepJobPolicyUnappliedJobPercentage(0),
+              new LocalUserServiceTestConfig())
+          .setEnvIsAdmin(true)
+          .setEnvIsLoggedIn(true)
+          .setEnvEmail("test@gmail.com")
+          .setEnvAuthDomain("gmail.com")
+          .setEnvAttributes(
+              new HashMap(
+                  ImmutableMap.of(
+                      "com.google.appengine.api.users.UserService.user_id_key", USER_ID)));
 
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
@@ -56,8 +58,8 @@ public final class LoginServletTest {
     servlet = new LoginServlet();
     mockRequest = mock(HttpServletRequest.class);
     mockResponse = mock(HttpServletResponse.class);
-    
-    // Set up a fake HTTP response 
+
+    // Set up a fake HTTP response
     responseWriter = new StringWriter();
     when(mockResponse.getWriter()).thenReturn(new PrintWriter(responseWriter));
 
@@ -69,14 +71,15 @@ public final class LoginServletTest {
     helper.setEnvIsLoggedIn(true);
     helper.tearDown();
   }
-  
+
   @Test
   public void userLoggedInAndInDatastore() throws Exception {
-    storeUsertoDatastore(datastore, LOGGED_IN_USER);
+    storeUserInDatastore(datastore, LOGGED_IN_USER);
 
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    String expectedResponse = "{\"logoutUrl\":\"/_ah/logout?continue\\u003d%2F\",\"loginUrl\":\"null\",\"showTabStatus\":true}";
+    String expectedResponse =
+        "{\"logoutUrl\":\"/_ah/logout?continue\\u003d%2F\",\"loginUrl\":\"null\",\"showTabStatus\":true}";
     System.out.println(response);
 
     assertTrue(compareJson(response, expectedResponse));
@@ -86,7 +89,8 @@ public final class LoginServletTest {
   public void userLoggedInButNotInDatastore() throws Exception {
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    String expectedResponse = "{\"logoutUrl\":\"/_ah/logout?continue\\u003d%2F\",\"loginUrl\":\"null\",\"showTabStatus\":true}";
+    String expectedResponse =
+        "{\"logoutUrl\":\"/_ah/logout?continue\\u003d%2F\",\"loginUrl\":\"null\",\"showTabStatus\":true}";
     System.out.println(response);
 
     assertTrue(compareJson(response, expectedResponse));
@@ -97,12 +101,13 @@ public final class LoginServletTest {
     helper.setEnvIsLoggedIn(false);
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    String expectedResponse = "{\"logoutUrl\":\"null\",\"loginUrl\":\"/_ah/login?continue\\u003d%2F\",\"showTabStatus\":false}";
+    String expectedResponse =
+        "{\"logoutUrl\":\"null\",\"loginUrl\":\"/_ah/login?continue\\u003d%2F\",\"showTabStatus\":false}";
 
     assertTrue(compareJson(response, expectedResponse));
   }
 
-  public void storeUsertoDatastore(DatastoreService datastore, User user) {
+  public void storeUserInDatastore(DatastoreService datastore, User user) {
     datastore.put(user.createEntity());
   }
 }

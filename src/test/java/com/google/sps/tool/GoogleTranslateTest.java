@@ -1,9 +1,7 @@
 package com.google.sps.tool;
 
 import org.junit.Test;
-import org.junit.Assert;
 import static org.junit.Assert.assertNotNull;
-import com.google.sps.tool.GoogleTranslate;
 
 public class GoogleTranslateTest {
 

@@ -10,12 +10,10 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.SortDirection;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,14 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import com.google.gson.Gson;
 
-import com.google.cloud.translate.Translate;
-import com.google.cloud.translate.TranslateOptions;
-import com.google.cloud.translate.Translation;
-import com.google.sps.tool.GoogleTranslate;
-
-import com.google.sps.data.Folder;
 import com.google.sps.data.Card;
-import java.util.List; 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
@@ -60,17 +52,17 @@ public class UserCardsServlet extends HttpServlet {
           String key = KeyFactory.keyToString(entity.getKey());
           Card card = new Card(entity, key);
           userCards.add(card);
-        }   
+        }
       }
 
       jsonInfo.put("showCreateFormStatus", true);
     }
-    
+
     jsonInfo.put("userCards", userCards);
     response.setContentType("application/json;");
     response.getWriter().println(new Gson().toJson(jsonInfo));
   }
-  
+
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
@@ -81,21 +73,22 @@ public class UserCardsServlet extends HttpServlet {
       String textTranslated = request.getParameter("translatedText");
       String imageBlobKey = getImageBlobKey(request);
 
-      Card card = new Card.Builder()
-          .setImageBlobKey(imageBlobKey)
-          .setRawText(rawText)
-          .setTextTranslated(textTranslated)
-          .setParentKey(folderKey)
-          .build();
-  
+      Card card =
+          new Card.Builder()
+              .setImageBlobKey(imageBlobKey)
+              .setRawText(rawText)
+              .setTextTranslated(textTranslated)
+              .setParentKey(folderKey)
+              .build();
+
       Entity cardEntity = card.createEntity();
 
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(cardEntity);
     }
   }
-  
-  private String getImageBlobKey(HttpServletRequest request){
+
+  private String getImageBlobKey(HttpServletRequest request) {
     // TODO(ngothomas): There is a bug with getting getBlobKey to work on test server
     // Unit tests will always set blobKey to "null"
     // There should be no paramater testStatus in the live server thus returns null
@@ -108,7 +101,7 @@ public class UserCardsServlet extends HttpServlet {
     }
 
     return blobKey;
-  } 
+  }
 
   private String getBlobKeyFromBlobstore(HttpServletRequest request, String formInputElementName) {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();

@@ -1,17 +1,14 @@
 package com.google.sps.servlets;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.After;
-import static org.mockito.Mockito.*;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.io.IOException;
-
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
@@ -19,12 +16,7 @@ import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.junit.Test;
-import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
-import com.google.sps.tool.GoogleTranslate;
 import com.google.sps.tool.Tool;
 import com.google.gson.Gson;
 import java.util.Map;
@@ -32,12 +24,13 @@ import java.util.HashMap;
 
 @RunWith(JUnit4.class)
 public class TranslationServletTest {
-  private final LocalServiceTestHelper helper = 
-    new LocalServiceTestHelper(
-      new LocalUserServiceTestConfig())
-      .setEnvIsAdmin(true).setEnvIsLoggedIn(true)
-      .setEnvEmail("test@gmail.com").setEnvAuthDomain("gmail.com");
-  
+  private final LocalServiceTestHelper helper =
+      new LocalServiceTestHelper(new LocalUserServiceTestConfig())
+          .setEnvIsAdmin(true)
+          .setEnvIsLoggedIn(true)
+          .setEnvEmail("test@gmail.com")
+          .setEnvAuthDomain("gmail.com");
+
   private Map<String, String> expectedJsonInfo = new HashMap<>();
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
@@ -50,8 +43,8 @@ public class TranslationServletTest {
     servlet = new TranslationServlet();
     mockRequest = mock(HttpServletRequest.class);
     mockResponse = mock(HttpServletResponse.class);
-    
-    // Set up a fake HTTP response 
+
+    // Set up a fake HTTP response
     responseWriter = new StringWriter();
     when(mockResponse.getWriter()).thenReturn(new PrintWriter(responseWriter));
   }

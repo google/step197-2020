@@ -33,7 +33,6 @@ public class LoginServlet extends HttpServlet {
     String userEmail = "null";
     Boolean showNewTab = false;
 
-    User user;
     if (userService.isUserLoggedIn()) {
       userId = userService.getCurrentUser().getUserId();
       userEmail = userService.getCurrentUser().getEmail();
@@ -43,7 +42,7 @@ public class LoginServlet extends HttpServlet {
       loginUrl = userService.createLoginURL(urlToRedirect);
     }
 
-    user = new User(userId, userEmail);
+    User user = new User(userId, userEmail);
 
     if (userId != "null" && !isUserInDatastore(user)) {
       storeUserToDatastore(user);

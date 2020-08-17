@@ -61,15 +61,10 @@ class CreateFolderContent extends Component {
                       value={this.state.folderLang}
                       onChange={this.handleFolderLang}
                       required>
-                      <option value='English'>English</option>
                       {
-                        /*
-                        * Instead of using the languageScroll sub-component, we parse the supported languages so
-                        * the value/language-name can be displayed on the folder preview.
-                        */
-                        supportedLang.languages.map((lang) => {
+                        supportedLang.languages.map((lang, i) => {
                           return (
-                            <option value={lang.language}>
+                            <option key={i} value={lang.language}>
                               {lang.language}
                             </option>
                           );

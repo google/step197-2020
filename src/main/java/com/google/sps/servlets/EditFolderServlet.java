@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import com.google.sps.tool.ResponseParser;
+import com.google.sps.tool.ResponseSerializer;
 import com.google.gson.Gson;
 
 @WebServlet("/editfolder")
@@ -32,7 +32,7 @@ public class EditFolderServlet extends HttpServlet {
       Entity folderEntity = getExistingFolderInDatastore(response, datastore, folderKey);
 
       if (folderEntity == null) {
-        String jsonErrorInfo = ResponseParser.getErrorJson("Cannot edit Folder at the moment");
+        String jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot edit Folder at the moment");
         response.setContentType("application/json;");
         response.getWriter().println(new Gson().toJson(jsonErrorInfo));
       } else {

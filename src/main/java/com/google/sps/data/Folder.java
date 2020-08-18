@@ -16,10 +16,10 @@ public final class Folder {
     this.folderKey = "null";
   }
 
-  public Folder(Entity entity, String key) {
+  public Folder(Entity entity) {
     this.folderName = (String) entity.getProperty("folderName");
     this.folderDefaultLanguage = (String) entity.getProperty("folderDefaultLanguage");
-    this.folderKey = key;
+    this.folderKey = KeyFactory.keyToString(entity.getKey());
   }
 
   public String getFolderName() {

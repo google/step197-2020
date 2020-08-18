@@ -49,8 +49,7 @@ public class UserCardsServlet extends HttpServlet {
 
       if (results != null) {
         for (Entity entity : results.asIterable()) {
-          String key = KeyFactory.keyToString(entity.getKey());
-          Card card = new Card(entity, key);
+          Card card = new Card(entity);
           userCards.add(card);
         }
       }

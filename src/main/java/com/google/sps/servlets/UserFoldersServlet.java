@@ -25,13 +25,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
-<<<<<<< HEAD
 @WebServlet("/userfolders")
-=======
-
-/** **/
-@WebServlet("/folder")
->>>>>>> Setup
 public class UserFoldersServlet extends HttpServlet {
 
   private static final String CREATE_FORM_KEY = "showCreateFormStatus";

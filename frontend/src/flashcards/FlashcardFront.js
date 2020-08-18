@@ -35,4 +35,5 @@ function FlashcardFront(props) {
 		</div>
 	);
 }
+
 export default FlashcardFront;

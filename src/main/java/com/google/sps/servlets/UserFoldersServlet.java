@@ -51,9 +51,7 @@ public class UserFoldersServlet extends HttpServlet {
 
       if (results != null) {
         for (Entity entity : results.asIterable()) {
-          String folderKey = KeyFactory.keyToString(entity.getKey());
-          Folder folder = new Folder(entity, folderKey);
-
+          Folder folder = new Folder(entity);
           userFolders.add(folder);
         }
       }

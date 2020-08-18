@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import com.google.gson.Gson;
-import com.google.sps.tool.ResponseParser;
+import com.google.sps.tool.ResponseSerializer;
 import java.util.Map;
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class EditCardServlet extends HttpServlet {
       Entity card = getExistingCardInDatastore(response, datastore, cardKey);
 
       if (card == null) {
-        String jsonErrorInfo = ResponseParser.getErrorJson("Cannot edit Card at the moment");
+        String jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot edit Card at the moment");
         response.setContentType("application/json;");
         response.getWriter().println(new Gson().toJson(jsonErrorInfo));
       } else {

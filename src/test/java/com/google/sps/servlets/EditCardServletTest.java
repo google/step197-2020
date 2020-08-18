@@ -72,12 +72,6 @@ public final class EditCardServletTest {
             .setRawText("hello")
             .setTextTranslated("hola")
             .build();
-    Card expectedCard =
-        new Card.Builder()
-            .setImageBlobKey("null")
-            .setRawText("hello")
-            .setTextTranslated("xin chào")
-            .build();
 
     // Generate a folder entity to obtain a folder key
     // which would be used to set as the parent of the card entities
@@ -86,9 +80,6 @@ public final class EditCardServletTest {
 
     Card cardInDatastore = storeCardInDatastore(currentCard, datastore, folderKey);
     String cardKey = cardInDatastore.getCardKey();
-
-    // Make sure the expected card has the same key
-    expectedCard.setCardKey(cardKey);
 
     when(mockRequest.getParameter("cardKey")).thenReturn(cardKey);
     when(mockRequest.getParameter("rawText")).thenReturn("hello");
@@ -99,7 +90,7 @@ public final class EditCardServletTest {
 
     Entity editedCard = datastore.get(KeyFactory.stringToKey(cardKey));
 
-    String response = new Gson().toJson(new Card(editedCard, cardKey));
+    String response = new Gson().toJson(new Card(editedCard));
     String expectedResponse =
         "{\"imageBlobKey\":\"null\",\"rawText\":\"hello\",\"textTranslated\":\"xin chào\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAEM\"}";
     assertEquals(response, expectedResponse);

@@ -26,7 +26,7 @@ public class LoginServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
 
-    String urlToRedirect = "/";
+    String urlToRedirect = "/homePage";
     String userId = "null";
     String logoutUrl = "null";
     String loginUrl = "null";

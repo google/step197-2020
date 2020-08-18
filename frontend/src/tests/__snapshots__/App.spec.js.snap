@@ -649,7 +649,7 @@ exports[`mainApp snapshot CreateCard renders 1`] = `
             className="holdCard"
           >
             <div
-              className="FlashcardFront css-1xi97vb"
+              className="FlashcardFront css-1vlg8p9"
             >
               <img
                 alt="image"
@@ -672,7 +672,7 @@ exports[`mainApp snapshot CreateCard renders 1`] = `
             className="holdCard"
           >
             <div
-              className="FlashcardBack css-jov65y"
+              className="FlashcardBack css-19i6xki"
             >
               none
             </div>
@@ -683,7 +683,8 @@ exports[`mainApp snapshot CreateCard renders 1`] = `
         >
           <ul>
             <form
-              action="/usercards"
+              action=""
+              encType="multipart/form-data"
               id="myForm"
               method="POST"
             >
@@ -860,6 +861,7 @@ exports[`mainApp snapshot CreateCard renders 1`] = `
                   <input
                     id="image"
                     name="imageSelect"
+                    onChange={[Function]}
                     type="file"
                   />
                 </span>

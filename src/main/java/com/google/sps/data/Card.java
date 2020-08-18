@@ -1,10 +1,7 @@
 package com.google.sps.data;
 
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
 
 public final class Card {
 
@@ -47,6 +44,7 @@ public final class Card {
       card.imageBlobKey = this.imageBlobKey;
       card.rawText = this.rawText;
       card.textTranslated = this.textTranslated;
+      card.key = this.key;
       card.parentKey = this.parentKey;
 
       return card;
@@ -61,11 +59,11 @@ public final class Card {
 
   private Card() {}
 
-  public Card(Entity entity, String key) {
+  public Card(Entity entity) {
     this.imageBlobKey = (String) entity.getProperty("imageBlobKey");
     this.rawText = (String) entity.getProperty("rawText");
     this.textTranslated = (String) entity.getProperty("textTranslated");
-    this.key = key;
+    this.key = KeyFactory.keyToString(entity.getKey());
   }
 
   public String getImageBlobKey() {

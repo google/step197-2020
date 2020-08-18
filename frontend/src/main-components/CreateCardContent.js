@@ -27,8 +27,9 @@ class CreateCardContent extends Component {
 
   async componentDidMount() {
     try {
-      const uploadUrl = await fetch("/upload")
-        .then(response => response.text());
+      const uploadUrl = await fetch("/upload").then((response) =>
+        response.text()
+      );
       if (!uploadUrl.ok) {
         throw Error(uploadUrl.statusText);
       }
@@ -42,29 +43,32 @@ class CreateCardContent extends Component {
    * When the user has finished typing, the Google Translate
    * API is called to fetch the translated version of the text input.
    */
-  async translateText(event) {
-    event.persist();
+  translateText(event) {
     const text = event.target.value;
     // Ensures that languages have been selected before translating
     if (this.state.fromLang !== "none" && this.state.toLang !== "none") {
-      try {
-        const translated = await getTranslation(
-          text,
-          this.state.fromLang,
-          this.state.toLang
-        );
-        // Checks if the getTranslation function encountered an error
-        if (!translated.ok) {
-          throw Error(translated.statusText)
+      (async () => {
+        try {
+          const translated = await getTranslation(
+            text,
+            this.state.fromLang,
+            this.state.toLang
+          );
+          // Checks if the getTranslation function encountered an error
+          if (!translated.ok) {
+            throw Error(translated.statusText);
+          }
+          this.setState({ translation: translated, text: text });
+        } catch (error) {
+          this.setState({
+            translation: "Text could not be translated",
+            text: text,
+          });
         }
-        this.setState({ translation: translated, text: text });
-      } catch (error) {
-          this.setState({ translation: "Text could not be translated", text: target });
-      }
+      })();
     } else {
-        this.setState({ text: text });
+      this.setState({ text: text });
     }
-
   }
 
   // Updates the selected language code for future calls to the translateText function

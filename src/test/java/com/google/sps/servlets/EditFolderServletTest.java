@@ -79,9 +79,6 @@ public final class EditFolderServletTest {
     Folder folderInDatastore = storeFolderInDatastore(currentFolder, datastore, userKey);
     String folderKey = folderInDatastore.getFolderKey();
 
-    // Make sure the expected Folder has the same key as the folder in datastore
-    expectedFolder.setFolderKey(folderKey);
-
     when(mockRequest.getParameter("folderName")).thenReturn("Edited Folder");
     when(mockRequest.getParameter("folderDefaultLanguage")).thenReturn("es");
     when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
@@ -89,7 +86,7 @@ public final class EditFolderServletTest {
     servlet.doPut(mockRequest, mockResponse);
 
     Entity editedFolderEntity = datastore.get(KeyFactory.stringToKey(folderKey));
-    Folder editedFolder = new Folder(editedFolderEntity, folderKey);
+    Folder editedFolder = new Folder(editedFolderEntity);
 
     String response = new Gson().toJson(editedFolder);
     String expectedResponse =

@@ -54,7 +54,6 @@ class CreateCardContent extends Component {
             this.state.fromLang,
             this.state.toLang
           );
-          // Checks if the getTranslation function encountered an error
           if (!translated.ok) {
             throw Error(translated.statusText);
           }
@@ -67,7 +66,7 @@ class CreateCardContent extends Component {
         }
       })();
     } else {
-      this.setState({ text: text });
+      this.setState({ text });
     }
   }
 
@@ -92,12 +91,9 @@ class CreateCardContent extends Component {
   }
 
   render() {
-    // TODO: uncomment this and add blob upload Url
-    /*
     if (!this.state.uploadUrlFetched) {
       return <h1>Loading</h1>;
     }
-    */
     return (
       <div id='container'>
         <div id='innerContainer'>

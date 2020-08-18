@@ -6,6 +6,8 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.After;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalBlobstoreServiceTestConfig;
 
+@RunWith(JUnit4.class)
 public final class UploadOnBlobstoreServletTest {
 
   private final LocalServiceTestHelper helper =

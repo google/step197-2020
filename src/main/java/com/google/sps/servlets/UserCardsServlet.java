@@ -12,11 +12,6 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.KeyFactory;
 
-import com.google.cloud.translate.Translate;
-import com.google.cloud.translate.TranslateOptions;
-import com.google.cloud.translate.Translation;
-
-
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 
@@ -28,80 +23,86 @@ import java.io.IOException;
 import com.google.gson.Gson;
 
 import com.google.sps.data.Card;
-import java.util.List; 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.HashMap;
 
-/** **/
 @WebServlet("/usercards")
 public class UserCardsServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
-    // Ensures user is authenticated
     UserService userService = UserServiceFactory.getUserService();
+    List<Card> userCards = new ArrayList<>();
+
+    Map<String, Object> jsonInfo = new HashMap<>();
+    jsonInfo.put("showCreateFormStatus", false);
+
     if (userService.isUserLoggedIn()) {
+      String folderKey = request.getParameter("folderKey");
 
-        List<Card> userCards = new ArrayList<>();
+      Query cardQuery = new Query("Card").setAncestor(KeyFactory.stringToKey(folderKey));
 
-        String folderKey = request.getParameter("folderKey");
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      PreparedQuery results = datastore.prepare(cardQuery);
 
-        // Query all folders identified by the userKey
-        Query cardQuery = new Query("Card").setAncestor(KeyFactory.stringToKey(folderKey));
-
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        PreparedQuery results = datastore.prepare(cardQuery);
-
-        if (results != null) {
-          for (Entity entity: results.asIterable()) {
-            Card card = Card.EntityToCard(entity);
-            userCards.add(card);
-          }   
+      if (results != null) {
+        for (Entity entity : results.asIterable()) {
+          Card card = new Card(entity);
+          userCards.add(card);
         }
+      }
 
-        response.setContentType("application/json;");
-        response.getWriter().println(new Gson().toJson(userCards));
+      jsonInfo.put("showCreateFormStatus", true);
     }
+
+    jsonInfo.put("userCards", userCards);
+    response.setContentType("application/json;");
+    response.getWriter().println(new Gson().toJson(jsonInfo));
   }
-  
+
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
     UserService userService = UserServiceFactory.getUserService();
 
     if (userService.isUserLoggedIn()) {
+      String folderKey = request.getParameter("folderKey");
+      String rawText = request.getParameter("rawText");
+      String textTranslated = request.getParameter("translatedText");
+      String imageBlobKey = getImageBlobKey(request);
 
-        // if blobKey is null, user did not add an image
-        String folderKey = request.getParameter("folderKey");
-        String blobKey = getBlobKeyfromBlobstore(request, "image");
-        String labels = request.getParameter("labels");
-        String fromLang = request.getParameter("fromLang");
-        String toLang = request.getParameter("toLang");
-        String textNotTranslated = request.getParameter("textNotTranslated");
-        String textTranslated = translateText(textNotTranslated, toLang);
+      Card card =
+          new Card.Builder()
+              .setImageBlobKey(imageBlobKey)
+              .setRawText(rawText)
+              .setTextTranslated(textTranslated)
+              .setParentKey(folderKey)
+              .build();
 
-        Card card = new Card(blobKey, labels, fromLang, toLang, textNotTranslated, textTranslated);
-        Entity cardEntity = card.createEntity(KeyFactory.stringToKey(folderKey));
+      Entity cardEntity = card.createEntity();
 
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        datastore.put(cardEntity);
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.put(cardEntity);
+    }
+  }
+
+  private String getImageBlobKey(HttpServletRequest request) {
+    // TODO(ngothomas): There is a bug with getting getBlobKey to work on test server
+    // Unit tests will always set blobKey to "null"
+    // There should be no paramater testStatus in the live server thus returns null
+    String blobKey;
+
+    if (request.getParameter("testStatus") == null) {
+      blobKey = getBlobKeyFromBlobstore(request, "image");
+    } else {
+      blobKey = "null";
     }
 
+    return blobKey;
   }
 
-  private String translateText(String textNotTranslated, String toLang) {
-
-    // Do the translation.
-    Translate translate = TranslateOptions.getDefaultInstance().getService();
-    Translation translation = 
-        translate.translate(textNotTranslated, Translate.TranslateOption.targetLanguage(toLang));
-    String translatedText = translation.getTranslatedText();
-
-    return translatedText;
-  }
-
-  private String getBlobKeyfromBlobstore(HttpServletRequest request, String formInputElementName) {
+  private String getBlobKeyFromBlobstore(HttpServletRequest request, String formInputElementName) {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get("image");

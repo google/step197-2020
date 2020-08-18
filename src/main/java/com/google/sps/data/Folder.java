@@ -19,7 +19,7 @@ public final class Folder {
   public Folder(Entity entity) {
     this.folderName = (String) entity.getProperty("folderName");
     this.folderDefaultLanguage = (String) entity.getProperty("folderDefaultLanguage");
-    this.folderKey = (String) entity.getProperty("folderKey");
+    this.folderKey = KeyFactory.keyToString(entity.getKey());
   }
 
   public String getFolderName() {
@@ -47,8 +47,7 @@ public final class Folder {
   }
 
   public Entity createEntity() {
-    Entity folder = new Entity("Folder", KeyFactory.stringToKey(parentKey));
-
+    Entity folder = new Entity("Folder", KeyFactory.stringToKey(this.parentKey));
     folder.setProperty("folderName", this.folderName);
     folder.setProperty("folderDefaultLanguage", this.folderDefaultLanguage);
 

@@ -29,12 +29,10 @@ class CreateFolderContent extends Component {
     return (
       <div id='container'>
         <div id='innerContainer'>
-
           <div id='folderPreview'>
             <h2 id='previewFolderName'>{this.state.folderName}</h2>
             <h4 id='previewFolderLang'>{this.state.folderLang}</h4>
           </div>
-
           <div id='formBox'>
             <ul>
               <form id='myForm' action='/userfolders' method='post'>
@@ -81,7 +79,6 @@ class CreateFolderContent extends Component {
               </form>
             </ul>
           </div>
-          
         </div>
       </div>
     );

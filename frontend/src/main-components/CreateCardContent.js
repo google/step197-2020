@@ -52,7 +52,6 @@ class CreateCardContent extends Component {
     return (
       <div id='container'>
         <div id='innerContainer'>
-
           <div id='CardPreview'>
             <div className='holdCard'>
               <FrontCard
@@ -63,7 +62,6 @@ class CreateCardContent extends Component {
               <BackCard text={this.state.translation}></BackCard>
             </div>
           </div>
-
           <div id='formBox'>
             <ul>
               <form id='myForm' action='/usercards'>
@@ -116,7 +114,6 @@ class CreateCardContent extends Component {
               </form>
             </ul>
           </div>
-
         </div>
       </div>
     );

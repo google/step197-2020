@@ -69,7 +69,6 @@ public final class EditFolderServletTest {
   @Test
   public void editFolder() throws Exception {
     Folder currentFolder = new Folder("Folder", "en");
-    Folder expectedFolder = new Folder("Edited Folder", "es");
 
     // Generate a user entity to obtain a user key
     // which would be used to set as the parent of the folder entity

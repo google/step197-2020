@@ -40,7 +40,6 @@ public class UserFoldersServlet extends HttpServlet {
       List<Folder> userFolders = new ArrayList<>();
 
       String userKey = request.getParameter("userKey");
-
       // Query all folders identified by the userKey
       Query folderQuery = new Query("Folder").setAncestor(KeyFactory.stringToKey(userKey));
 

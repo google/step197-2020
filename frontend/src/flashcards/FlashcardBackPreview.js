@@ -19,8 +19,8 @@ class FlashcardBack extends React.Component {
       text-align: center;
       width: 100%;
       @media (max-width: 700px) {
-        height: 70%;
-        width: 80%;
+        height: 100%;
+        width: 100%;
       }`;
 
     return (

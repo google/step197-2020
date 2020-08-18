@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home Page component testing Landing page loads button with alternating text 1`] = `
+<div
+  className="LandingPage"
+>
+  <h1>
+    Frame.cards learning made easy
+  </h1>
+  <div
+    style={Object {}}
+  >
+    <div
+      className="buttonBox"
+    >
+      <button
+        className="MyButton"
+        style={
+          Object {
+            "backgroundColor": "#F4B400",
+            "fontSize": "32px",
+          }
+        }
+      >
+         
+        My Folders
+         
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Home Page component testing Nav Bar does not generate my folders tab when logged out 1`] = `
+<div
+  className="NavBar"
+>
+  <div
+    style={Object {}}
+  />
+  <div
+    style={Object {}}
+  >
+    <div
+      className="buttonBox"
+    >
+      <button
+        className="MyButton"
+        style={
+          Object {
+            "backgroundColor": "#C4C4C4",
+            "fontSize": "24px",
+          }
+        }
+      >
+         
+        Login
+         
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Home Page component testing Nav Bar generates new tab when logged in 1`] = `
+<div
+  className="NavBar"
+>
+  <div
+    style={Object {}}
+  >
+    <div
+      className="buttonBox"
+    >
+      <button
+        className="MyButton"
+        style={
+          Object {
+            "backgroundColor": "#F4B400",
+            "fontSize": "24px",
+          }
+        }
+      >
+         
+        My Folders
+         
+      </button>
+    </div>
+  </div>
+  <div
+    style={Object {}}
+  >
+    <div
+      className="buttonBox"
+    >
+      <button
+        className="MyButton"
+        style={
+          Object {
+            "backgroundColor": "#C4C4C4",
+            "fontSize": "24px",
+          }
+        }
+      >
+         
+        Logout
+         
+      </button>
+    </div>
+  </div>
+</div>
+`;

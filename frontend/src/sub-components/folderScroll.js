@@ -1,5 +1,4 @@
-import React, { Component, useState } from "react";
-import supportedLang from "./SupportedLang.json";
+import React, { Component } from "react";
 import styled from "@emotion/styled";
 
 class FolderScroll extends Component {
@@ -9,13 +8,18 @@ class FolderScroll extends Component {
       isDataFetched: false,
       folders: "",
     };
-    this.grabFolders();
   }
 
-  grabFolders() {
-    const folders = fetch("/folder").then((data) =>
-      useState({ isDataFetched: true, folders: data })
-    );
+  async componentDidMount() {
+    try {
+      const foldersData = await fetch("/userfolders").then((result) => result.json());
+      if (!foldersData.ok) {
+        throw Error(foldersData.statusText);
+      }
+      this.setState({ isDataFetched: true, folders: foldersData });
+    } catch (error) {
+      alert("Could not load folders, try refreshing page");
+    }
   }
 
   render() {
@@ -29,13 +33,15 @@ class FolderScroll extends Component {
       border-radius: 0.5rem;
       font-size: 1.75rem;
     `;
-
+    if (!this.state.isDataFetched) {
+      return <h5>loading</h5>;
+    }
     return (
       <Options
         onChange={this.props.clickFunc}
         value={this.props.selected}
-        name="languages"
-      >
+        name='languages'
+        id={this.props.key}>
         {
           // Parses JSON and displays all the users folders
           data.usersFolders.map((folder) => {

@@ -9,6 +9,7 @@ import ImageInterface from "./pages/ImageInterface";
 import PageError from "./pages/404";
 import css from "./mainApp.css";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { match } from "react-router-dom"
 
 // This file handles all routing for our app pages
 function App() {

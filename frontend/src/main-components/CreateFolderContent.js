@@ -35,7 +35,7 @@ class CreateFolderContent extends Component {
           </div>
           <div id='formBox'>
             <ul>
-              <form id='myForm' action='/userfolders' method='post'>
+              <form id='myForm' action='/userfolders' method='POST'>
                 <li>
                   <label>Folder Name: </label>
                 </li>
@@ -46,8 +46,7 @@ class CreateFolderContent extends Component {
                     type='text'
                     placeholder={this.state.folderName}
                     onBlur={this.handleFolderName}
-                    required>
-                  </input>
+                    required></input>
                 </li>
                 <li>
                   <label>Folder Language:</label>
@@ -58,13 +57,12 @@ class CreateFolderContent extends Component {
                       id='language'
                       name='language'
                       value={this.state.folderLang}
-                      onChange={this.handleFolderLang}>
-                      <option value='English'>English</option>
+                      onChange={this.handleFolderLang}
+                      required>
                       {
-                        // Parse json and display supported languages in scroll list
-                        supportedLang.languages.map((lang) => {
+                        supportedLang.languages.map((lang, i) => {
                           return (
-                            <option value={lang.language}>
+                            <option key={i} value={lang.language}>
                               {lang.language}
                             </option>
                           );

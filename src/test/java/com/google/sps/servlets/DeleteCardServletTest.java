@@ -65,7 +65,7 @@ public final class DeleteCardServletTest {
   }
 
   @Test
-  public void DeleteCardAndThereAreNoneLeft() throws Exception {
+  public void DeleteCard() throws Exception {
     // Generate testing card to add into datastore
     Card card =
         new Card.Builder()

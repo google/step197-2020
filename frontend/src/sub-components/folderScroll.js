@@ -41,7 +41,7 @@ class FolderScroll extends Component {
       <Options
         onChange={this.props.clickFunc}
         value={this.props.selected}
-        name='languages'
+        name='folderKey'
         id={this.props.key}>
         {
           // Parses JSON and displays all the users folders

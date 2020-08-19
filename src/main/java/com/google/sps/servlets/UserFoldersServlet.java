@@ -68,7 +68,7 @@ public class UserFoldersServlet extends HttpServlet {
    * Store new folder into Datastore
    */
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) {
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
 
     if (userService.isUserLoggedIn()) {
@@ -85,6 +85,7 @@ public class UserFoldersServlet extends HttpServlet {
 
       datastore.put(folderEntity);
     }
+    response.sendRedirect("/MyFolders");
   }
 
   public String getUserKey(UserService userService, DatastoreService datastore) {

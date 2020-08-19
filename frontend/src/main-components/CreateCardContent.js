@@ -28,8 +28,9 @@ class CreateCardContent extends Component {
 
   async componentDidMount() {
     try {
-      const uploadUrl = await fetch("/upload");
-      if (!uploadUrl.ok) {
+      const uploadResponse = await fetch("/upload");
+      const uploadUrl = await uploadResponse.text();
+      if (!uploadResponse.ok) {
         throw Error(uploadUrl.statusText);
       }
       this.setState({ imageUploadUrl: uploadUrl, uploadUrlFetched: true });
@@ -134,6 +135,7 @@ class CreateCardContent extends Component {
                   <input
                     id='mainText'
                     type='text'
+                    name="rawText"
                     placeholder={this.state.text}
                     onBlur={this.translateText}
                     required></input>
@@ -143,7 +145,8 @@ class CreateCardContent extends Component {
                   <input
                     id='translated'
                     type='text'
-                    placeholder={this.state.translation}
+                    name="translatedText"
+                    value={this.state.translation}
                     readOnly></input>
                 </li>
                 <li>
@@ -152,7 +155,7 @@ class CreateCardContent extends Component {
                     <input
                       type='file'
                       id='image'
-                      name='imageSelect'
+                      name='image'
                       onChange={this.imageSelected}></input>
                   </span>
                   <span className='inline'>

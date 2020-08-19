@@ -22,6 +22,7 @@ class CreateCardContent extends Component {
     this.translateText = this.translateText.bind(this);
     this.fromLangSelected = this.fromLangSelected.bind(this);
     this.toLangSelected = this.toLangSelected.bind(this);
+    this.folderSelected = this.folderSelected.bind(this);
     this.imageSelected = this.imageSelected.bind(this);
   }
 

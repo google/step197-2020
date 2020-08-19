@@ -54,20 +54,18 @@ class CreateFolderContent extends Component {
                 <li>
                   <div id='scroll'>
                     <select
-                      id='language'
-                      name='language'
+                      id='folderDefaultLanguage'
+                      name='folderDefaultLanguage'
                       value={this.state.folderLang}
                       onChange={this.handleFolderLang}
                       required>
-                      {
-                        supportedLang.languages.map((lang, i) => {
-                          return (
-                            <option key={i} value={lang.language}>
-                              {lang.language}
-                            </option>
-                          );
-                        })
-                      }
+                      {supportedLang.languages.map((lang, i) => {
+                        return (
+                          <option key={i} value={lang.language}>
+                            {lang.language}
+                          </option>
+                        );
+                      })}
                     </select>
                   </div>
                 </li>

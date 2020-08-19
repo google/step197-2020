@@ -8,7 +8,7 @@ const debugMessage = (message, isOn) => {
   }
 };
 
-const debugMessageOn = false;
+const debugMessageOn = true;
 
 const MyFoldersContent = (props) => {
   const Container = styled.div`

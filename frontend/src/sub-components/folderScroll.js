@@ -12,10 +12,8 @@ class FolderScroll extends Component {
 
   async componentDidMount() {
     try {
-      const folders = await fetch("/userfolders").then(res => res.json());
-      const foldersData = folders['userFolders'];
-      console.log(folders);
-      console.log(foldersData);
+      const folders = await fetch("/userfolders");
+      const foldersData = await (folders.json()).then(res => res['userFolders']);
       if (!folders.ok) {
         throw Error(foldersData.statusText);
       }

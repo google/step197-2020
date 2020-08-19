@@ -1,7 +1,10 @@
 package com.google.sps.servlets;
 
+import static com.google.appengine.api.datastore.TransactionOptions.Builder.*;
+
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -11,6 +14,7 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 
 import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;
+import com.google.appengine.api.blobstore.BlobstoreFailureException;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
@@ -24,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import com.google.gson.Gson;
-import com.google.sps.tool.ResponseHandler;
+import com.google.sps.tool.ResponseSerializer;
 import com.google.sps.data.Folder;
 import com.google.sps.data.Card;
 
@@ -36,28 +40,27 @@ public class DeleteCardServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
 
     if (userService.isUserLoggedIn()) {
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       String cardKey = request.getParameter("cardKey");
-      deleteCardFromDatastore(response, cardKey);
+      Entity card = getExistingCardInDatastore(response, datastore, cardKey);
+  
+      if (card == null) {
+        String jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot delete Card at the moment");
+        response.setContentType("application/json;");
+        response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+      } else {
+        deleteBlob(card);
+        deleteCard(datastore, card);
+      }
     }
-  }
-
-  private void deleteCardFromDatastore(HttpServletResponse response, String cardKey) throws IOException {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Entity card = getExistingCardInDatastore(response, datastore, cardKey);
-    deleteBlob(card);
-    deleteCard(datastore, card);
   }
 
   private Entity getExistingCardInDatastore(HttpServletResponse response, DatastoreService datastore, String cardKey) throws IOException {
-    Entity card;
     try {
-      card = datastore.get(KeyFactory.stringToKey(cardKey));
+      return datastore.get(KeyFactory.stringToKey(cardKey));
     } catch (EntityNotFoundException e) {
-      ResponseHandler.sendErrorMessage(response, "Cannot edit Card at the moment");
-      card = null;
+      return null;
     }
-
-    return card;
   }
 
   private void deleteBlob(Entity card) throws IOException {
@@ -65,11 +68,45 @@ public class DeleteCardServlet extends HttpServlet {
     String blobKey = (String) card.getProperty("blobKey");
     if (blobKey != "null") {
       BlobKey key = new BlobKey(blobKey);
-      blobstoreService.delete(key);
+      int retries = 5;
+      while (true) {
+        try {
+          blobstoreService.delete(key);
+          break;
+        } catch (BlobstoreFailureException e) {
+          if (retries == 0) {
+            break;
+          }
+          --retries;
+        }
+      }
     }
   }
 
   private void deleteCard(DatastoreService datastore, Entity card) {
-    datastore.delete(card.getKey());
+    int retries = 5;
+    while (true) {
+      try {
+        cardDeletionTransaction(datastore, card);
+        break;
+      } catch (Exception e) {
+        if (retries == 0) {
+          break;
+        }
+        --retries;
+      }
+    }
+  }
+
+  private void cardDeletionTransaction(DatastoreService datastore, Entity card) {
+    Transaction txn = datastore.beginTransaction(withXG(true));
+    try {
+      datastore.delete(card.getKey());
+      txn.commit();
+    } finally {
+      if (txn.isActive()) {
+        txn.rollback();
+      }
+    }
   }
 }

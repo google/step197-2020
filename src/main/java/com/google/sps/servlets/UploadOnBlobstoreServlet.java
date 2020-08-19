@@ -16,7 +16,7 @@ public class UploadOnBlobstoreServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 
-    // Redirects the user to /usercards servlet upon completion of
+    // Redirects the user to /usercards servlet upon completion of image being processed in Blobstore
     String uploadUrl = blobstoreService.createUploadUrl("/usercards");
 
     response.setContentType("text/html");

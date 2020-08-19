@@ -59,11 +59,11 @@ public final class Card {
 
   private Card() {}
 
-  public Card(Entity entity, String key) {
+  public Card(Entity entity) {
     this.imageBlobKey = (String) entity.getProperty("imageBlobKey");
     this.rawText = (String) entity.getProperty("rawText");
     this.textTranslated = (String) entity.getProperty("textTranslated");
-    this.key = key;
+    this.key = KeyFactory.keyToString(entity.getKey());
   }
 
   public String getImageBlobKey() {

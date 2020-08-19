@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import java.util.Map;
 import java.util.HashMap;
 
-public class ResponseParser {
+public class ResponseSerializer {
 
   public static String getErrorJson(String error) throws IOException {
     Map<String, String> jsonErrorInfo = new HashMap<>();

@@ -12,8 +12,11 @@ class FolderScroll extends Component {
 
   async componentDidMount() {
     try {
-      const foldersData = await fetch("/userfolders").then((result) => result.json());
-      if (!foldersData.ok) {
+      const folders = await fetch("/userfolders").then(res => res.json());
+      const foldersData = folders['userFolders'];
+      console.log(folders);
+      console.log(foldersData);
+      if (!folders.ok) {
         throw Error(foldersData.statusText);
       }
       this.setState({ isDataFetched: true, folders: foldersData });
@@ -44,7 +47,7 @@ class FolderScroll extends Component {
         id={this.props.key}>
         {
           // Parses JSON and displays all the users folders
-          data.usersFolders.map((folder) => {
+          this.state.folders.map((folder) => {
             return (
               <option key={folder.folderName} value={folder.folderKey}>
                 {folder.folderName}

@@ -28,9 +28,7 @@ class CreateCardContent extends Component {
 
   async componentDidMount() {
     try {
-      const uploadUrl = await fetch("/upload").then((response) =>
-        response.text()
-      );
+      const uploadUrl = await fetch("/upload");
       if (!uploadUrl.ok) {
         throw Error(uploadUrl.statusText);
       }

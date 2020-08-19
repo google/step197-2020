@@ -38,9 +38,32 @@ public class DeleteFolderServlet extends HttpServlet {
     }
   }
 
-  private void deleteFolder(String folderKey) throws IOException {
+  private void deleteFolder(String folderKey) {
+    int retries = 5;
+    while (true) {
+      try {
+        folderDeletionTransaction(folderKey);
+        break;
+      } catch (Exception e) {
+        if (retries == 0) {
+          break;
+        }
+        --retries;
+      }
+    }
+  }
+
+  private void folderDeletionTransaction(String folderKey) throws IOException {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.delete(KeyFactory.stringToKey(folderKey));
+    Transaction txn = datastore.beginTransaction(withXG(true));
+    try {
+      datastore.delete(KeyFactory.stringToKey(folderKey));
+      txn.commit();
+    } finally {
+      if (txn.isActive()) {
+        txn.rollback();
+      }
+    }
   }
 
   private void deleteAllCardsInsideFolder(String folderKey) throws IOException {
@@ -56,7 +79,7 @@ public class DeleteFolderServlet extends HttpServlet {
         if (imageBlobKey != "null") {
           deleteBlob(imageBlobKey);
         }
-        transactionalRetryForCardDeletion(datastore, card);
+        deleteCard(datastore, card);
       }
     }
   }
@@ -82,11 +105,11 @@ public class DeleteFolderServlet extends HttpServlet {
     }
   }
 
-  private void transactionalRetryForCardDeletion(DatastoreService datastore, Entity card) {
+  private void deleteCard(DatastoreService datastore, Entity card) {
     int retries = 5;
     while (true) {
       try {
-        deleteCard(datastore, card);
+        cardDeletionTransaction(datastore, card);
         break;
       } catch (Exception e) {
         if (retries == 0) {
@@ -97,7 +120,7 @@ public class DeleteFolderServlet extends HttpServlet {
     }
   }
 
-  private void deleteCard(DatastoreService datastore, Entity card) {
+  private void cardDeletionTransaction(DatastoreService datastore, Entity card) {
     Transaction txn = datastore.beginTransaction(withXG(true));
     try {
       datastore.delete(card.getKey());

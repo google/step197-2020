@@ -27,19 +27,13 @@ const imgStyle = {
 	margin: '10px',
 };
 
-class FlashcardFront extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
-
-	render() {
-		return (
-			<div className="FlashcardFront" style={frontStyle}>
-				<img src={this.props.image} alt={this.props.text} style={imgStyle} />
-				{this.props.text}
-			</div>
-		);
-	}
+function FlashcardFront(props) {
+	return (
+		<div className="FlashcardFront" style={frontStyle}>
+			{this.props.image ? <img style={imgStyle} src={this.props.image} alt="Can not fetch image" /> : null}
+			{this.props.text}
+		</div>
+	);
 }
+
 export default FlashcardFront;

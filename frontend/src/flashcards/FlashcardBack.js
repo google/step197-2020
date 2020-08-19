@@ -17,14 +17,12 @@ const backStyle = {
 	color: 'white',
 };
 
-class FlashcardBack extends React.Component {
-	render() {
-		return (
-			<div className="FlashcardBack" style={backStyle}>
-				{this.props.text}
-			</div>
-		);
-	}
+function FlashcardBack(props) {
+	return (
+		<div className="FlashcardBack" style={backStyle}>
+			{this.props.text}
+		</div>
+	);
 }
 
 export default FlashcardBack;

@@ -1,121 +1,113 @@
 package com.google.sps.data;
 
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
 public final class Card {
 
-    private String id;
-    private String blobKey;
-    private String labels;
-    private String fromLang;
-    private String toLang;
-    private String textNotTranslated;
-    private String textTranslated;
-    private String cardKey;
-      
-    public Card (
-        String blobKey,
-        String labels,
-        String fromLang,
-        String toLang,
-        String textNotTranslated,
-        String textTranslated) {
-            
-      this.blobKey = blobKey;
-      this.labels = labels;
-      this.fromLang = fromLang;
-      this.toLang = toLang;
-      this.textNotTranslated = textNotTranslated;
+  public static class Builder {
+    private String imageBlobKey = "null";
+    private String rawText = "null";
+    private String textTranslated = "null";
+    private String key;
+    private String parentKey;
+
+    public Builder() {}
+
+    public Builder setImageBlobKey(String imageBlobKey) {
+      this.imageBlobKey = imageBlobKey;
+      return this;
+    }
+
+    public Builder setRawText(String rawText) {
+      this.rawText = rawText;
+      return this;
+    }
+
+    public Builder setTextTranslated(String textTranslated) {
       this.textTranslated = textTranslated;
-      this.cardKey = "null";
+      return this;
     }
 
-    public String getBlobKey() {
-        return this.blobKey;
+    public Builder setCardKey(String key) {
+      this.key = key;
+      return this;
     }
 
-    public String getLabels() {
-        return this.labels;
+    public Builder setParentKey(String parentkey) {
+      this.parentKey = parentkey;
+      return this;
     }
 
-    public String getFromLang() {
-        return this.fromLang;
+    public Card build() {
+      Card card = new Card();
+      card.imageBlobKey = this.imageBlobKey;
+      card.rawText = this.rawText;
+      card.textTranslated = this.textTranslated;
+      card.key = this.key;
+      card.parentKey = this.parentKey;
+
+      return card;
     }
+  }
 
-    public String getToLang() {
-        return this.toLang;
-    }
+  private String imageBlobKey = "null";
+  private String rawText = "null";
+  private String textTranslated = "null";
+  private String key;
+  private String parentKey;
 
-    public String getTextNotTranslated() {
-        return this.textNotTranslated;
-    }
+  private Card() {}
 
-    public String getTextTranslated() {
-        return this.textTranslated;
-    }
+  public Card(Entity entity) {
+    this.imageBlobKey = (String) entity.getProperty("imageBlobKey");
+    this.rawText = (String) entity.getProperty("rawText");
+    this.textTranslated = (String) entity.getProperty("textTranslated");
+    this.key = KeyFactory.keyToString(entity.getKey());
+  }
 
-    public String getCardKey() {
-        return this.cardKey;
-    }
+  public String getImageBlobKey() {
+    return this.imageBlobKey;
+  }
 
-    public void setBlobKey(String newBlobKey) {
-        this.blobKey = blobKey;
-    }
+  public String getRawText() {
+    return this.rawText;
+  }
 
-    public void setLabels(String newLabels) {
-        // This may need to changed for further processing of how we should store labels // query them
-        this.labels = newLabels;
-    }
+  public String getTextTranslated() {
+    return this.textTranslated;
+  }
 
-    public void setFromLang(String newLang) {
-        this.fromLang = newLang;
-    }
-    
-    public void setToLang(String newLang) {
-        this.toLang = newLang;
-    }
+  public String getCardKey() {
+    return this.key;
+  }
 
-    public void setNewText(String newText) {
-        this.textNotTranslated = newText;
-    }
+  public void setImageBlobKey(String newImageBlobKey) {
+    this.imageBlobKey = newImageBlobKey;
+  }
 
-    public void setTextTranslated(String newText) {
-        this.textTranslated = newText;
-    }
+  public void setNewText(String newText) {
+    this.rawText = newText;
+  }
 
-    public void setCardKey(String cardKey) {
-        this.cardKey = cardKey;
-    }
+  public void setTextTranslated(String newText) {
+    this.textTranslated = newText;
+  }
 
-    public Entity createEntity(Key folderKey) {
-        
-        Entity card = new Entity("Card", folderKey);
-        card.setProperty("blobKey", this.blobKey);
-        card.setProperty("labels", this.labels);
-        card.setProperty("fromLang", this.fromLang);
-        card.setProperty("toLang", this.toLang);
-        card.setProperty("textNotTranslated", this.textNotTranslated);
-        card.setProperty("textTranslated", this.textTranslated);
-        card.setProperty("cardKey", KeyFactory.keyToString(card.getKey()));
+  public void setCardKey(String key) {
+    this.key = key;
+  }
 
-        return card;
-    }
+  public void setParentKey(String key) {
+    this.parentKey = key;
+  }
 
-    public static Card EntityToCard(Entity entity) {
+  public Entity createEntity() {
+    Entity card = new Entity("Card", KeyFactory.stringToKey(this.parentKey));
+    card.setProperty("imageBlobKey", this.imageBlobKey);
+    card.setProperty("rawText", this.rawText);
+    card.setProperty("textTranslated", this.textTranslated);
 
-        String blobKey = (String) entity.getProperty("blobKey");
-        String labels = (String) entity.getProperty("labels");
-        String fromLang = (String) entity.getProperty("fromLang");
-        String toLang = (String) entity.getProperty("toLang");
-        String textNotTranslated = (String) entity.getProperty("textNotTranslated");
-        String textTranslated = (String) entity.getProperty("textTranslated");
-        String cardKey = (String) entity.getProperty("cardKey");
-
-        Card card = new Card(blobKey, labels, fromLang, toLang, textNotTranslated, textTranslated);
-        card.setCardKey(cardKey);
-        
-        return card;
-    }
+    return card;
+  }
 }

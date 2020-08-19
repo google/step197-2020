@@ -23,7 +23,6 @@ class CreateCardContent extends Component {
     this.fromLangSelected = this.fromLangSelected.bind(this);
     this.toLangSelected = this.toLangSelected.bind(this);
     this.imageSelected = this.imageSelected.bind(this);
-    this.imageUploadUrl = "";
   }
 
   async componentDidMount() {

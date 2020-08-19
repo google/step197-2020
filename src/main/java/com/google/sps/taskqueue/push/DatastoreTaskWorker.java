@@ -22,7 +22,9 @@ public class DatastoreTaskWorker extends HttpServlet {
     String key = request.getParameter("key");
 
     try {
+      // if successful, we send SC 200 to the Queue service 
       deleteEntity(key);
+      response.sendError(200);
     } catch (Exception e) {
       // When the response returns an HTTP status code
       // outside the range 200–299

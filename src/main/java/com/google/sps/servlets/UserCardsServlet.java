@@ -83,9 +83,8 @@ public class UserCardsServlet extends HttpServlet {
 
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(cardEntity);
+      response.sendRedirect("/insideFolder?folderKey=" + folderKey);
     }
-    // TODO(esaracay): Redirect to inside of this cards folder
-    response.sendRedirect("/InsideFolder?folderKey=" + folderKey);
   }
 
   private String getImageBlobKey(HttpServletRequest request) {

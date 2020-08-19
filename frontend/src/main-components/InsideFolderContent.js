@@ -11,7 +11,7 @@ const InsideFolderContent = (props) => {
     background-color: white;
     margin: 1%;
   `;
-  
+
 
   return (
     <Container>

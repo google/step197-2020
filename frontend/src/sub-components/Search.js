@@ -54,8 +54,8 @@ const Search = (props) => {
   return (
       <Container>
         <Form action="/someServlet">
-          <Button type="submit" class="material-icons">
-          <i class="material-icons">search</i>
+          <Button type="submit" className="material-icons">
+          <i className="material-icons">search</i>
           </Button>
           <Input type="text" placeholder="Search.." name="search-input"></Input>
         </Form>

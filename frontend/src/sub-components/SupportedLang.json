@@ -1,0 +1,44 @@
+{
+  "languages": [
+    {
+      "language": "Italian",
+      "code": "it"
+    },
+    {
+      "language": "Hindi",
+      "code": "hi"
+    },
+    {
+      "language": "Arabic",
+      "code": "ar"
+    },
+    {
+      "language": "Chinese",
+      "code": "zh"
+    },
+    {
+      "language": "English",
+      "code": "en"
+    },
+    {
+      "language": "French",
+      "code": "fr"
+    },
+    {
+      "language": "Spanish",
+      "code": "es"
+    },
+    {
+      "language": "German",
+      "code": "de"
+    },
+    {
+      "language": "Vietnamese",
+      "code": "vi"
+    },
+    {
+      "language": "Greek",
+      "code": "el"
+    }
+  ]
+}

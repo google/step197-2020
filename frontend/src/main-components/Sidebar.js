@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 
 import accountIcon from "../SVG/account.svg";
+import logoutIcon from "../SVG/login-black-18dp.svg";
 import newCardIcon from "../SVG/create-24px.svg"
 import objectIcon from "../SVG/image_search-24px.svg";
 import youTubeIcon from "../SVG/youtube.svg";
@@ -33,15 +34,13 @@ const Sidebar = (props) => {
    `;
 
   return (
-    <Side id="side" class="flex-container">
-      
+    <Side id="side" className="flex-container">
       <SideIcon link="/myFolders" icon={homeIcon}></SideIcon>
       <SideIcon link="/CreateCard" icon={newCardIcon}></SideIcon>
       <SideIcon link="/CreateFolder" icon={newFolderIcon}></SideIcon>
       <SideIcon link="/ImageInterface" icon={objectIcon}></SideIcon>
       <SideIcon link="/YoutubeInterface" icon={youTubeIcon}></SideIcon>
-      <SideIcon link="/myFolders" icon={accountIcon}></SideIcon>
-      
+      <SideIcon link="/myFolders" icon={logoutIcon}></SideIcon>
     </Side>
   );
 };

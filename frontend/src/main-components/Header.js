@@ -41,16 +41,16 @@ const Header = (props) => {
    * If the device size is less than 700px wide then we will display
    * a button for our side menu instead of our logo.
    */
-   const width = window.innerWidth;
+  const width = self.innerWidth;
   if (width < 700) {
     display = (
       <Menu onClick={(e)=> props.handleClick()}>
-        <i class="material-icons">menu</i>
+        <i className="material-icons">menu</i>
       </Menu>
     );
   }
     return (
-      <Head class="flex-container">
+      <Head className="flex-container">
         <Box>{display}</Box>
         <Search></Search>
       </Head>

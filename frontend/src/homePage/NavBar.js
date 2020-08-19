@@ -9,7 +9,6 @@ class NavBar extends React.Component {
     this.html = null;
     this.message = "Login";
     // Check if the user is logged in to display folders
-    console.log(this.props.loginStatus);
     if (this.props.loginStatus) {
       this.html = (
         <LoginButton

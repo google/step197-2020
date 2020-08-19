@@ -18,16 +18,16 @@ function CreateCard() {
     
 
     
-
-  return (
-    <div className="App">
-      <Header id="head" handleClick={handleClick}></Header>
-      <div id="main">
-        <Sidebar bool={sideSetting}></Sidebar>
-        <CreateCardContent></CreateCardContent>
+    return (
+      <div className="App">
+        <Header id="head" handleClick={handleClick}></Header>
+        <div id="main">
+          <Sidebar bool={sideSetting}></Sidebar>
+          <CreateCardContent></CreateCardContent>
+        </div>
       </div>
-    </div>
-  );
+    );
+  
 }
 
 export default CreateCard;

@@ -1,71 +1,56 @@
 package com.google.sps.data;
 
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
 
 public final class Folder {
 
-    private String folderName;
-    private String folderDefaultLanguage;
-    private String folderKey;
+  private String folderName;
+  private String folderDefaultLanguage;
+  private String folderKey;
+  private String parentKey;
 
-    public Folder(
-        String folderName,
-        String folderDefaultLanguage) {
-        
-        this.folderName = folderName;
-        this.folderDefaultLanguage = folderDefaultLanguage;
-        this.folderKey = "null";
-    }
+  public Folder(String folderName, String folderDefaultLanguage) {
+    this.folderName = folderName;
+    this.folderDefaultLanguage = folderDefaultLanguage;
+    this.folderKey = "null";
+  }
 
-    public Folder(Entity entity) {
-        this.folderName = (String) entity.getProperty("folderName");
-        this.folderDefaultLanguage = (String) entity.getProperty("folderDefaultLanguage");
-        this.folderKey = (String) entity.getProperty("folderKey");
-    }
+  public Folder(Entity entity) {
+    this.folderName = (String) entity.getProperty("folderName");
+    this.folderDefaultLanguage = (String) entity.getProperty("folderDefaultLanguage");
+    this.folderKey = KeyFactory.keyToString(entity.getKey());
+  }
 
-    public String getFolderName() {
-        return this.folderName;
-    }
+  public String getFolderName() {
+    return this.folderName;
+  }
 
-    public String getFolderDefaultLanguage() {
-        return this.folderDefaultLanguage;
-    }
+  public String getFolderDefaultLanguage() {
+    return this.folderDefaultLanguage;
+  }
 
-    public String getFolderKey() {
-        return this.folderKey;
-    }
+  public String getFolderKey() {
+    return this.folderKey;
+  }
 
-    public void setFolderName(String newFolderName) {
-        this.folderName = newFolderName;
-    }
+  public void setFolderName(String newFolderName) {
+    this.folderName = newFolderName;
+  }
 
-    public void setFolderDefaultLanguage(String newDefaultLanguage) {
-        this.folderDefaultLanguage = newDefaultLanguage;
-    }
+  public void setFolderKey(String folderKey) {
+    this.folderKey = folderKey;
+  }
 
-    public void setFolderKey(String folderKey) {
-        this.folderKey = folderKey;
-    }
+  public void setParentKey(String key) {
+    this.parentKey = key;
+  }
 
-    public Entity createEntity(Key userKey) {
-        
-        // Set owner of folder 
-        Entity folder = new Entity("Folder", userKey);
+  public Entity createEntity() {
+    Entity folder = new Entity("Folder", KeyFactory.stringToKey(this.parentKey));
+    folder.setProperty("folderName", this.folderName);
+    folder.setProperty("folderDefaultLanguage", this.folderDefaultLanguage);
 
-        // Store initial folder entity without properties to generate auto ID for entity
-        // This is necessary to obtain a "complete" key
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        datastore.put(folder);
-
-        folder.setProperty("folderName", this.folderName);
-        folder.setProperty("folderDefaultLanguage", this.folderDefaultLanguage);
-        folder.setProperty("folderKey", KeyFactory.keyToString(folder.getKey()));
-
-        return folder;
-    }
-
+    return folder;
+  }
 }

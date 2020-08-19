@@ -3,37 +3,35 @@ package com.google.sps.data;
 import com.google.appengine.api.datastore.Entity;
 
 public final class User {
-    private final String userId;
-    private String email;
-    private String userKey;
-      
-    public User(String userId, String email) {
-      this.userId = userId;
-      this.email = email;
-      this.userKey = "null";
-    }
+  private final String userId;
+  private String email;
+  private String userKey;
 
-    public String getUserId() {
-        return this.userId;
-    }
+  public User(String userId, String email) {
+    this.userId = userId;
+    this.email = email;
+    this.userKey = "null";
+  }
 
-    public String getEmail() {
-        return this.email;
-    }
+  public String getUserId() {
+    return this.userId;
+  }
 
-    public String getUserKey() {
-        return this.userKey;
-    }
+  public String getEmail() {
+    return this.email;
+  }
 
-    public void setUserKey(String userKey) {
-        this.userKey = userKey;
-    }
+  public String getUserKey() {
+    return this.userKey;
+  }
 
-    public Entity createEntity() {
-        // Create user entity identified by userId
-        Entity user = new Entity("User", this.userId);
-        user.setProperty("email", this.email);
-        return user;
-    }
+  public void setUserKey(String userKey) {
+    this.userKey = userKey;
+  }
+
+  public Entity createEntity() {
+    Entity user = new Entity("User", this.userId);
+    user.setProperty("email", this.email);
+    return user;
+  }
 }
-

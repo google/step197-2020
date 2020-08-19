@@ -8,19 +8,17 @@ import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 
-import com.google.appengine.api.blobstore.BlobInfo;
-import com.google.appengine.api.blobstore.BlobInfoFactory;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+
 import com.google.appengine.api.blobstore.BlobstoreFailureException;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
-
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,12 +27,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.sps.tool.ResponseSerializer;
-import com.google.sps.data.Folder;
-import com.google.sps.data.Card;
 
 @WebServlet("/deletecard")
 public class DeleteCardServlet extends HttpServlet {
-  
+
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
@@ -42,20 +38,21 @@ public class DeleteCardServlet extends HttpServlet {
     if (userService.isUserLoggedIn()) {
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       String cardKey = request.getParameter("cardKey");
-      Entity card = getExistingCardInDatastore(response, datastore, cardKey);
-  
+      Entity card = getExistingCardInDatastore(datastore, cardKey);
+
       if (card == null) {
         String jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot delete Card at the moment");
         response.setContentType("application/json;");
         response.getWriter().println(new Gson().toJson(jsonErrorInfo));
       } else {
         deleteBlob(card);
-        deleteCard(datastore, card);
+        deleteCard(card);
       }
     }
   }
 
-  private Entity getExistingCardInDatastore(HttpServletResponse response, DatastoreService datastore, String cardKey) throws IOException {
+  private Entity getExistingCardInDatastore(DatastoreService datastore, String cardKey)
+      throws IOException {
     try {
       return datastore.get(KeyFactory.stringToKey(cardKey));
     } catch (EntityNotFoundException e) {
@@ -65,9 +62,9 @@ public class DeleteCardServlet extends HttpServlet {
 
   private void deleteBlob(Entity card) throws IOException {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-    String blobKey = (String) card.getProperty("blobKey");
-    if (blobKey != "null") {
-      BlobKey key = new BlobKey(blobKey);
+    String imageBlobKey = (String) card.getProperty("imageBlobKey");
+    if (imageBlobKey != "null") {
+      BlobKey key = new BlobKey(imageBlobKey);
       int retries = 5;
       while (true) {
         try {
@@ -75,6 +72,7 @@ public class DeleteCardServlet extends HttpServlet {
           break;
         } catch (BlobstoreFailureException e) {
           if (retries == 0) {
+            addBlobstoreTaskToQueue(key.getKeyString());
             break;
           }
           --retries;
@@ -83,14 +81,15 @@ public class DeleteCardServlet extends HttpServlet {
     }
   }
 
-  private void deleteCard(DatastoreService datastore, Entity card) {
+  private void deleteCard(Entity card) {
     int retries = 5;
     while (true) {
       try {
-        cardDeletionTransaction(datastore, card);
+        cardDeletionTransaction(card);
         break;
       } catch (Exception e) {
         if (retries == 0) {
+          addDatastoreTaskToQueue(card);
           break;
         }
         --retries;
@@ -98,7 +97,8 @@ public class DeleteCardServlet extends HttpServlet {
     }
   }
 
-  private void cardDeletionTransaction(DatastoreService datastore, Entity card) {
+  private void cardDeletionTransaction(Entity card) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Transaction txn = datastore.beginTransaction(withXG(true));
     try {
       datastore.delete(card.getKey());
@@ -108,5 +108,17 @@ public class DeleteCardServlet extends HttpServlet {
         txn.rollback();
       }
     }
+  }
+
+  private void addDatastoreTaskToQueue(Entity entity) {
+    Queue queue = QueueFactory.getDefaultQueue();
+    queue.add(
+        TaskOptions.Builder.withUrl("/datastoreWorker")
+            .param("key", KeyFactory.keyToString(entity.getKey())));
+  }
+
+  private void addBlobstoreTaskToQueue(String key) {
+    Queue queue = QueueFactory.getDefaultQueue();
+    queue.add(TaskOptions.Builder.withUrl("/blobstoreWorker").param("key", key));
   }
 }

@@ -61,7 +61,7 @@ class InsideFolderContent extends React.Component {
 			<h1>Your Folder has {this.state.flashcardCount} cards.</h1>
 			<br/>
 			<div style={CardContainer}>
-				{this.state.flashcards}
+			  {this.state.flashcards}
 			</div>
 		  </div>
 	  </div>

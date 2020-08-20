@@ -5,31 +5,28 @@ import InsideFolderContent from '../main-components/InsideFolderContent';
 import queryString from 'query-string';
 
 function InsideFolder(props) {
-	const [sideSetting, setSideSetting] = useState('f');
-	const handleClick = (e) => {
-		console.log('Clicked');
-		if (sideSetting === 'f') {
-			setSideSetting('t');
-		} else {
-			setSideSetting('f');
-		}
-	};
+  const [sideSetting, setSideSetting] = useState('f');
+  const handleClick = (e) => {
+    if (sideSetting === 'f') {
+      setSideSetting('t');
+    } else {
+      setSideSetting('f');
+    }
+  };
 
-	let folderKey;
-	useEffect(() => {
-		const values = queryString.parse(props.location.search);
-		folderKey = values.folderKey;
-	});
+  let folderKey;
+  const values = queryString.parse(props.location.search);
+  folderKey = values.folderKey;
 
-	return (
-		<div className="App">
-			<Header id="head" handleClick={handleClick}></Header>
-			<div id="main">
-				<Sidebar bool={sideSetting}></Sidebar>
-				<InsideFolderContent folderKey={folderKey}></InsideFolderContent>
-			</div>
-		</div>
-	);
+  return (
+    <div className="App">
+	  <Header id="head" handleClick={handleClick}></Header>
+	  <div id="main">
+	    <Sidebar bool={sideSetting}></Sidebar>
+	    <InsideFolderContent folderKey={folderKey}></InsideFolderContent>
+	  </div>
+	</div>
+  );
 }
 
 export default InsideFolder;

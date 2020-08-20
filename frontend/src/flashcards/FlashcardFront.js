@@ -30,8 +30,8 @@ const imgStyle = {
 function FlashcardFront(props) {
 	return (
 		<div className="FlashcardFront" style={frontStyle}>
-			{this.props.image ? <img style={imgStyle} src={this.props.image} alt="Can not fetch image" /> : null}
-			{this.props.text}
+			{props.image ? <img style={imgStyle} src={props.image} alt="Can not fetch image" /> : null}
+			{props.text}
 		</div>
 	);
 }

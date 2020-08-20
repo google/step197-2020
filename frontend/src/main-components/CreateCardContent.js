@@ -95,7 +95,7 @@ class CreateCardContent extends Component {
       return <h1>Loading</h1>;
     }
     return (
-      <div id='container'>
+      <div className='Container'>
         <div id='innerContainer'>
           <div id='CardPreview'>
             <div className='holdCard'>

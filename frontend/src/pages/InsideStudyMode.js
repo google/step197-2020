@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Header from "../main-components/Header";
 import Sidebar from "../main-components/Sidebar";
 import StudyModeContent from "../main-components/StudyModeContent";
+import css from "./template.css";
 
 function InsideStudyMode(props) {
   // Handles mobile menu button and updates sidebar view

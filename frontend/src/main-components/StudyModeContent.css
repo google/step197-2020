@@ -1,5 +1,4 @@
-#container {
-  display: flex;
+#studyContainer {
   flex-direction: column;
 }
 
@@ -11,10 +10,11 @@
   width: 100%;
 }
 
-#main {
+#studyMain {
   display: flex;
   margin-top: 1%;
   width: 100%;
+  min-height: 80vh;
 }
 
 #card {

@@ -2,16 +2,6 @@ html {
   font-size: 62.5%;
 }
 
-#container {
-  background-color: white;
-  border: 1rem solid white;
-  border-radius: 1rem;
-  display: flex;
-  flex: 9;
-  justify-content: center;
-  margin: 1%;
-}
-
 #innerContainer {
   display: flex;
   display: flex;
@@ -89,9 +79,8 @@ li {
 #submission:hover {
   background-color: #1d303d;
 }
-
 /* Mobile layout */
-@media (max-width: 700px) {
+@media screen and (max-width: 700px) {
   
   .inline {
     margin-right: none;

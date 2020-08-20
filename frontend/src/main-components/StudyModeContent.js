@@ -22,14 +22,14 @@ class StudyModeContent extends React.Component {
 
   render() {
     return (
-      <div id='container'>
+      <div id='studyContainer' className='Container'>
         <div id='rounds'>
           <RoundLights
             currentRound={this.state.currentRound}
             totalRounds={this.state.totalRounds}></RoundLights>
         </div>
 
-        <div id='main'>
+        <div id='studyMain'>
           <div id='card'>
             <FlashcardBack text={"testing"}></FlashcardBack>
           </div>

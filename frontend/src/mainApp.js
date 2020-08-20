@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import MyFolders from "./pages/MyFolders";
 import InsideFolder from "./pages/InsideFolder";
-import YoutubeDetect from "./pages/YoutubeDetect";
+import StudyMode from "./pages/StudyMode";
 import CreateCard from "./pages/CreateCard";
 import CreateFolder from "./pages/CreateFolder";
 import ImageInterface from "./pages/ImageInterface";
@@ -10,18 +10,20 @@ import PageError from "./pages/404";
 import css from "./mainApp.css";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { match } from "react-router-dom"
+import InsideStudyMode from './pages/InsideStudyMode';
 
 // This file handles all routing for our app pages
 function App() {
   return (
     <div>
       <Switch>
-        <Route exact path="/CreateCard" component={CreateCard} />
-        <Route exact path="/MyFolders" component={MyFolders} />
-        <Route exact path="/ImageInterface" component={ImageInterface} />
-        <Route exact path="/YoutubeInterface" component={YoutubeDetect} />
-        <Route exact path="/CreateFolder" component={CreateFolder} />
-        <Route exact path="/InsideFolder" component={InsideFolder} />
+        <Route exact path='/CreateCard' component={CreateCard} />
+        <Route exact path='/MyFolders' component={MyFolders} />
+        <Route exact path='/ImageInterface' component={ImageInterface} />
+        <Route exact path='/StudyMode' component={StudyMode} />
+        <Route exact path='/InsideStudyMode' component={InsideStudyMode} />
+        <Route exact path='/CreateFolder' component={CreateFolder} />
+        <Route exact path='/InsideFolder' component={InsideFolder} />
         <Route component={PageError} />
       </Switch>
     </div>

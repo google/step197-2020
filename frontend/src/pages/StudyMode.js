@@ -1,9 +1,9 @@
 import React, { useState, Component } from "react";
 import Header from "../main-components/Header";
 import Sidebar from "../main-components/Sidebar";
-import YoutubeDetectContent from "../main-components/StudyModeSelect";
+import MyFoldersContent from "../main-components/MyFoldersContent";
 
-function YoutubeDetect() {
+function StudyMode() {
   // Handles mobile menu button and updates sidebar view
   const [sideSetting, setSideSetting] = useState("f");
   const handleClick = (e) => {
@@ -20,10 +20,13 @@ function YoutubeDetect() {
       <Header id="head" handleClick={handleClick}></Header>
       <div id="main">
         <Sidebar bool={sideSetting}></Sidebar>
-        <YoutubeDetectContent></YoutubeDetectContent>
+        <MyFoldersContent
+          mainURL="/InsideStudyMode"
+          headingText="Select a folder to begin studying">        
+        </MyFoldersContent>
       </div>
     </div>
   );
 }
 
-export default YoutubeDetect;
+export default StudyMode;

@@ -1,46 +1,37 @@
 import React from "react";
-import RoundLights from "../sub-components/RoundLights";
-import FlashcardBack from "../flashcards/FlashcardBack";
-import Options from "../sub-components/CardOptions";
-import css from "./StudyModeContent.css";
+import StudyModeQuiz from "../sub-components/StudyModeQuiz";
 
 class StudyModeContent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isDataFetched: false,
       currentRound: 1,
-      totalRounds: 4,
+      quizWord: "none",
+      options: ["hello", "hi", "hola", "bonjour"],
+      correctAnswer: "none",
     };
+    this.cardKey = "";
     this.optionSelected = this.optionSelected.bind(this);
   }
 
   optionSelected(event) {
     const selectedValue = event.currentTarget.value;
-    // TODO(esaracay): Check if the word was correct
+    let correct = "false";
+    if (selectedValue === this.state.correctAnswer) {
+      correct = "true";
+    }
+    // TODO(esaracay): fetch with parameters
+    const response = fetch('/study',"method:POST")
   }
 
   render() {
     return (
-      <div id='studyContainer' className='Container'>
-        <div id='rounds'>
-          <RoundLights
-            currentRound={this.state.currentRound}
-            totalRounds={this.state.totalRounds}></RoundLights>
-        </div>
-
-        <div id='studyMain'>
-          <div id='card'>
-            <FlashcardBack text={"testing"}></FlashcardBack>
-          </div>
-
-          <div id='options'>
-            <Options
-              options={["hello", "hola", "bonjour", "hi"]}
-              func={this.optionSelected}></Options>
-          </div>
-        </div>
-      </div>
+      <StudyModeQuiz
+        currentRound={this.state.currentRound}
+        totalRounds={this.props.totalRounds}
+        quizWord={this.state.quizWord}
+        options={this.state.options}
+      optionSelected={this.optionSelected}></StudyModeQuiz>
     );
   }
 }

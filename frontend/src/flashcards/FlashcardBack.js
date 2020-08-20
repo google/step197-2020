@@ -20,7 +20,7 @@ const backStyle = {
 function FlashcardBack(props) {
 	return (
 		<div className="FlashcardBack" style={backStyle}>
-			{this.props.text}
+			{props.text}
 		</div>
 	);
 }

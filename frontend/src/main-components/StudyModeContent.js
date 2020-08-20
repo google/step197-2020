@@ -1,6 +1,6 @@
 import React from "react";
 import RoundLights from "../sub-components/RoundLights";
-import BackCard from "../flashcards/FlashcardBackPreview";
+import FlashcardBack from "../flashcards/FlashcardBack";
 import Options from "../sub-components/CardOptions";
 import css from "./StudyModeContent.css";
 
@@ -31,7 +31,7 @@ class StudyModeContent extends React.Component {
 
         <div id='main'>
           <div id='card'>
-            <BackCard text={"testing"}></BackCard>
+            <FlashcardBack text={"testing"}></FlashcardBack>
           </div>
 
           <div id='options'>

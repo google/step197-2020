@@ -1,5 +1,6 @@
 import React from "react";
 import StudyModeQuiz from "../sub-components/StudyModeQuiz";
+import { nextQuizWord, updateWordQueues, getRound } from "./StudyModeGameHandler";
 
 class StudyModeContent extends React.Component {
   constructor(props) {
@@ -14,14 +15,30 @@ class StudyModeContent extends React.Component {
     this.optionSelected = this.optionSelected.bind(this);
   }
 
+  componentDidMount() {
+     const word = nextQuizWord();
+     const round = getRound();
+     this.setState({ quizWord: word.quizWord,
+       options: word.possibleResponses, correctAnswer: word.correctAnswer,
+       currentRound: round
+     });
+  }
+
   optionSelected(event) {
     const selectedValue = event.currentTarget.value;
     let correct = "false";
     if (selectedValue === this.state.correctAnswer) {
       correct = "true";
     }
-    // TODO(esaracay): fetch with parameters
-    const response = fetch('/study',"method:POST")
+    updateWordQueues(correct)
+     const word = nextQuizWord();
+     const round = getRound();
+     this.setState({
+       quizWord: word.quizWord,
+       options: word.possibleResponses,
+       correctAnswer: word.correctAnswer,
+       currentRound: round,
+     });
   }
 
   render() {
@@ -31,7 +48,8 @@ class StudyModeContent extends React.Component {
         totalRounds={this.props.totalRounds}
         quizWord={this.state.quizWord}
         options={this.state.options}
-      optionSelected={this.optionSelected}></StudyModeQuiz>
+        optionSelected={this.optionSelected}>
+      </StudyModeQuiz>
     );
   }
 }

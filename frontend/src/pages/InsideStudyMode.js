@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Header from "../main-components/Header";
 import Sidebar from "../main-components/Sidebar";
 import StudyModeContent from "../main-components/StudyModeContent";
+import { startQuiz } from "../main-components/StudyModeGameHandler";
 import css from "./template.css";
 
 class InsideStudyMode extends React.Component {
@@ -9,43 +10,43 @@ class InsideStudyMode extends React.Component {
     super(props);
     this.state = {
       isDataFetched: false,
-      rounds: 4,
+      rounds: 0,
+      sideSetting: "f",
     };
-  }
-  // Initializes a new game
-    async componentDidMount() {
-      
+    this.handleClick = this.handleClick.bind(this);
   }
 
-  // Must clear game incase of early termination
-    componentWillUnmount() { }
-    
+  // Initializes a new game
+  async componentDidMount() {
+    const rounds = await startQuiz("123");
+    this.setState({ rounds, isDataFetched: true });
+  }
+
+  handleClick(event) {
+    if (sideSetting === "f") {
+      this.setState({ sideSetting: "t" });
+    } else {
+      this.setState({ sideSetting: "f" });
+    }
+  };
+
   render() {
     // Handles mobile menu button and updates sidebar view
-    const [sideSetting, setSideSetting] = useState("f");
-    const handleClick = (e) => {
-      console.log("Clicked");
-      if (sideSetting === "f") {
-        setSideSetting("t");
-      } else {
-        setSideSetting("f");
-      }
-    };
-    if (!isDataFetched) {
+    if (!this.state.isDataFetched) {
       return (
         <div className='App'>
-          <Header id='head' handleClick={handleClick}></Header>
+          <Header id='head' handleClick={this.handleClick}></Header>
           <div id='main'>
-            <Sidebar bool={sideSetting}></Sidebar>
+            <Sidebar bool={this.state.sideSetting}></Sidebar>
           </div>
         </div>
       );
     }
     return (
       <div className='App'>
-        <Header id='head' handleClick={handleClick}></Header>
+        <Header id='head' handleClick={this.handleClick}></Header>
         <div id='main'>
-          <Sidebar bool={sideSetting}></Sidebar>
+          <Sidebar bool={this.state.sideSetting}></Sidebar>
           <StudyModeContent totalRounds={this.state.rounds}></StudyModeContent>
         </div>
       </div>

@@ -1,12 +1,43 @@
 let rounds = 0;
 let Quiz = [];
-/*
-function startQuiz(folderKey) {
-    // TODO(esaracay): Make call to the study Servelet with folderKey
-    Quiz = exampleQuiz;
-    rounds = Quiz.length;
-    return rounds;
+let currentQuizWord = {};
+let currentArray = 0;
+
+async function startQuiz(folderKey) {
+    //TODO(esaracay): Fetch /study servelet and parse json into object
+    Quiz = [
+        [{ cardKey: 1, quizWord: "hola", possibleResponses: ["hinder", "hello", "hone", "help"], correctAnswer: "hello" }],
+        [{ cardKey: 2, quizWord: "hola2", possibleResponses: ["hinder", "hello", "hone", "help"], correctAnswer: "hello" }],
+        [{ cardKey: 3, quizWord: "hola3", possibleResponses: ["hinder", "hello", "hone", "help"], correctAnswer: "hello" }]
+    ];
+    return 3;
 }
 
-export { startQuiz };
-*/
+function nextQuizWord() {
+    let nextWord = {};
+    if (Quiz[currentArray].length != 0) {
+        nextWord = Quiz[currentArray].shift();
+    } else {
+        currentArray++;
+        if (currentArray >= Quiz.length) {
+            return "end";
+        } else {
+            nextWord = Quiz[currentArray].shift();
+        }
+    }
+    currentQuizWord = nextWord;
+    return nextWord;
+}
+
+function updateWordQueues(correct) {
+    if (correct == "false" && currentArray < (Quiz.length - 1)) {
+        Quiz[currentArray + 1].push(currentQuizWord);
+    }
+    //TODO(esaaracay): Fetch /study to update familarity score
+}
+
+function getRound() {
+    return currentArray;
+}
+
+export { startQuiz, updateWordQueues, nextQuizWord, getRound };

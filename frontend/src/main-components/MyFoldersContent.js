@@ -53,7 +53,12 @@ class MyFoldersContent extends React.Component {
       return <h1>loading</h1>;
     }
     if (this.state.folders) {
-      headingText = `You have ${this.state.folders.length} Folders`;
+      if (this.props.headingText === "main") {
+        headingText = `You have ${this.state.folders.length} Folders`;
+      } else {
+        headingText = this.props.headingText;
+      }
+      
     }
     return (
       <Container>
@@ -63,7 +68,7 @@ class MyFoldersContent extends React.Component {
           {this.state.folders.map((folder) => {
             return (
               <Folder
-                folderURL={'/InsideFolder'}
+                folderURL={this.props.mainURL}
                 folderKey={folder.folderKey}
                 name={folder.folderName}
                 language={folder.folderDefaultLanguage}

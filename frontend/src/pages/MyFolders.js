@@ -27,7 +27,10 @@ function MyFolders(props) {
       <Header id="head" handleClick={handleClick}></Header>
       <div id="main">
         <Sidebar bool={sideSetting}></Sidebar>
-        <MyFoldersContent userKey={userKey}></MyFoldersContent>
+        <MyFoldersContent userKey={userKey}
+          mainURL="/InsideFolder"
+          headingText="main">
+        </MyFoldersContent>
       </div>
     </div>
   );

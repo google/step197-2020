@@ -4,54 +4,69 @@ import Flashcard from '../flashcards/Flashcard.js';
 import NewCard from '../flashcards/NewCard.js';
 import { LogDebugMessage } from './LogDebugMessage.js';
 
-const InsideFolderContent = (props) => {
-	const Container = styled.div`
-		flex: 9 1 auto;
-		display: flex;
-		border: 1rem solid white;
-		border-radius: 1rem;
-		background-color: white;
-		margin: 1%;
-		flex-direction: column;
-	`;
-
-	let flashcards = [];
-	const FetchPromise = fetch(`/usercards?folderKey=${props.folderKey}`, { method: 'GET' });
-	FetchPromise.then((result) => result.json())
-		.then((data) => {
-			flashcards = data.map((flashcard) => (
-				<Flashcard
-					key={flashcard.cardKey}
-					image={flashcard.blobKey}
-					text={flashcard.rawText}
-					translation={flashcard.textTranslated}
-					labels={flashcard.labels}
-				/>
-			));
-		})
-		.catch((error) => {
-			LogDebugMessage('Can not fetch flashcards.');
-		});
-
-	const CardContainer = {
-		display: 'flex',
-		flexFlow: 'row wrap',
-		justifyContent: 'space-around',
-		alignItems: 'start',
-	};
-
-	const count = flashcards?.length;
-
-	flashcards.unshift(<NewCard />);
-	return (
-		<div style={{ flex: '9', display: 'flex' }}>
-			<Container>
-				<h1>Your Folder has {count} cards</h1>
-				<br></br>
-				<div style={CardContainer}>{flashcards}</div>
-			</Container>
-		</div>
-	);
+const ContainerStyle = {
+  flex: "9",
+  display: "flex",
+  border: "1rem solid white",
+  borderRadius: "1rem",
+  backgroundColor: "white",
+  margin: "1%",
+  flexDirection: "column",
 };
+
+const CardContainer = {
+  display: 'flex',
+  flexFlow: 'row wrap',
+  justifyContent: 'space-around',
+  alignItems: 'baseline',
+};
+
+class InsideFolderContent extends React.Component {
+  constructor(props) {
+	super(props);
+	this.state = {
+	  isDataFetched: false,
+	  flashcards: [],
+	};
+  }
+
+  componentDidMount() {
+	let flashcards=[];
+	const FetchPromise = fetch(`/usercards?folderKey=${this.props.folderKey}`, { method: 'GET' });
+	FetchPromise.then((result) => result.json())
+	  .then((data) => {
+		flashcards = data.map((flashcard) => (
+		  <Flashcard
+			key={flashcard.cardKey}
+			image={flashcard.blobKey}
+			text={flashcard.rawText}
+			translation={flashcard.textTranslated}
+			labels={flashcard.labels}
+		  />
+		));
+	  })
+	  .catch((error) => {
+		alert("Could not load cards, please try refreshing the page.");
+	});
+	let count = flashcards?.length;
+	flashcards.unshift(<NewCard />);
+	console.log(count);
+	this.setState({ flashcards: flashcards, flashcardCount: count });
+  }
+  
+  render(){
+	return (
+	  <div style={{ flex: '9', display: 'flex' }}>
+		  <div style={ContainerStyle}>
+			<h1>Your Folder has {this.state.flashcardCount} cards.</h1>
+			<br/>
+			<div style={CardContainer}>
+				{this.state.flashcards}
+			</div>
+		  </div>
+	  </div>
+	);
+  }
+}
 
 export default InsideFolderContent;

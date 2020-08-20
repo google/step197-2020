@@ -9,7 +9,6 @@ import ReactCardFlip from "react-card-flip";
 const flipStyle = {
   width: "300px",
   height: "350px",
-  margin: "15px",
 };
 
 /**
@@ -31,12 +30,11 @@ class Flashcard extends React.Component {
     */
   handleClick(e) {
     this.setState((prevState) => ({ isFlipped: !prevState.isFlipped }));
-    console.log(e);
   }
 
   render() {
     return (
-      <div className="Flashcard" onClick={this.handleClick} style={flipStyle}>
+      <div className="Flashcard" onClick={this.handleClick} style={{height:"350px",width:"300px",margin:"15px"}}>
         <ReactCardFlip
           isFlipped={this.state.isFlipped}
           flipDirection="horizontal"

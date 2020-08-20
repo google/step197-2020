@@ -32,8 +32,8 @@ class InsideFolderContent extends React.Component {
 
   componentDidMount() {
 	let flashcards=[];
-	const FetchPromise = fetch(`/usercards?folderKey=${this.props.folderKey}`, { method: 'GET' });
-	FetchPromise.then((result) => result.json())
+	const fetchPromise = fetch(`/usercards?folderKey=${this.props.folderKey}`, { method: 'GET' });
+	fetchPromise.then((result) => result.json())
 	  .then((data) => {
 		flashcards = data.map((flashcard) => (
 		  <Flashcard

@@ -8,3 +8,5 @@ target
 .factorypath
 *.swp
 src/main/webapp/build
+home/ngothomas/framecard-9a6f461a5619.json
+WEB-INF/appengine-generated/datastore-indexes-auto.xml

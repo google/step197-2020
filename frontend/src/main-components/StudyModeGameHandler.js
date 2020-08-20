@@ -1,4 +1,3 @@
-let rounds = 0;
 let Quiz = [];
 let currentQuizWord = {};
 let currentArray = 0;
@@ -20,7 +19,7 @@ function nextQuizWord() {
     } else {
         currentArray++;
         if (currentArray >= Quiz.length) {
-            return "end";
+            return "!@end";
         } else {
             nextWord = Quiz[currentArray].shift();
         }

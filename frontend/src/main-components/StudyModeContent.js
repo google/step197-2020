@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "@emotion/styled";
 import StudyModeQuiz from "../sub-components/StudyModeQuiz";
 import { nextQuizWord, updateWordQueues, getRound } from "./StudyModeGameHandler";
 
@@ -10,6 +11,7 @@ class StudyModeContent extends React.Component {
       quizWord: "none",
       options: ["hello", "hi", "hola", "bonjour"],
       correctAnswer: "none",
+      end: false,
     };
     this.cardKey = "";
     this.optionSelected = this.optionSelected.bind(this);
@@ -31,7 +33,10 @@ class StudyModeContent extends React.Component {
       correct = "true";
     }
     updateWordQueues(correct)
-     const word = nextQuizWord();
+    const word = nextQuizWord();
+    if (word == "!@end") {
+      this.setState({ end: true });
+    }
      const round = getRound();
      this.setState({
        quizWord: word.quizWord,
@@ -42,6 +47,17 @@ class StudyModeContent extends React.Component {
   }
 
   render() {
+    const EndGame = styled.h1`
+        color: #D4AF37;
+        font-size: 10rem;
+    `;
+    if (this.state.end) {
+      return (
+        <div className="Container">
+          <EndGame>You Finished The Game</EndGame>
+        </div>
+      );
+    }
     return (
       <StudyModeQuiz
         currentRound={this.state.currentRound}

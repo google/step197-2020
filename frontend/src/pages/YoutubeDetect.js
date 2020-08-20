@@ -1,7 +1,7 @@
 import React, { useState, Component } from "react";
 import Header from "../main-components/Header";
 import Sidebar from "../main-components/Sidebar";
-import YoutubeDetectContent from "../main-components/YoutubeDetectContent";
+import YoutubeDetectContent from "../main-components/StudyModeSelect";
 
 function YoutubeDetect() {
   // Handles mobile menu button and updates sidebar view

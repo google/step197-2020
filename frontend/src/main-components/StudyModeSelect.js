@@ -2,15 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import Folder from "../flashcards/Folder.js";
 
-const debugMessage = (message, isOn) => {
-  if (isOn) {
-    console.log(message);
-  }
-};
-
-const debugMessageOn = false;
-
-class MyFoldersContent extends React.Component {
+class StudyModeSelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,9 +17,9 @@ class MyFoldersContent extends React.Component {
       const foldersData = await fetch("/userfolders")
         .then((result) => result.json())
         .then((data) => data["userFolders"]);
-      this.setState({ isDataFetched: true, folders:foldersData });
+      this.setState({ isDataFetched: true, folders: foldersData });
     } catch (err) {
-      debugMessage("Folders can not be fetched", debugMessageOn);
+      alert("Refresh page to load folders");
     }
   }
 
@@ -47,13 +39,13 @@ class MyFoldersContent extends React.Component {
       justifyContent: "space-around",
       alignItems: "start",
     };
-      let headingText =
-        "You have no folders at the moment. Please make a new folder by clicking on the side menu.";
+    let headingText =
+      "You have no folders at the moment. Please make a new folder by clicking on the side menu.";
     if (!this.state.isDataFetched) {
       return <h1>loading</h1>;
     }
     if (this.state.folders) {
-      headingText = `You have ${this.state.folders.length} Folders`;
+      headingText = "Select a folder to begin playing";
     }
     return (
       <Container>
@@ -63,8 +55,7 @@ class MyFoldersContent extends React.Component {
           {this.state.folders.map((folder) => {
             return (
               <Folder
-                folderURL={'/InsideFolder'}
-                folderKey={folder.folderKey}
+                folderURL={folder.folderKey}
                 name={folder.folderName}
                 language={folder.folderDefaultLanguage}
                 key={folder.folderKey}
@@ -77,4 +68,4 @@ class MyFoldersContent extends React.Component {
   }
 }
 
-export default MyFoldersContent;
+export default StudyModeSelect;

@@ -6,7 +6,7 @@ class Folder extends React.Component {
   render() {
     return (
       <div className="Folder" key={this.props.folderURL}>
-        <Link to={`/insideFolder?folderKey=${this.props.folderURL}`}>
+        <Link to={`/${this.props.folderURL}?folderKey=${this.props.folderKey}`}>
           <div className="FolderContent">
             <br />
             <p style={{ textDecoration: "underline" }}>{this.props.name}</p>

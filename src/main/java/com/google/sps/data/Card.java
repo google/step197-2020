@@ -56,7 +56,7 @@ public final class Card {
   private String textTranslated = "null";
   private String key;
   private String parentKey;
-  private String familarityScore;
+  private Double familarityScore;
   private Long timeTested;
 
   private Card() {}
@@ -65,8 +65,8 @@ public final class Card {
     this.imageBlobKey = (String) entity.getProperty("imageBlobKey");
     this.rawText = (String) entity.getProperty("rawText");
     this.textTranslated = (String) entity.getProperty("textTranslated");
-    this.key = KeyFactory.keyToString(entity.getKey());  
-    this.familarityScore = (Double) entity.getProperty("familarityScore") ;
+    this.key = KeyFactory.keyToString(entity.getKey());
+    this.familarityScore = (Double) entity.getProperty("familarityScore");
     this.timeTested = (Long) entity.getProperty("timeTested");
   }
 
@@ -123,7 +123,7 @@ public final class Card {
   }
 
   public Entity createEntity() {
-    org.w3c.dom.Entity card = new Entity("Card", KeyFactory.stringToKey(this.parentKey));
+    Entity card = new Entity("Card", KeyFactory.stringToKey(this.parentKey));
     card.setProperty("imageBlobKey", this.imageBlobKey);
     card.setProperty("rawText", this.rawText);
     card.setProperty("textTranslated", this.textTranslated);

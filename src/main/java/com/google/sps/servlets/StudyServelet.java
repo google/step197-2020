@@ -2,20 +2,10 @@ package com.google.sps.servlets;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.appengine.api.blobstore.BlobInfo;
-import com.google.appengine.api.blobstore.BlobInfoFactory;
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.KeyFactory;
-
-import com.google.cloud.translate.Translate;
-import com.google.cloud.translate.TranslateOptions;
-import com.google.cloud.translate.Translation;
-
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 
@@ -46,7 +36,7 @@ public class StudyServelet extends HttpServlet {
     public QuizCard(Card card) {
       this.word = card.getTextTranslated();
       this.cardKey = card.getCardKey();
-      this.correctAnswer = card.getRawText();
+      this.correctAnswer = card.getRawText().toLowerCase();
       this.options = WordSearch.generateWordOptions(this.correctAnswer);
     }
   }
@@ -57,10 +47,14 @@ public class StudyServelet extends HttpServlet {
     }
   }
 
+  private int numOfCardsPerRound = 2;
+  private int maxNumOfRounds = 4;
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     List<Card> userCards = new ArrayList<>();
+
     if (userService.isUserLoggedIn()) {
       String folderKey = request.getParameter("folderKey");
       Query cardQuery = new Query("Card").setAncestor(KeyFactory.stringToKey(folderKey));
@@ -77,6 +71,7 @@ public class StudyServelet extends HttpServlet {
       List<List<QuizCard>> quiz = createQuizRounds(userCards);
       Gson gson = new Gson();
       String jsonResponse = gson.toJson(quiz);
+
       response.setContentType("application/json;");
       response.getWriter().println(jsonResponse);
     }
@@ -93,19 +88,19 @@ public class StudyServelet extends HttpServlet {
   private List<List<QuizCard>> createQuizRounds(List<Card> userCards) {
     List<List<QuizCard>> quiz = new ArrayList<List<QuizCard>>();
     List<QuizCard> holder = new ArrayList<QuizCard>();
-    int numRounds = userCards.size() / 1;
+    int numRounds = userCards.size() / numOfCardsPerRound;
     int start = 0;
-    if (numRounds > 4) {
-      numRounds = 4;
+    if (numRounds > maxNumOfRounds) {
+      numRounds = maxNumOfRounds;
     }
 
     for (int i = 0; i < numRounds; i++) {
       quiz.add(new ArrayList<QuizCard>());
-      for (int j = start; j < (start + 1); j++) {
+      for (int j = start; j < (start + numOfCardsPerRound); j++) {
         QuizCard quizCard = new QuizCard(userCards.get(j));
         quiz.get(i).add(quizCard);
       }
-      start += 1;
+      start += numOfCardsPerRound;
     }
 
     return quiz;

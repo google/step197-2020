@@ -4,7 +4,7 @@ import Sidebar from "../main-components/Sidebar";
 import StudyModeContent from "../main-components/StudyModeContent";
 import { startQuiz } from "../main-components/StudyModeGameHandler";
 import css from "./template.css";
-
+import queryString from "query-string";
 class InsideStudyMode extends React.Component {
   constructor(props) {
     super(props);
@@ -18,7 +18,8 @@ class InsideStudyMode extends React.Component {
 
   // Initializes a new game
   async componentDidMount() {
-    const rounds = await startQuiz("123");
+    const parameters = queryString.parse(props.location.search);
+    const rounds = await startQuiz(parameters.folderKey);
     this.setState({ rounds, isDataFetched: true });
   }
 

@@ -47,19 +47,21 @@ class MyFoldersContent extends React.Component {
       justifyContent: "space-around",
       alignItems: "start",
     };
-      let headingText =
-        "You have no folders at the moment. Please make a new folder by clicking on the side menu.";
+    
+    let headingText =
+      "You have no folders at the moment. Please make a new folder by clicking on the side menu.";
     if (!this.state.isDataFetched) {
       return <h1>loading</h1>;
     }
+
     if (this.state.folders) {
       if (this.props.headingText === "main") {
         headingText = `You have ${this.state.folders.length} Folders`;
       } else {
         headingText = this.props.headingText;
       }
-      
     }
+
     return (
       <Container>
         <h1>{headingText}</h1>

@@ -8,7 +8,6 @@ function InsideStudyMode(props) {
   // Handles mobile menu button and updates sidebar view
   const [sideSetting, setSideSetting] = useState("f");
   const handleClick = (e) => {
-    console.log("Clicked");
     if (sideSetting === "f") {
       setSideSetting("t");
     } else {

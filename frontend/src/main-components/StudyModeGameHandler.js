@@ -1,14 +1,13 @@
 let Quiz;
 let currentQuizWord = {};
-let currentArray = 0;
-let test = 0;
+let currentArray;
 
 async function startQuiz(folderKey) {
-await fetch(`/study?folderKey=${folderKey}`)
+  currentArray = 0;
+  await fetch(`/study?folderKey=${folderKey}`)
      .then(res => res.json())
      .then(result => {
          Quiz = result;
-         console.log(Quiz[0].length);
          return Quiz.length;
     }).catch("Could not find any cards");
 }

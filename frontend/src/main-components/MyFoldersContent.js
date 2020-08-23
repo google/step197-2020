@@ -1,15 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import Folder from "../flashcards/Folder.js";
-
-const debugMessage = (message, isOn) => {
-  if (isOn) {
-    console.log(message);
-  }
-};
-
-const debugMessageOn = false;
-
+import { logDebugMessage } from "./LogDebugMessage";
 class MyFoldersContent extends React.Component {
   constructor(props) {
     super(props);
@@ -27,7 +19,7 @@ class MyFoldersContent extends React.Component {
         .then((data) => data["userFolders"]);
       this.setState({ isDataFetched: true, folders:foldersData });
     } catch (err) {
-      debugMessage("Folders can not be fetched", debugMessageOn);
+      logDebugMessage("Folders can not be fetched", debugMessageOn);
     }
   }
 

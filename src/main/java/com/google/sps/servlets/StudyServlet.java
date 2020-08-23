@@ -27,7 +27,7 @@ import java.util.Collections;
 
 /** * */
 @WebServlet("/study")
-public class StudyServelet extends HttpServlet {
+public class StudyServlet extends HttpServlet {
   public class QuizCard {
     private String quizWord;
     private String cardKey;

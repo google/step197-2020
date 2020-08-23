@@ -5,6 +5,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
@@ -79,10 +80,30 @@ public class StudyServelet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    Entity cardEntity;
+    Double newScore;
     String answeredCorrectly = request.getParameter("answeredCorrectly");
     String cardKey = request.getParameter("cardKey");
     long time = System.currentTimeMillis();
-    // TODO(esaracay): Update familarity score in Datastore
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+    try {
+      cardEntity = datastore.get(KeyFactory.stringToKey(cardKey));
+    } catch (EntityNotFoundException e) {
+      cardEntity = null;
+    }
+
+    if (cardEntity != null) {
+      Card card = new Card(cardEntity);
+      if (answeredCorrectly.equals("true")) {
+        newScore = incFamilarityScore(time, card.getFamilarityScore(), card.getTimeTested());
+      } else {
+        newScore = decFamilarityScore(time, card.getFamilarityScore(), card.getTimeTested());
+      }
+      cardEntity.setProperty("familarityScore", newScore);
+      cardEntity.setProperty("timeTested", time);
+      datastore.put(cardEntity);
+    }
   }
 
   private List<List<QuizCard>> createQuizRounds(List<Card> userCards) {
@@ -118,7 +139,7 @@ public class StudyServelet extends HttpServlet {
     return card;
   }
 
-  private Double incFamilarityScore(long time, long currentScore, long prevTime) {
+  private Double incFamilarityScore(long time, Double currentScore, long prevTime) {
     Double numHours = (double) (time - prevTime) / 3600;
     if (numHours > 168) {
       numHours = 168.0;
@@ -126,7 +147,7 @@ public class StudyServelet extends HttpServlet {
     return (currentScore + ((numHours / 168) * 2.4)) + 1;
   }
 
-  private Double decFamilarityScore(long time, long currentScore, long prevTime) {
+  private Double decFamilarityScore(long time, Double currentScore, long prevTime) {
     Double numHours = (double) (time - prevTime) / 3600;
     if (numHours > 24) {
       numHours = 0.0;

@@ -33,7 +33,7 @@ class StudyModeContent extends React.Component {
     if (selectedValue === this.state.correctAnswer) {
       correct = "true";
     }
-    updateWordQueues(correct)
+    updateWordQueues(correct, this.state.cardKey)
     const word = nextQuizWord();
     if (word == "!@end") {
       this.setState({ end: true });

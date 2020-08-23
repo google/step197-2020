@@ -14,8 +14,6 @@ await fetch(`/study?folderKey=${folderKey}`)
 }
 
 function nextQuizWord() {
-    console.log(Quiz);
-    console.log(test);
   let nextWord = {};
   if (Quiz[currentArray].length != 0) {
     nextWord = Quiz[currentArray].shift();
@@ -31,11 +29,16 @@ function nextQuizWord() {
   return nextWord;
 }
 
-function updateWordQueues(correct) {
+function updateWordQueues(correct, cardKey) {
   if (correct == "false" && currentArray < Quiz.length - 1) {
     Quiz[currentArray + 1].push(currentQuizWord);
   }
-  //TODO(esaaracay): Fetch /study to update familarity score
+  // Updates the card's familarity score 
+  fetch('/study', {
+    method: 'POST',
+    body: `cardKey=${cardKey}&answeredCorrectly=${correct}`,
+    headers: { 'Content-type': 'application/x-www-form-urlencoded' }
+  });
 }
 
 function getRound() {

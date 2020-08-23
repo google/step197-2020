@@ -18,7 +18,7 @@ class InsideStudyMode extends React.Component {
 
   // Initializes a new game
   async componentDidMount() {
-    const parameters = queryString.parse(props.location.search);
+    const parameters = queryString.parse(this.props.location.search);
     const rounds = await startQuiz(parameters.folderKey);
     this.setState({ rounds, isDataFetched: true });
   }
@@ -29,7 +29,7 @@ class InsideStudyMode extends React.Component {
     } else {
       this.setState({ sideSetting: "f" });
     }
-  };
+  }
 
   render() {
     // Handles mobile menu button and updates sidebar view

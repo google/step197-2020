@@ -12,17 +12,18 @@ class StudyModeContent extends React.Component {
       options: ["hello", "hi", "hola", "bonjour"],
       correctAnswer: "none",
       end: false,
+      cardKey: "",
     };
     this.cardKey = "";
     this.optionSelected = this.optionSelected.bind(this);
   }
 
   componentDidMount() {
-     const word = nextQuizWord();
-     const round = getRound();
+    const word = nextQuizWord();
+    const round = getRound();
      this.setState({ quizWord: word.quizWord,
        options: word.possibleResponses, correctAnswer: word.correctAnswer,
-       currentRound: round
+       cardKey: word.cardKey, currentRound: round
      });
   }
 
@@ -42,7 +43,8 @@ class StudyModeContent extends React.Component {
        quizWord: word.quizWord,
        options: word.possibleResponses,
        correctAnswer: word.correctAnswer,
-       currentRound: round,
+       cardKey: word.cardKey,
+       currentRound: round
      });
   }
 

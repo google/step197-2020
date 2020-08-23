@@ -28,16 +28,16 @@ import java.util.Collections;
 @WebServlet("/study")
 public class StudyServelet extends HttpServlet {
   public class QuizCard {
-    private String word;
+    private String quizWord;
     private String cardKey;
-    private ArrayList<String> options = new ArrayList<>();
+    private ArrayList<String> possibleResponses = new ArrayList<>();
     private String correctAnswer;
 
     public QuizCard(Card card) {
-      this.word = card.getTextTranslated();
+      this.quizWord = card.getTextTranslated();
       this.cardKey = card.getCardKey();
       this.correctAnswer = card.getRawText().toLowerCase();
-      this.options = WordSearch.generateWordOptions(this.correctAnswer);
+      this.possibleResponses = WordSearch.generateWordOptions(this.correctAnswer);
     }
   }
 

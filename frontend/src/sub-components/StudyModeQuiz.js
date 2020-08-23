@@ -5,9 +5,6 @@ import Options from "./CardOptions";
 import css from "./StudyModeQuiz.css";
 
 class StudyModeQuiz extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     return (

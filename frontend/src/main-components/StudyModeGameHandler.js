@@ -19,7 +19,7 @@ function nextQuizWord() {
     } else {
         currentArray++;
         if (currentArray >= Quiz.length) {
-            return "!@end";
+            return null;
         } else {
             nextWord = Quiz[currentArray].shift();
         }
@@ -29,7 +29,7 @@ function nextQuizWord() {
 }
 
 function updateWordQueues(correct) {
-    if (correct == "false" && currentArray < (Quiz.length - 1)) {
+    if (correct === "false" && currentArray < (Quiz.length - 1)) {
         Quiz[currentArray + 1].push(currentQuizWord);
     }
     //TODO(esaaracay): Fetch /study to update familarity score

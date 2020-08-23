@@ -9,20 +9,21 @@ class StudyModeContent extends React.Component {
     this.state = {
       currentRound: 1,
       quizWord: "none",
-      options: ["hello", "hi", "hola", "bonjour"],
+      options: [],
       correctAnswer: "none",
       end: false,
     };
-    this.cardKey = "";
     this.optionSelected = this.optionSelected.bind(this);
   }
 
   componentDidMount() {
-     const word = nextQuizWord();
-     const round = getRound();
-     this.setState({ quizWord: word.quizWord,
-       options: word.possibleResponses, correctAnswer: word.correctAnswer,
-       currentRound: round
+    const word = nextQuizWord();
+    const round = getRound();
+    this.setState({
+      quizWord: word.quizWord,
+      options: word.possibleResponses,
+      correctAnswer: word.correctAnswer,
+      currentRound: round
      });
   }
 
@@ -32,17 +33,17 @@ class StudyModeContent extends React.Component {
     if (selectedValue === this.state.correctAnswer) {
       correct = "true";
     }
-    updateWordQueues(correct)
+    updateWordQueues(correct);
     const word = nextQuizWord();
-    if (word == "!@end") {
+    if (word === null) {
       this.setState({ end: true });
     }
-     const round = getRound();
-     this.setState({
-       quizWord: word.quizWord,
-       options: word.possibleResponses,
-       correctAnswer: word.correctAnswer,
-       currentRound: round,
+    const round = getRound();
+    this.setState({
+      quizWord: word.quizWord,
+      options: word.possibleResponses,
+      correctAnswer: word.correctAnswer,
+      currentRound: round,
      });
   }
 
@@ -51,6 +52,7 @@ class StudyModeContent extends React.Component {
         color: #D4AF37;
         font-size: 10rem;
     `;
+
     if (this.state.end) {
       return (
         <div className="Container">
@@ -58,6 +60,7 @@ class StudyModeContent extends React.Component {
         </div>
       );
     }
+    
     return (
       <StudyModeQuiz
         currentRound={this.state.currentRound}

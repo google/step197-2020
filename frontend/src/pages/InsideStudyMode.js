@@ -21,7 +21,6 @@ class InsideStudyMode extends React.Component {
   async componentDidMount() {
     const parameters = queryString.parse(this.props.location.search);
     const rounds = await startQuiz(parameters.folderKey);
-    console.log(rounds);
     if (rounds === 0) {
       alert("No cards were found");
       window.location = "/MyFolders";

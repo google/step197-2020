@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ServletUtils {
   static boolean IsProduction() {
-    return SystemProperty.environment.value() ==
-        SystemProperty.Environment.Value.Production;
+    return SystemProperty.environment.value() == SystemProperty.Environment.Value.Production;
   }
+
   static Properties GetProperties() throws IOException {
     if (IsProduction()) {
       return GetProductionProperties();
@@ -24,8 +24,7 @@ public class ServletUtils {
   }
 
   static Properties GetProductionProperties() throws IOException {
-    InputStream input =
-        new FileInputStream(new File("WEB-INF/secrets/keys.properties"));
+    InputStream input = new FileInputStream(new File("WEB-INF/secrets/keys.properties"));
 
     Properties props = new Properties();
     props.load(input);
@@ -33,8 +32,8 @@ public class ServletUtils {
   }
 
   static Properties GetDevelopmentProperties() throws IOException {
-    InputStream input = new FileInputStream(
-        new File("WEB-INF/secrets/keys.development.properties"));
+    InputStream input =
+        new FileInputStream(new File("WEB-INF/secrets/keys.development.properties"));
 
     Properties props = new Properties();
     props.load(input);
@@ -47,14 +46,12 @@ public class ServletUtils {
 
   // Set attribute TITLE before calling RenderReact to add a custom page title.
   // Set attribute HEAD_HTML to add aribtrary HTML to the end of head.
-  static void RenderReact(String module, HttpServletRequest request,
-                          HttpServletResponse response)
+  static void RenderReact(String module, HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
 
     request.setAttribute("SERVER_ROOT", BuildReactRoot());
 
     request.setAttribute("REACT_MODULE", module);
-    request.getRequestDispatcher("/WEB-INF/react.jsp")
-        .forward(request, response);
+    request.getRequestDispatcher("/WEB-INF/react.jsp").forward(request, response);
   }
 }

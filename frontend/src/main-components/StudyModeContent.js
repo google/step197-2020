@@ -17,6 +17,7 @@ class StudyModeContent extends React.Component {
   }
 
   componentDidMount() {
+    // Grabs the first word in the game
     const word = nextQuizWord();
     const round = getRound();
     this.setState({
@@ -33,11 +34,17 @@ class StudyModeContent extends React.Component {
     if (selectedValue === this.state.correctAnswer) {
       correct = "true";
     }
+
+    /**
+     * Calls function that updates queues and places the
+     * word at the end of another round if possible.
+     */
     updateWordQueues(correct);
     const word = nextQuizWord();
     if (word === null) {
       this.setState({ end: true });
     }
+
     const round = getRound();
     this.setState({
       quizWord: word.quizWord,

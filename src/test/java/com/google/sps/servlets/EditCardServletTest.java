@@ -12,7 +12,6 @@ import org.junit.runners.JUnit4;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,10 +24,10 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Entity;
 
 import com.google.gson.Gson;
-import com.google.sps.data.Folder;
+import com.google.sps.data.Card;
 
 @RunWith(JUnit4.class)
-public final class EditFolderServletTest {
+public final class EditCardServletTest {
 
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(
@@ -43,13 +42,13 @@ public final class EditFolderServletTest {
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
   private StringWriter responseWriter;
-  private EditFolderServlet servlet;
+  private EditCardServlet servlet;
   private DatastoreService datastore;
 
   @Before
   public void setUp() throws Exception {
     helper.setUp();
-    servlet = new EditFolderServlet();
+    servlet = new EditCardServlet();
     mockRequest = mock(HttpServletRequest.class);
     mockResponse = mock(HttpServletResponse.class);
 
@@ -66,40 +65,44 @@ public final class EditFolderServletTest {
   }
 
   @Test
-  public void editFolder() throws Exception {
-    Folder currentFolder = new Folder("Folder", "en");
+  public void editCard() throws Exception {
+    Card currentCard =
+        new Card.Builder()
+            .setImageBlobKey("null")
+            .setRawText("hello")
+            .setTextTranslated("hola")
+            .build();
 
-    // Generate a user entity to obtain a user key
-    // which would be used to set as the parent of the folder entity
-    Entity user = new Entity("User", "testId");
-    String userKey = KeyFactory.keyToString(user.getKey());
+    // Generate a folder entity to obtain a folder key
+    // which would be used to set as the parent of the card entities
+    Entity folder = new Entity("Folder", "testID");
+    String folderKey = KeyFactory.keyToString(folder.getKey());
 
-    Folder folderInDatastore = storeFolderInDatastore(currentFolder, datastore, userKey);
-    String folderKey = folderInDatastore.getFolderKey();
+    Card cardInDatastore = storeCardInDatastore(currentCard, datastore, folderKey);
+    String cardKey = cardInDatastore.getCardKey();
 
-    when(mockRequest.getParameter("folderName")).thenReturn("Edited Folder");
-    when(mockRequest.getParameter("folderDefaultLanguage")).thenReturn("es");
-    when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
+    when(mockRequest.getParameter("cardKey")).thenReturn(cardKey);
+    when(mockRequest.getParameter("rawText")).thenReturn("hello");
+    when(mockRequest.getParameter("testStatus")).thenReturn("True");
+    when(mockRequest.getParameter("textTranslated")).thenReturn("xin chào");
 
     servlet.doPut(mockRequest, mockResponse);
 
-    Entity editedFolderEntity = datastore.get(KeyFactory.stringToKey(folderKey));
-    Folder editedFolder = new Folder(editedFolderEntity);
+    Entity editedCard = datastore.get(KeyFactory.stringToKey(cardKey));
 
-    String response = new Gson().toJson(editedFolder);
+    String response = new Gson().toJson(new Card(editedCard));
     String expectedResponse =
-        "{\"folderName\":\"Edited Folder\",\"folderDefaultLanguage\":\"es\",\"folderKey\":\"agR0ZXN0chwLEgRVc2VyIgZ0ZXN0SWQMCxIGRm9sZGVyGAEM\"}";
-
+        "{\"imageBlobKey\":\"null\",\"rawText\":\"hello\",\"textTranslated\":\"xin chào\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAEM\"}";
     assertEquals(response, expectedResponse);
   }
 
-  private Folder storeFolderInDatastore(Folder folder, DatastoreService datastore, String userKey) {
-    folder.setParentKey(userKey);
-    Entity folderEntity = folder.createEntity();
-    datastore.put(folderEntity);
+  public Card storeCardInDatastore(Card card, DatastoreService datastore, String folderKey) {
+    card.setParentKey(folderKey);
+    Entity cardEntity = card.createEntity();
+    datastore.put(cardEntity);
 
-    folder.setFolderKey(KeyFactory.keyToString(folderEntity.getKey()));
+    card.setCardKey(KeyFactory.keyToString(cardEntity.getKey()));
 
-    return folder;
+    return card;
   }
 }

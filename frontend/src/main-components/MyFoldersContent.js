@@ -1,15 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import Folder from "../flashcards/Folder.js";
-
-const debugMessage = (message, isOn) => {
-  if (isOn) {
-    console.log(message);
-  }
-};
-
-const debugMessageOn = false;
-
+import { logDebugMessage } from "./LogDebugMessage";
 class MyFoldersContent extends React.Component {
   constructor(props) {
     super(props);
@@ -27,7 +19,7 @@ class MyFoldersContent extends React.Component {
         .then((data) => data["userFolders"]);
       this.setState({ isDataFetched: true, folders:foldersData });
     } catch (err) {
-      debugMessage("Folders can not be fetched", debugMessageOn);
+      logDebugMessage("Folders can not be fetched", debugMessageOn);
     }
   }
 
@@ -47,19 +39,21 @@ class MyFoldersContent extends React.Component {
       justifyContent: "space-around",
       alignItems: "start",
     };
-      let headingText =
-        "You have no folders at the moment. Please make a new folder by clicking on the side menu.";
+
+    let headingText =
+      "You have no folders at the moment. Please make a new folder by clicking on the side menu.";
     if (!this.state.isDataFetched) {
       return <h1>loading</h1>;
     }
+
     if (this.state.folders) {
       if (this.props.headingText === "main") {
         headingText = `You have ${this.state.folders.length} Folders`;
       } else {
         headingText = this.props.headingText;
       }
-      
     }
+
     return (
       <Container>
         <h1>{headingText}</h1>

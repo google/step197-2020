@@ -25,8 +25,8 @@ import java.util.Comparator;
 import java.util.Collections;
 
 /**
- * Handles the study mode questions and responses by adjusting and
- * sorting a card's based on their familarity score and last time seen.
+ * Handles the study mode questions and responses by adjusting and sorting a card's based on their
+ * familarity score and last time seen.
  */
 @WebServlet("/study")
 public class StudyServlet extends HttpServlet {
@@ -50,7 +50,7 @@ public class StudyServlet extends HttpServlet {
     }
   }
 
-  private int numOfCardsPerRound = 5;
+  private int numOfCardsPerRound = 1;
   private int maxNumOfRounds = 4;
 
   // Returns QuizCard's that are sorted by familarity score as json
@@ -68,7 +68,7 @@ public class StudyServlet extends HttpServlet {
 
       if (results != null) {
         for (Entity entity : results.asIterable()) {
-          // If the card has no familarity score then it's set to the default value 
+          // If the card has no familarity score then it's set to the default value
           userCards.add(initializeCard(entity));
         }
       }
@@ -83,7 +83,7 @@ public class StudyServlet extends HttpServlet {
     }
   }  
 
-  // Updates and stores a card's new familarity score 
+  // Updates and stores a card's new familarity score
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Entity cardEntity;
@@ -113,8 +113,8 @@ public class StudyServlet extends HttpServlet {
   }
 
   /**
-   * Takes a list of cards that have been sorted and breaks them
-   * into smaller lists that represent rounds.
+   * Takes a list of cards that have been sorted and breaks them into smaller lists that represent
+   * rounds.
    */
   private List<List<QuizCard>> createQuizRounds(List<Card> userCards) {
     List<List<QuizCard>> quiz = new ArrayList<List<QuizCard>>();

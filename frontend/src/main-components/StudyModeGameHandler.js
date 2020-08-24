@@ -1,4 +1,4 @@
-let Quiz = [];
+let quiz = [];
 let currentQuizWord = {};
 let currentArray = 0;
 
@@ -6,7 +6,7 @@ function startQuiz(folderKey) {
     fetch(`/study?folderKey=${folderKey}`, { method: 'POST' })
         .then(result => result.json())
         .then(arrays => {
-            Quiz = arrays;
+            quiz = arrays;
             return arrays.length;
         })
         .catch(alert("Could not find words for Study Mode"));
@@ -14,14 +14,14 @@ function startQuiz(folderKey) {
 
 function nextQuizWord() {
     let nextWord = {};
-    if (Quiz[currentArray].length != 0) {
-        nextWord = Quiz[currentArray].shift();
+    if (quiz[currentArray].length != 0) {
+        nextWord = quiz[currentArray].shift();
     } else {
         currentArray++;
-        if (currentArray >= Quiz.length) {
+        if (currentArray >= quiz.length) {
             return null;
         } else {
-            nextWord = Quiz[currentArray].shift();
+            nextWord = quiz[currentArray].shift();
         }
     }
     currentQuizWord = nextWord;
@@ -29,8 +29,8 @@ function nextQuizWord() {
 }
 
 function updateWordQueues(correct) {
-    if (correct === "false" && currentArray < (Quiz.length - 1)) {
-        Quiz[currentArray + 1].push(currentQuizWord);
+    if (correct === "false" && currentArray < (quiz.length - 1)) {
+        quiz[currentArray + 1].push(currentQuizWord);
     }
     //TODO(esaaracay): Fetch /study to update familarity score
 }
@@ -39,4 +39,4 @@ function getRound() {
     return currentArray;
 }
 
-export { startQuiz, updateWordQueues, nextQuizWord, getRound };
+export { startquiz, updateWordQueues, nextquizWord, getRound };

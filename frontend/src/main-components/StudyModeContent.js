@@ -36,8 +36,8 @@ class StudyModeContent extends React.Component {
     }
 
     /**
-     * Calls function that updates queues and places the
-     * word at the end of another round if possible.
+     * If the selected word was incorrect then this function
+     * will repeat this word at the end of another round if possible.
      */
     updateWordQueues(correct);
     const word = nextQuizWord();

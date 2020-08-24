@@ -73,30 +73,33 @@ public class WordSearch {
    * is a letter of the alphabet and the value is a list of words that begin with that letter.
    */
   private static Boolean initMap() {
-    int retries = 0;
-    try {
-      File dictionary = new File("./WEB-INF/classes/META-INF/Dictionary.txt");
-      dictionary.setReadable(true);
-      Scanner reader = new Scanner(dictionary);
+    int retries = 5;
+    while (true) {
+      try {
+        File dictionary = new File("./WEB-INF/classes/META-INF/Dictionary.txt");
+        dictionary.setReadable(true);
+        Scanner reader = new Scanner(dictionary);
 
-      while (reader.hasNextLine()) {
-        String word = reader.nextLine();
-        char firstLetter = word.charAt(0);
-        if (!firstLetterMap.containsKey(firstLetter)) {
-          firstLetterMap.put(firstLetter, new ArrayList<String>());
+        while (reader.hasNextLine()) {
+          String word = reader.nextLine();
+          char firstLetter = word.charAt(0);
+          if (!firstLetterMap.containsKey(firstLetter)) {
+            firstLetterMap.put(firstLetter, new ArrayList<String>());
+          }
+          firstLetterMap.get(firstLetter).add(word);
         }
-        firstLetterMap.get(firstLetter).add(word);
-      }
 
-      reader.close();
-    } catch (FileNotFoundException e) {
-      if (retries > 5) {
-        return false;
+        reader.close();
+        break;
+      } catch (FileNotFoundException e) {
+        if (retries <= 0) {
+          return false;
+        }
+        // If parsing fails try again
+        retries--;
+        firstLetterMap.clear();
+        initMap();
       }
-      // If parsing fails try again
-      retries++;
-      firstLetterMap.clear();
-      initMap();
     }
     return true;
   }

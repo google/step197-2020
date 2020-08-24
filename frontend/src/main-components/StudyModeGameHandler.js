@@ -4,12 +4,13 @@ let currentArray;
 
 async function startQuiz(folderKey) {
   currentArray = 0;
-  await fetch(`/study?folderKey=${folderKey}`)
+  const numRounds = await fetch(`/study?folderKey=${folderKey}`)
      .then(res => res.json())
      .then(result => {
          quiz = result;
          return quiz.length;
-    }).catch("Could not find any cards");
+     }).catch("Could not find any cards");
+  return numRounds;
 }
 
 /**

@@ -22,23 +22,27 @@ public class EditFolderServlet extends HttpServlet {
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
+    if (!userService.isUserLoggedIn()) {
+      String jsonErrorInfo = ResponseSerializer.getErrorJson("User not logged in");
+      response.setContentType("application/json;");
+      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+      return;
+    }
 
-    if (userService.isUserLoggedIn()) {
-      String newFolderName = request.getParameter("folderName");
-      String newFolderDefaultLanguage = request.getParameter("folderDefaultLanguage");
-      String folderKey = request.getParameter("folderKey");
+    String newFolderName = request.getParameter("folderName");
+    String newFolderDefaultLanguage = request.getParameter("folderDefaultLanguage");
+    String folderKey = request.getParameter("folderKey");
 
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      Entity folderEntity = getExistingFolderInDatastore(response, datastore, folderKey);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Entity folderEntity = getExistingFolderInDatastore(response, datastore, folderKey);
 
-      if (folderEntity == null) {
-        String jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot edit Folder at the moment");
-        response.setContentType("application/json;");
-        response.getWriter().println(new Gson().toJson(jsonErrorInfo));
-      } else {
-        updateFolder(
-            response, datastore, folderEntity, newFolderName, newFolderDefaultLanguage, folderKey);
-      }
+    if (folderEntity == null) {
+      String jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot edit Folder at the moment");
+      response.setContentType("application/json;");
+      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+    } else {
+      updateFolder(
+          response, datastore, folderEntity, newFolderName, newFolderDefaultLanguage, folderKey);
     }
   }
 

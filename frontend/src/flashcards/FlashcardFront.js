@@ -28,10 +28,18 @@ const imgStyle = {
 };
 
 function FlashcardFront(props) {
+	if (props.text === "+New Card") {
+    return (
+      <div className='FlashcardFront' style={frontStyle}>
+        <img style={imgStyle} src={props.image} />
+        {props.text}
+      </div>
+    );
+    }
 	return (
 		<div className="FlashcardFront" style={frontStyle}>
-			{this.props.image ? <img style={imgStyle} src={this.props.image} alt="Can not fetch image" /> : null}
-			{this.props.text}
+			{props.image ? <img style={imgStyle} src={`/serve?key=${props.image}`} alt="Can not fetch image" /> : null}
+			{props.text}
 		</div>
 	);
 }

@@ -24,21 +24,25 @@ public class DeleteCardServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
+    if (!userService.isUserLoggedIn()) {
+      String jsonErrorInfo = ResponseSerializer.getErrorJson("User not logged in");
+      response.setContentType("application/json;");
+      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+      return;
+    }
 
-    if (userService.isUserLoggedIn()) {
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      String cardKey = request.getParameter("cardKey");
-      Entity card = getExistingCardInDatastore(datastore, cardKey);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    String cardKey = request.getParameter("cardKey");
+    Entity card = getExistingCardInDatastore(datastore, cardKey);
 
-      if (card == null) {
-        String jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot delete Card at the moment");
-        response.setContentType("application/json;");
-        response.getWriter().println(new Gson().toJson(jsonErrorInfo));
-      } else {
-        String imageBlobKey = (String) card.getProperty("imageBlobKey");
-        Card.deleteBlob(imageBlobKey);
-        deleteCardWithRetries(card);
-      }
+    if (card == null) {
+      String jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot delete Card at the moment");
+      response.setContentType("application/json;");
+      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+    } else {
+      String imageBlobKey = (String) card.getProperty("imageBlobKey");
+      Card.deleteBlob(imageBlobKey);
+      deleteCardWithRetries(card);
     }
   }
 

@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 @RunWith(JUnit4.class)
-public final class UserCardsServletTest {
+public final class StudyServletTest {
 
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(
@@ -51,9 +51,30 @@ public final class UserCardsServletTest {
   private StringWriter responseWriter;
   private StudyServlet servlet;
   private DatastoreService datastore;
+  private Card cardA, cardB, cardC;
 
   @Before
   public void setUp() throws Exception {
+    // Generate cards that will be used
+    cardA =
+        new Card.Builder()
+            .setImageBlobKey("null")
+            .setRawText("test")
+            .setTextTranslated("translatedTest")
+            .build();
+    cardB =
+        new Card.Builder()
+            .setImageBlobKey("null")
+            .setRawText("test2")
+            .setTextTranslated("translatedTest2")
+            .build();
+    cardC =
+        new Card.Builder()
+            .setImageBlobKey("null")
+            .setRawText("test3")
+            .setTextTranslated("translatedTest3")
+            .build();
+
     helper.setUp();
     servlet = new StudyServlet();
     mockRequest = mock(HttpServletRequest.class);
@@ -74,19 +95,6 @@ public final class UserCardsServletTest {
 
   @Test
   public void grabStudyModeQuiz() throws Exception {
-    // Generate cards that will be sorted
-    Card cardA =
-        new Card.Builder()
-            .setImageBlobKey("null")
-            .setRawText("test")
-            .setTextTranslated("translatedTest")
-            .build();
-    Card cardB =
-        new Card.Builder()
-            .setImageBlobKey("null")
-            .setRawText("test2")
-            .setTextTranslated("translatedTest2")
-            .build();
 
     // Generate a folder entity to obtain a folder key
     // which would be used to set as the parent of the card entity
@@ -94,15 +102,21 @@ public final class UserCardsServletTest {
     String folderKey = KeyFactory.keyToString(folder.getKey());
 
     when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
+    when(mockRequest.getParameter("numCards")).thenReturn("1");
+    when(mockRequest.getParameter("numRounds")).thenReturn("2");
 
     List<Card> cards = new ArrayList<>();
     Card cardAInDatastore = storeCardInDatastore(cardA, datastore, folderKey);
     Card cardBInDatastore = storeCardInDatastore(cardB, datastore, folderKey);
+    Card cardCInDatastore = storeCardInDatastore(cardC, datastore, folderKey);
     cards.add(cardAInDatastore);
     cards.add(cardBInDatastore);
+    cards.add(cardCInDatastore);
 
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
+    System.out.println("grabStudyModeQuiz-----------------");
+    System.out.println(response);
     String expectedResponse =
         "{\"userCards\":"
             + "["
@@ -115,18 +129,18 @@ public final class UserCardsServletTest {
   }
 
   @Test
-  public void userHasNoCurrentCard() throws Exception {
+  public void folderHasNoCards() throws Exception {
     List<Card> noCardsInDatastore = new ArrayList<>();
 
-    // Generate a folder entity to obtain a folder key
-    // which would be used to set as the parent of the card entity
     Entity folder = new Entity("Folder", "testID");
     String folderKey = KeyFactory.keyToString(folder.getKey());
 
     when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
     servlet.doGet(mockRequest, mockResponse);
+    System.out.println("folderHasNoCards-----------------");
     String response = responseWriter.toString();
-    String expectedResponse = "{\"userCards\":[],\"showCreateFormStatus\":true}";
+    System.out.println(response);
+    String expectedResponse = "";
 
     assertTrue(compareJson(response, expectedResponse));
   }
@@ -138,71 +152,11 @@ public final class UserCardsServletTest {
 
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    String expectedResponse = "{\"userCards\":[],\"showCreateFormStatus\":false}";
+    System.out.println(response);
+    System.out.println("UserNotLoggedIn-----------------");
+    String expectedResponse = "";
 
     assertTrue(compareJson(response, expectedResponse));
-  }
-
-  @Test
-  public void userCreatesAHelloSpanishCard() throws Exception {
-    // Generate a folder entity to obtain a folder key
-    // which would be used to set as the parent of the card entities
-    Entity folder = new Entity("Folder", "testID");
-    String folderKey = KeyFactory.keyToString(folder.getKey());
-
-    when(mockRequest.getParameter("testStatus")).thenReturn("True");
-    when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
-    when(mockRequest.getParameter("rawText")).thenReturn("hello");
-    when(mockRequest.getParameter("translatedText")).thenReturn("hola");
-
-    servlet.doPost(mockRequest, mockResponse);
-    PreparedQuery responseEntity =
-        datastore.prepare(new Query("Card").setAncestor(folder.getKey()));
-    Entity card = responseEntity.asSingleEntity();
-
-    // Ensures the created card has all the properties in datastore
-    assertTrue(
-        (card.getProperty("imageBlobKey") != null
-            && card.getProperty("textTranslated") != null
-            && card.getProperty("rawText") != null));
-
-    assertEquals(1, responseEntity.countEntities(withLimit(10)));
-  }
-
-  @Test
-  public void userCreatesACardAndHasOtherCardsBefore() throws Exception {
-    // Generate testing card objects to store in datastore
-    Card cardA =
-        new Card.Builder()
-            .setImageBlobKey("null")
-            .setRawText("test")
-            .setTextTranslated("test")
-            .build();
-    Card cardB =
-        new Card.Builder()
-            .setImageBlobKey("null")
-            .setRawText("test")
-            .setTextTranslated("test")
-            .build();
-
-    // Generate a folder entity to obtain a folder key
-    // which would be used to set as the parent of the card entities
-    Entity folder = new Entity("Folder", "testID");
-    String folderKey = KeyFactory.keyToString(folder.getKey());
-
-    when(mockRequest.getParameter("testStatus")).thenReturn("True");
-    when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
-    when(mockRequest.getParameter("rawText")).thenReturn("hello");
-    when(mockRequest.getParameter("translatedText")).thenReturn("hola");
-
-    storeCardInDatastore(cardA, datastore, folderKey);
-    storeCardInDatastore(cardB, datastore, folderKey);
-
-    servlet.doPost(mockRequest, mockResponse);
-    PreparedQuery responseEntity =
-        datastore.prepare(new Query("Card").setAncestor(folder.getKey()));
-
-    assertEquals(3, responseEntity.countEntities(withLimit(10)));
   }
 
   public Card storeCardInDatastore(Card card, DatastoreService datastore, String folderKey) {

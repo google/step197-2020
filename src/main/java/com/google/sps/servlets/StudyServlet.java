@@ -81,7 +81,7 @@ public class StudyServlet extends HttpServlet {
       response.setContentType("application/json;");
       response.getWriter().println(jsonResponse);
     }
-  }  
+  }
 
   // Updates and stores a card's new familarity score
   @Override
@@ -150,22 +150,19 @@ public class StudyServlet extends HttpServlet {
     return card;
   }
 
-  /**
-   * Parses optional parameters that allow for testing on
-   * fewer rounds with fewer cards.
-   */
-  private void setOptionalQuizParameters(HttpServletRequest request){
-      String optNumCards = request.getParameter("numCards");
-      String optNumRounds = request.getParameter("numRounds");
-      if (optNumCards != null && optNumRounds != null) {
-        try {
-          numOfCardsPerRound = Integer.parseInt(optNumCards);
-          optNumRounds = Integer.parseInt(optNumRounds);
-        } catch (NumberFormatException e) {
-          numOfCardsPerRound = 5;
-          maxNumOfRounds = 4;
-        }
-     }
+  /** Parses optional parameters that allow for testing on fewer rounds with fewer cards. */
+  private void setOptionalQuizParameters(HttpServletRequest request) {
+    String optNumCards = request.getParameter("numCards");
+    String optNumRounds = request.getParameter("numRounds");
+    if (optNumCards != null && optNumRounds != null) {
+      try {
+        numOfCardsPerRound = Integer.parseInt(optNumCards);
+        maxNumOfRounds = Integer.parseInt(optNumRounds);
+      } catch (NumberFormatException e) {
+        numOfCardsPerRound = 5;
+        maxNumOfRounds = 4;
+      }
+    }
   }
 
   private Double incFamilarityScore(long time, Double currentScore, long prevTime) {

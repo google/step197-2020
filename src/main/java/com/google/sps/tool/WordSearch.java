@@ -94,7 +94,8 @@ public class WordSearch {
         return false;
       }
       // If parsing fails try again
-      retries++;
+      retries = retries + 1;
+      System.out.println(retries);
       firstLetterMap.clear();
       initMap();
     }

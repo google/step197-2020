@@ -2,16 +2,11 @@ package com.google.sps.servlets;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.appengine.api.datastore.DatastoreFailureException;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.KeyFactory;
-
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
 
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
@@ -66,7 +61,7 @@ public class DeleteFolderServlet extends HttpServlet {
     int retries = 5;
     while (true) {
       try {
-        deleteFolder(folder);
+        Folder.deleteFolder(folder);
         break;
       } catch (Exception e) {
         if (retries == 0) {
@@ -75,15 +70,6 @@ public class DeleteFolderServlet extends HttpServlet {
         }
         --retries;
       }
-    }
-  }
-
-  private void deleteFolder(Entity folder) throws IOException {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    try {
-      datastore.delete(folder.getKey());
-    } catch (DatastoreFailureException e) {
-      throw e;
     }
   }
 
@@ -109,7 +95,7 @@ public class DeleteFolderServlet extends HttpServlet {
     int retries = 5;
     while (true) {
       try {
-        deleteCard(card);
+        Card.deleteCard(card);
         break;
       } catch (Exception e) {
         if (retries == 0) {
@@ -118,15 +104,6 @@ public class DeleteFolderServlet extends HttpServlet {
         }
         --retries;
       }
-    }
-  }
-
-  private void deleteCard(Entity card) {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    try {
-      datastore.delete(card.getKey());
-    } catch (DatastoreFailureException e) {
-      throw e;
     }
   }
 }

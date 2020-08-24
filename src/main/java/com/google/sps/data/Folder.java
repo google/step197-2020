@@ -3,9 +3,14 @@ package com.google.sps.data;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import java.io.IOException;
+import com.google.appengine.api.datastore.DatastoreFailureException;
+
+import org.mockito.plugins.MockMaker.StaticMockControl;
 
 public final class Folder {
 
@@ -54,6 +59,7 @@ public final class Folder {
     Entity folder = new Entity("Folder", KeyFactory.stringToKey(this.parentKey));
     folder.setProperty("folderName", this.folderName);
     folder.setProperty("folderDefaultLanguage", this.folderDefaultLanguage);
+    folder.setProperty("status", true);
 
     return folder;
   }
@@ -67,6 +73,22 @@ public final class Folder {
     folder.setFolderKey(KeyFactory.keyToString(folderEntity.getKey()));
 
     return folder;
+  }
+
+  public static void deleteFolder(Entity folder) throws IOException {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    markFolderAsDeleted(folder);
+    try {
+      datastore.delete(folder.getKey());
+    } catch (DatastoreFailureException e) {
+      throw e;
+    }
+  }
+
+  public static void markFolderAsDeleted(Entity folder) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    folder.setProperty("status", false);
+    datastore.put(folder);
   }
 
   public static void addDatastoreDeleteTaskToQueue(Entity entity) {

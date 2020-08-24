@@ -10,7 +10,6 @@ import javax.servlet.ServletException;
 
 @WebServlet("/homePage")
 public class ReactServlet extends HttpServlet {
-
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     request.setAttribute("TITLE", "Frame.cards");

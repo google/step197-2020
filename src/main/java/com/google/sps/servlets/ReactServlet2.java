@@ -10,7 +10,7 @@ import javax.servlet.ServletException;
 
 @WebServlet(
     urlPatterns = {
-      "MyFolders",
+      "/MyFolders",
       "createCard",
       "createFolder",
       "imageInterface",

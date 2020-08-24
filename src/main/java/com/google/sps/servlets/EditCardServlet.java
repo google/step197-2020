@@ -31,24 +31,28 @@ public class EditCardServlet extends HttpServlet {
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
+    if (!userService.isUserLoggedIn()) {
+      String jsonErrorInfo = ResponseSerializer.getErrorJson("User not logged in");
+      response.setContentType("application/json;");
+      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+      return;
+    }
 
-    if (userService.isUserLoggedIn()) {
-      String cardKey = request.getParameter("cardKey");
-      String newRawText = request.getParameter("rawText");
-      String newTextTranslated = request.getParameter("textTranslated");
-      String newImageBlobKey = getImageBlobKey(request);
+    String cardKey = request.getParameter("cardKey");
+    String newRawText = request.getParameter("rawText");
+    String newTextTranslated = request.getParameter("textTranslated");
+    String newImageBlobKey = getImageBlobKey(request);
 
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      Entity card = getExistingCardInDatastore(response, datastore, cardKey);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Entity card = getExistingCardInDatastore(response, datastore, cardKey);
 
-      if (card == null) {
-        String jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot edit Card at the moment");
-        response.setContentType("application/json;");
-        response.getWriter().println(new Gson().toJson(jsonErrorInfo));
-      } else {
-        updateCard(
-            response, card, datastore, cardKey, newRawText, newTextTranslated, newImageBlobKey);
-      }
+    if (card == null) {
+      String jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot edit Card at the moment");
+      response.setContentType("application/json;");
+      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+    } else {
+      updateCard(
+          response, card, datastore, cardKey, newRawText, newTextTranslated, newImageBlobKey);
     }
   }
 
@@ -82,15 +86,11 @@ public class EditCardServlet extends HttpServlet {
     // Method to determine whether or not this is a unit test or live server
     // Unit tests will always set blobKey to "null"
     // There should be no paramater testStatus in the live server thus returns null
-    String blobKey;
-
     if (request.getParameter("testStatus") == null) {
-      blobKey = getBlobKeyFromBlobstore(request, "image");
+      return getBlobKeyFromBlobstore(request, "image");
     } else {
-      blobKey = "null";
+      return "null";
     }
-
-    return blobKey;
   }
 
   private String getBlobKeyFromBlobstore(HttpServletRequest request, String formInputElementName) {

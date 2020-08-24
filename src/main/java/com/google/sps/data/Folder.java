@@ -2,6 +2,10 @@ package com.google.sps.data;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 public final class Folder {
 
@@ -52,5 +56,23 @@ public final class Folder {
     folder.setProperty("folderDefaultLanguage", this.folderDefaultLanguage);
 
     return folder;
+  }
+
+  public static Folder storeFolderInDatastore(
+      Folder folder, DatastoreService datastore, String userKey) {
+    folder.setParentKey(userKey);
+    Entity folderEntity = folder.createEntity();
+    datastore.put(folderEntity);
+
+    folder.setFolderKey(KeyFactory.keyToString(folderEntity.getKey()));
+
+    return folder;
+  }
+
+  public static void addDatastoreDeleteTaskToQueue(Entity entity) {
+    Queue queue = QueueFactory.getDefaultQueue();
+    queue.add(
+        TaskOptions.Builder.withUrl("/datastoreWorker")
+            .param("key", KeyFactory.keyToString(entity.getKey())));
   }
 }

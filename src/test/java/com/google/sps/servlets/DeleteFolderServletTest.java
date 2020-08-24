@@ -57,7 +57,6 @@ public final class DeleteFolderServletTest {
     responseWriter = new StringWriter();
     when(mockResponse.getWriter()).thenReturn(new PrintWriter(responseWriter));
 
-    // Initialize datastore
     datastore = DatastoreServiceFactory.getDatastoreService();
   }
 
@@ -67,7 +66,7 @@ public final class DeleteFolderServletTest {
   }
 
   @Test
-  public void DeleteFolderAndThereAreNoneLeft() throws Exception {
+  public void deleteFolderWithNoCardInside() throws Exception {
     // Generate testing folder to add into datastore
     Folder folder = new Folder("FIRSTFOLDER", "en");
 
@@ -76,7 +75,7 @@ public final class DeleteFolderServletTest {
     Entity user = new Entity("User", "testId");
     String userKey = KeyFactory.keyToString(user.getKey());
 
-    Folder folderInDatastore = storeFolderInDatastore(folder, datastore, userKey);
+    Folder folderInDatastore = Folder.storeFolderInDatastore(folder, datastore, userKey);
     String folderKey = folderInDatastore.getFolderKey();
 
     when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
@@ -90,7 +89,7 @@ public final class DeleteFolderServletTest {
   }
 
   @Test
-  public void DeleteFolderAndItsCards() throws Exception {
+  public void deleteFolderAndItsCards() throws Exception {
     // Generate testing folder to add into datastore
     Folder folder = new Folder("FIRSTFOLDER", "en");
 
@@ -107,10 +106,10 @@ public final class DeleteFolderServletTest {
     Entity user = new Entity("User", "testId");
     String userKey = KeyFactory.keyToString(user.getKey());
 
-    Folder folderInDatastore = storeFolderInDatastore(folder, datastore, userKey);
+    Folder folderInDatastore = Folder.storeFolderInDatastore(folder, datastore, userKey);
     String folderKey = folderInDatastore.getFolderKey();
 
-    storeCardInDatastore(card, datastore, folderKey);
+    Card.storeCardInDatastore(card, datastore, folderKey);
 
     when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
 
@@ -125,25 +124,5 @@ public final class DeleteFolderServletTest {
         datastore
             .prepare(new Query("Card").setAncestor(KeyFactory.stringToKey(folderKey)))
             .countEntities(withLimit(10)));
-  }
-
-  private Folder storeFolderInDatastore(Folder folder, DatastoreService datastore, String userKey) {
-    folder.setParentKey(userKey);
-    Entity folderEntity = folder.createEntity();
-    datastore.put(folderEntity);
-
-    folder.setFolderKey(KeyFactory.keyToString(folderEntity.getKey()));
-
-    return folder;
-  }
-
-  public Card storeCardInDatastore(Card card, DatastoreService datastore, String folderKey) {
-    card.setParentKey(folderKey);
-    Entity cardEntity = card.createEntity();
-    datastore.put(cardEntity);
-
-    card.setCardKey(KeyFactory.keyToString(cardEntity.getKey()));
-
-    return card;
   }
 }

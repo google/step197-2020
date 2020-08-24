@@ -22,16 +22,16 @@ public class BlobstoreTaskWorker extends HttpServlet {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     BlobKey blobKey = new BlobKey(key);
     try {
-      // Blobstore doesn't have a transaction as a part of its API
-      // We will just catch an error and signal
-      // the Queue to retry the task
-      // if successful, we send SC 200 to the Queue service 
+      /* Blobstore doesn't have a transaction as a part of its API
+       *  We will just catch an error and signal
+       *  the Queue Service to retry the task.
+       *  If successful, we send SC 200 to the Queue Service */
       blobstoreService.delete(blobKey);
       response.sendError(200);
     } catch (BlobstoreFailureException e) {
-      // When the response returns an HTTP status code
-      // outside the range 200–299
-      // the queue retries the task until it succeeds.
+      /* When the response returns an HTTP status code
+       *  outside the range 200–299
+       *  the Queue Service retries the task until it succeeds. */
       response.sendError(500);
     }
   }

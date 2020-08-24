@@ -1,0 +1,36 @@
+.Container{
+  flex: 9;
+  display: flex;
+  border: 1rem solid white;
+  border-radius: 1rem;
+  background-color: white;
+  margin: 1%;
+  flex-direction: column;
+}
+.ContentContainer{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.FormContainer{
+  display: flex;
+  flex:1;
+  align-items: center;
+  justify-content: center;
+}
+.ImageContainer{
+  flex:2;
+  display:flex;
+  text-align: center;
+  justify-content: center;
+  width:100%;
+  margin: 2%;
+}
+.NoImageContainer{
+  flex:2;
+  padding:25vh;
+  background-color:#c4c4c4;;
+  margin:5%;
+  text-align: center;
+  font-size: 1.5rem;
+}

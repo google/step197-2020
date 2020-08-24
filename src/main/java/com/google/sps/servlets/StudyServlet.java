@@ -22,10 +22,12 @@ import com.google.sps.tool.WordSearch;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Map;
 import java.util.Collections;
 
-/** * */
+/**
+ * Handles the study mode questions and responses by adjusting and
+ * sorting a card's based on their familarity score and last time seen.
+ */
 @WebServlet("/study")
 public class StudyServlet extends HttpServlet {
   public class QuizCard {
@@ -48,9 +50,10 @@ public class StudyServlet extends HttpServlet {
     }
   }
 
-  private int numOfCardsPerRound = 2;
+  private int numOfCardsPerRound = 5;
   private int maxNumOfRounds = 4;
 
+  // Returns QuizCard's that are sorted by familarity score as json
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
@@ -64,20 +67,22 @@ public class StudyServlet extends HttpServlet {
 
       if (results != null) {
         for (Entity entity : results.asIterable()) {
+          // If the card has no familarity score then it's set to the default value 
           userCards.add(initializeCard(entity));
         }
       }
-
+      // Sorts cards in increasing order of familarity score
       Collections.sort(userCards, new SortByFamilarity());
       List<List<QuizCard>> quiz = createQuizRounds(userCards);
+
       Gson gson = new Gson();
       String jsonResponse = gson.toJson(quiz);
-
       response.setContentType("application/json;");
       response.getWriter().println(jsonResponse);
     }
   }
 
+  // Updates and stores a card's new familarity score 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Entity cardEntity;
@@ -106,6 +111,10 @@ public class StudyServlet extends HttpServlet {
     }
   }
 
+  /**
+   * Takes a list of cards that have been sorted and breaks them
+   * into smaller lists that represent rounds.
+   */
   private List<List<QuizCard>> createQuizRounds(List<Card> userCards) {
     List<List<QuizCard>> quiz = new ArrayList<List<QuizCard>>();
     List<QuizCard> holder = new ArrayList<QuizCard>();
@@ -118,6 +127,7 @@ public class StudyServlet extends HttpServlet {
     for (int i = 0; i < numRounds; i++) {
       quiz.add(new ArrayList<QuizCard>());
       for (int j = start; j < (start + numOfCardsPerRound); j++) {
+        // Calls constructor that fetches similar words for the quiz
         QuizCard quizCard = new QuizCard(userCards.get(j));
         quiz.get(i).add(quizCard);
       }
@@ -128,7 +138,7 @@ public class StudyServlet extends HttpServlet {
   }
 
   private Card initializeCard(Entity entity) {
-    // If cards don't have a familarity score then provide default
+    // If cards don't have a familarity score then provide default value
     if (!entity.hasProperty("familarityScore")) {
       entity.setProperty("familarityScore", .5);
       entity.setProperty("timeTested", System.currentTimeMillis());

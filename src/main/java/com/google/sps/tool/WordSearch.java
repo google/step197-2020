@@ -15,28 +15,29 @@ public class WordSearch {
   public static ArrayList<String> generateWordOptions(String correctAnswer) {
     ArrayList<String> quizWords = new ArrayList<>();
     quizWords.add(correctAnswer);
+
     if (!firstLetterMap.containsKey('a')) {
       initMap();
     }
+
     char firstLetter = correctAnswer.charAt(0);
-    ArrayList<String> prefixList = firstLetterMap.get(Character.toLowerCase(firstLetter));
+    ArrayList<String> wordList = firstLetterMap.get(Character.toLowerCase(firstLetter));
     Boolean wordFound = false;
 
-    for (int i = 0; i < prefixList.size(); i++) {
-      if (prefixList.get(i).equals(correctAnswer)) {
+    for (int i = 0; i < wordList.size(); i++) {
+      if (wordList.get(i).equals(correctAnswer)) {
         wordFound = true;
-        getRandomWords(i, prefixList, quizWords);
+        getRandomWords(i, wordList, quizWords);
         break;
       }
     }
 
-    // If we could not find the exact word, then we will generate random words based on the first
-    // letter
+    // If exact word could not be found, then generate random words with the same first letter
     if (!wordFound) {
       Random random = new Random();
       for (int i = 0; i < 3; i++) {
-        int index = random.nextInt(prefixList.size());
-        quizWords.add(prefixList.get(index));
+        int index = random.nextInt(wordList.size());
+        quizWords.add(wordList.get(index));
       }
     }
 
@@ -45,12 +46,12 @@ public class WordSearch {
   }
 
   private static void getRandomWords(
-      Integer origin, ArrayList<String> prefixList, ArrayList<String> quizWords) {
+      Integer origin, ArrayList<String> wordList, ArrayList<String> quizWords) {
     Random random = new Random();
     for (int i = 0; i < 3; i++) {
       try {
         int index = random.nextInt(20) - 10;
-        String possibleWord = prefixList.get(origin + index);
+        String possibleWord = wordList.get(origin + index);
         // Ensures that we don't have repeating words
         if (!quizWords.contains(possibleWord)) {
           quizWords.add(possibleWord);
@@ -58,19 +59,23 @@ public class WordSearch {
           i--;
         }
       } catch (ArrayIndexOutOfBoundsException e) {
-        // Trying again if we get a word that out of bounds
+        // Trying again if we get a word thats out of bounds
         i--;
       }
     }
   }
 
+  /**
+   * Goes through  a text file of words in the english dictionary and creates
+   * a hashmap where the key is a letter of the alphabet and the value is a list
+   * of words that begin with that letter.
+   */
   private static void initMap() {
     try {
       File dictionary = new File("./WEB-INF/classes/META-INF/Dictionary.txt");
-      System.out.println(dictionary.getAbsolutePath());
       dictionary.setReadable(true);
-      System.out.println(dictionary.exists());
       Scanner reader = new Scanner(dictionary);
+
       while (reader.hasNextLine()) {
         String word = reader.nextLine();
         char firstLetter = word.charAt(0);
@@ -79,10 +84,13 @@ public class WordSearch {
         }
         firstLetterMap.get(firstLetter).add(word);
       }
+
       reader.close();
     } catch (FileNotFoundException e) {
       // If parsing fails try again
       firstLetterMap.clear();
+      initMap();
     }
   }
+
 }

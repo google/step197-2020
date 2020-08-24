@@ -48,22 +48,13 @@ class CreateCardContent extends Component {
     // Ensures that languages have been selected before translating
     if (this.state.fromLang !== "none" && this.state.toLang !== "none") {
       (async () => {
-        try {
-          const translated = await getTranslation(
-            text,
-            this.state.fromLang,
-            this.state.toLang
-          );
-          if (!translated.ok) {
-            throw Error(translated.statusText);
-          }
-          this.setState({ translation: translated, text: text });
-        } catch (error) {
-          this.setState({
-            translation: "Text could not be translated",
-            text: text,
-          });
-        }
+        // If an error is thrown it is caught inside of get translation
+        const translated = await getTranslation(
+          text,
+          this.state.fromLang,
+          this.state.toLang
+        );
+        this.setState({ translation: translated.translation, text: text });
       })();
     } else {
       this.setState({ text });
@@ -135,7 +126,7 @@ class CreateCardContent extends Component {
                   <input
                     id='mainText'
                     type='text'
-                    name="rawText"
+                    name='rawText'
                     placeholder={this.state.text}
                     onBlur={this.translateText}
                     required></input>
@@ -145,7 +136,7 @@ class CreateCardContent extends Component {
                   <input
                     id='translated'
                     type='text'
-                    name="translatedText"
+                    name='translatedText'
                     value={this.state.translation}
                     readOnly></input>
                 </li>

@@ -2,15 +2,17 @@ package com.google.sps.data;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreFailureException;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
-import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import java.io.IOException;
+import com.google.appengine.api.datastore.DatastoreFailureException;
 
 public final class Card {
 
@@ -116,6 +118,7 @@ public final class Card {
     card.setProperty("imageBlobKey", this.imageBlobKey);
     card.setProperty("rawText", this.rawText);
     card.setProperty("textTranslated", this.textTranslated);
+    card.setProperty("status", true);
 
     return card;
   }
@@ -128,6 +131,22 @@ public final class Card {
     card.setCardKey(KeyFactory.keyToString(cardEntity.getKey()));
 
     return card;
+  }
+
+  public static void deleteCard(Entity card) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    markCardAsDeleted(card);
+    try {
+      datastore.delete(card.getKey());
+    } catch (DatastoreFailureException e) {
+      throw e;
+    }
+  }
+
+  public static void markCardAsDeleted(Entity card) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    card.setProperty("status", false);
+    datastore.put(card);
   }
 
   public static void deleteBlob(String blobKey) throws IOException {

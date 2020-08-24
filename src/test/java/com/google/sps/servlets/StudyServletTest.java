@@ -55,25 +55,6 @@ public final class StudyServletTest {
 
   @Before
   public void setUp() throws Exception {
-    // Generate cards that will be used
-    cardA =
-        new Card.Builder()
-            .setImageBlobKey("null")
-            .setRawText("test")
-            .setTextTranslated("translatedTest")
-            .build();
-    cardB =
-        new Card.Builder()
-            .setImageBlobKey("null")
-            .setRawText("test2")
-            .setTextTranslated("translatedTest2")
-            .build();
-    cardC =
-        new Card.Builder()
-            .setImageBlobKey("null")
-            .setRawText("test3")
-            .setTextTranslated("translatedTest3")
-            .build();
 
     helper.setUp();
     servlet = new StudyServlet();
@@ -94,14 +75,35 @@ public final class StudyServletTest {
   }
 
   @Test
-  public void grabStudyModeQuiz() throws Exception {
+  public void grabNewStudyModeCards() throws Exception {
+    /**
+     * Cards have not been initialized and all have the same default familarity score. Therefore,
+     * they will be returned in the order created.
+     */
+    cardA =
+        new Card.Builder()
+            .setImageBlobKey("null")
+            .setRawText("test")
+            .setTextTranslated("translatedTest")
+            .build();
+    cardB =
+        new Card.Builder()
+            .setImageBlobKey("null")
+            .setRawText("test2")
+            .setTextTranslated("translatedTest2")
+            .build();
+    cardC =
+        new Card.Builder()
+            .setImageBlobKey("null")
+            .setRawText("test3")
+            .setTextTranslated("translatedTest3")
+            .build();
 
-    // Generate a folder entity to obtain a folder key
-    // which would be used to set as the parent of the card entity
     Entity folder = new Entity("Folder", "testID");
     String folderKey = KeyFactory.keyToString(folder.getKey());
 
     when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
+    // Response Should generate 2 rounds with 1 card each
     when(mockRequest.getParameter("numCards")).thenReturn("1");
     when(mockRequest.getParameter("numRounds")).thenReturn("2");
 
@@ -115,15 +117,74 @@ public final class StudyServletTest {
 
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    System.out.println("grabStudyModeQuiz-----------------");
+    String expectedResponse =
+        "["
+            + "[{\"quizWord\":\"translatedTest\", \"cardKey\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAEM\","
+            + "\"possibleResponses\":[\"test\"],\"correctAnswer\":\"test\"}],"
+            + "[{\"quizWord\":\"translatedTest2\",\"cardKey\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAIM\","
+            + "\"possibleResponses\":[\"test2\"],\"correctAnswer\":\"test2\"}]"
+            + "]";
+
+    assertTrue(compareJson(response, expectedResponse));
+  }
+
+  @Test
+  public void grabStudyModeCards() throws Exception {
+    /*
+     * These cards  have familarity scores and should be sorted and
+     * returned in order of increasing familarity score.
+     */
+    cardA =
+        new Card.Builder()
+            .setFamilarityScore(3.67)
+            .setImageBlobKey("null")
+            .setRawText("test")
+            .setTextTranslated("translatedTest")
+            .build();
+    cardB =
+        new Card.Builder()
+            .setFamilarityScore(-.54)
+            .setImageBlobKey("null")
+            .setRawText("test2")
+            .setTextTranslated("translatedTest2")
+            .build();
+    cardC =
+        new Card.Builder()
+            .setFamilarityScore(9.3)
+            .setImageBlobKey("null")
+            .setRawText("test3")
+            .setTextTranslated("translatedTest3")
+            .build();
+
+    Entity folder = new Entity("Folder", "testID");
+    String folderKey = KeyFactory.keyToString(folder.getKey());
+
+    when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
+    // Response Should generate 3 rounds with 1 card each
+    when(mockRequest.getParameter("numCards")).thenReturn("1");
+    when(mockRequest.getParameter("numRounds")).thenReturn("3");
+
+    List<Card> cards = new ArrayList<>();
+    Card cardAInDatastore = storeCardInDatastore(cardA, datastore, folderKey);
+    Card cardBInDatastore = storeCardInDatastore(cardB, datastore, folderKey);
+    Card cardCInDatastore = storeCardInDatastore(cardC, datastore, folderKey);
+    cards.add(cardAInDatastore);
+    cards.add(cardBInDatastore);
+    cards.add(cardCInDatastore);
+
+    servlet.doGet(mockRequest, mockResponse);
+    String response = responseWriter.toString();
+    System.out.println("grabSortedStudyModeQuiz1-----------------");
     System.out.println(response);
     String expectedResponse =
-        "{\"userCards\":"
-            + "["
-            + "{\"imageBlobKey\":\"null\",\"rawText\":\"test\",\"textTranslated\":\"test\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAEM\"},"
-            + "{\"imageBlobKey\":\"null\",\"rawText\":\"test\",\"textTranslated\":\"test\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAIM\"}"
-            + "],"
-            + "\"showCreateFormStatus\":true}";
+        "["
+            + "[{\"quizWord\":\"translatedTest2\", \"cardKey\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAIM\","
+            + "\"possibleResponses\":[\"test2\"],\"correctAnswer\":\"test2\"}],"
+            + "[{\"quizWord\":\"translatedTest\",\"cardKey\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAEM\","
+            + "\"possibleResponses\":[\"test\"],\"correctAnswer\":\"test\"}],"
+            + "[{\"quizWord\":\"translatedTest3\",\"cardKey\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAMM\","
+            + "\"possibleResponses\":[\"test3\"],\"correctAnswer\":\"test3\"}]"
+            + "]";
 
     assertTrue(compareJson(response, expectedResponse));
   }
@@ -137,10 +198,8 @@ public final class StudyServletTest {
 
     when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
     servlet.doGet(mockRequest, mockResponse);
-    System.out.println("folderHasNoCards-----------------");
     String response = responseWriter.toString();
-    System.out.println(response);
-    String expectedResponse = "";
+    String expectedResponse = "[]";
 
     assertTrue(compareJson(response, expectedResponse));
   }
@@ -152,8 +211,6 @@ public final class StudyServletTest {
 
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    System.out.println(response);
-    System.out.println("UserNotLoggedIn-----------------");
     String expectedResponse = "";
 
     assertTrue(compareJson(response, expectedResponse));

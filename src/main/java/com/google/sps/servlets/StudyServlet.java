@@ -140,6 +140,7 @@ public class StudyServlet extends HttpServlet {
 
   private Card initializeCard(Entity entity) {
     // If cards don't have a familarity score then provide default value
+    System.out.println(entity.getProperty("familarityScore"));
     if (!entity.hasProperty("familarityScore")) {
       entity.setProperty("familarityScore", .5);
       entity.setProperty("timeTested", System.currentTimeMillis());

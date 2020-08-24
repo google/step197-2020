@@ -11,6 +11,8 @@ public final class Card {
     private String textTranslated = "null";
     private String key;
     private String parentKey;
+    private Double familarityScore;
+    private Long timeTested;
 
     public Builder() {}
 
@@ -34,6 +36,16 @@ public final class Card {
       return this;
     }
 
+    public Builder setFamilarityScore(Double newScore) {
+      this.familarityScore = newScore;
+      return this;
+    }
+
+    public Builder setTimeTested(long time) {
+      this.timeTested = time;
+      return this;
+    }
+
     public Builder setParentKey(String parentkey) {
       this.parentKey = parentkey;
       return this;
@@ -46,7 +58,8 @@ public final class Card {
       card.textTranslated = this.textTranslated;
       card.key = this.key;
       card.parentKey = this.parentKey;
-
+      card.familarityScore = this.familarityScore;
+      card.timeTested = this.timeTested;
       return card;
     }
   }
@@ -127,6 +140,10 @@ public final class Card {
     card.setProperty("imageBlobKey", this.imageBlobKey);
     card.setProperty("rawText", this.rawText);
     card.setProperty("textTranslated", this.textTranslated);
+    if (this.familarityScore != null) {
+      card.setProperty("familarityScore", this.familarityScore);
+      card.setProperty("timeTested", this.timeTested);
+    }
     return card;
   }
 }

@@ -18,7 +18,7 @@ public class WordSearch {
 
     if (!firstLetterMap.containsKey('a')) {
       // If hashmap can't read file then it should just return the correct Answer
-      if(!initMap()) {
+      if (!initMap()) {
         return quizWords;
       }
     }
@@ -69,9 +69,8 @@ public class WordSearch {
   }
 
   /**
-   * Goes through  a text file of words in the english dictionary and creates
-   * a hashmap where the key is a letter of the alphabet and the value is a list
-   * of words that begin with that letter.
+   * Goes through a text file of words in the english dictionary and creates a hashmap where the key
+   * is a letter of the alphabet and the value is a list of words that begin with that letter.
    */
   private static Boolean initMap() {
     int retries = 0;
@@ -91,14 +90,14 @@ public class WordSearch {
 
       reader.close();
     } catch (FileNotFoundException e) {
-      if(retries > 5) {
+      if (retries > 5) {
         return false;
       }
       // If parsing fails try again
+      retries++;
       firstLetterMap.clear();
       initMap();
     }
     return true;
   }
-
 }

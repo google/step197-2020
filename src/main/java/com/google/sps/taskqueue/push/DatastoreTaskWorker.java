@@ -20,15 +20,14 @@ public class DatastoreTaskWorker extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     String key = request.getParameter("key");
-
     try {
-      // if successful, we send SC 200 to the Queue service 
+      // If successful, we send SC 200 to the Queue service
       deleteEntity(key);
       response.sendError(200);
     } catch (Exception e) {
-      // When the response returns an HTTP status code
-      // outside the range 200–299
-      // the queue retries the task until it succeeds.
+      /* When the response returns an HTTP status code
+       *  outside the range 200–299
+       *  the queue retries the task until it succeeds. */
       response.sendError(500);
     }
   }

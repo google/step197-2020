@@ -78,7 +78,7 @@ public final class EditCardServletTest {
     Entity folder = new Entity("Folder", "testID");
     String folderKey = KeyFactory.keyToString(folder.getKey());
 
-    Card cardInDatastore = storeCardInDatastore(currentCard, datastore, folderKey);
+    Card cardInDatastore = Card.storeCardInDatastore(currentCard, datastore, folderKey);
     String cardKey = cardInDatastore.getCardKey();
 
     when(mockRequest.getParameter("cardKey")).thenReturn(cardKey);
@@ -94,15 +94,5 @@ public final class EditCardServletTest {
     String expectedResponse =
         "{\"imageBlobKey\":\"null\",\"rawText\":\"hello\",\"textTranslated\":\"xin chào\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAEM\"}";
     assertEquals(response, expectedResponse);
-  }
-
-  public Card storeCardInDatastore(Card card, DatastoreService datastore, String folderKey) {
-    card.setParentKey(folderKey);
-    Entity cardEntity = card.createEntity();
-    datastore.put(cardEntity);
-
-    card.setCardKey(KeyFactory.keyToString(cardEntity.getKey()));
-
-    return card;
   }
 }

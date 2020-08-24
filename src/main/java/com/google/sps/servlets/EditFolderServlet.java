@@ -28,7 +28,7 @@ public class EditFolderServlet extends HttpServlet {
       response.getWriter().println(new Gson().toJson(jsonErrorInfo));
       return;
     }
-    
+
     String newFolderName = request.getParameter("folderName");
     String newFolderDefaultLanguage = request.getParameter("folderDefaultLanguage");
     String folderKey = request.getParameter("folderKey");

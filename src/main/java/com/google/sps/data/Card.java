@@ -2,6 +2,15 @@ package com.google.sps.data;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreFailureException;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+import java.io.IOException;
 
 public final class Card {
 
@@ -109,5 +118,46 @@ public final class Card {
     card.setProperty("textTranslated", this.textTranslated);
 
     return card;
+  }
+
+  public static Card storeCardInDatastore(Card card, DatastoreService datastore, String folderKey) {
+    card.setParentKey(folderKey);
+    Entity cardEntity = card.createEntity();
+    datastore.put(cardEntity);
+
+    card.setCardKey(KeyFactory.keyToString(cardEntity.getKey()));
+
+    return card;
+  }
+
+  public static void deleteBlob(String blobKey) throws IOException {
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    BlobKey key = new BlobKey(blobKey);
+
+    int retries = 5;
+    while (true) {
+      try {
+        blobstoreService.delete(key);
+        break;
+      } catch (BlobstoreFailureException e) {
+        if (retries == 0) {
+          addBlobstoreDeleteTaskToQueue(key.getKeyString());
+          break;
+        }
+        --retries;
+      }
+    }
+  }
+
+  public static void addBlobstoreDeleteTaskToQueue(String key) {
+    Queue queue = QueueFactory.getDefaultQueue();
+    queue.add(TaskOptions.Builder.withUrl("/blobstoreWorker").param("key", key));
+  }
+
+  public static void addDatastoreDeleteTaskToQueue(Entity entity) {
+    Queue queue = QueueFactory.getDefaultQueue();
+    queue.add(
+        TaskOptions.Builder.withUrl("/datastoreWorker")
+            .param("key", KeyFactory.keyToString(entity.getKey())));
   }
 }

@@ -1,10 +1,8 @@
 package com.google.sps.servlets;
 
-import static com.google.appengine.api.datastore.TransactionOptions.Builder.*;
-
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.appengine.api.datastore.Transaction;
+import com.google.appengine.api.datastore.DatastoreFailureException;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -15,10 +13,6 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreFailureException;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 
@@ -29,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.sps.tool.ResponseSerializer;
+import com.google.sps.data.Card;
+import com.google.sps.data.Folder;
 
 @WebServlet("/deletefolder")
 public class DeleteFolderServlet extends HttpServlet {
@@ -36,21 +32,24 @@ public class DeleteFolderServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
+    if (!userService.isUserLoggedIn()) {
+      String jsonErrorInfo = ResponseSerializer.getErrorJson("User not logged in");
+      response.setContentType("application/json;");
+      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+      return;
+    }
 
-    if (userService.isUserLoggedIn()) {
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      String folderKey = request.getParameter("folderKey");
-      Entity folder = getExistingFolderInDatastore(datastore, folderKey);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    String folderKey = request.getParameter("folderKey");
+    Entity folder = getExistingFolderInDatastore(datastore, folderKey);
 
-      if (folder == null) {
-        String jsonErrorInfo =
-            ResponseSerializer.getErrorJson("Cannot delete Folder at the moment");
-        response.setContentType("application/json;");
-        response.getWriter().println(new Gson().toJson(jsonErrorInfo));
-      } else {
-        deleteAllCardsInsideFolder(folder);
-        deleteFolder(folder);
-      }
+    if (folder == null) {
+      String jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot delete Folder at the moment");
+      response.setContentType("application/json;");
+      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+    } else {
+      deleteAllCardsInsideFolder(folder);
+      deleteFolderWithRetries(folder);
     }
   }
 
@@ -63,15 +62,15 @@ public class DeleteFolderServlet extends HttpServlet {
     }
   }
 
-  private void deleteFolder(Entity folder) {
+  private void deleteFolderWithRetries(Entity folder) {
     int retries = 5;
     while (true) {
       try {
-        folderDeletionTransaction(folder);
+        deleteFolder(folder);
         break;
       } catch (Exception e) {
         if (retries == 0) {
-          addDatastoreTaskToQueue(folder);
+          Folder.addDatastoreDeleteTaskToQueue(folder);
           break;
         }
         --retries;
@@ -79,16 +78,12 @@ public class DeleteFolderServlet extends HttpServlet {
     }
   }
 
-  private void folderDeletionTransaction(Entity folder) throws IOException {
+  private void deleteFolder(Entity folder) throws IOException {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Transaction txn = datastore.beginTransaction(withXG(true));
     try {
       datastore.delete(folder.getKey());
-      txn.commit();
-    } finally {
-      if (txn.isActive()) {
-        txn.rollback();
-      }
+    } catch (DatastoreFailureException e) {
+      throw e;
     }
   }
 
@@ -103,28 +98,22 @@ public class DeleteFolderServlet extends HttpServlet {
       for (Entity card : results.asIterable()) {
         String imageBlobKey = (String) card.getProperty("imageBlobKey");
         if (imageBlobKey != "null") {
-          deleteBlob(imageBlobKey);
+          Card.deleteBlob(imageBlobKey);
         }
-        deleteCard(card);
+        deleteCardWithRetries(card);
       }
     }
   }
 
-  private void deleteBlob(String blobKey) throws IOException {
-    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-    BlobKey key = new BlobKey(blobKey);
-
-    // BlobstoreService doesn't have its own transaction API
-    // So we will try to delete the blobKey within 5 tries
-    // If it doesn't happen successfully, we will add it to a TaskQueue
+  private void deleteCardWithRetries(Entity card) {
     int retries = 5;
     while (true) {
       try {
-        blobstoreService.delete(key);
+        deleteCard(card);
         break;
-      } catch (BlobstoreFailureException e) {
+      } catch (Exception e) {
         if (retries == 0) {
-          addBlobstoreTaskToQueue(key.getKeyString());
+          Card.addDatastoreDeleteTaskToQueue(card);
           break;
         }
         --retries;
@@ -133,43 +122,11 @@ public class DeleteFolderServlet extends HttpServlet {
   }
 
   private void deleteCard(Entity card) {
-    int retries = 5;
-    while (true) {
-      try {
-        cardDeletionTransaction(card);
-        break;
-      } catch (Exception e) {
-        if (retries == 0) {
-          addDatastoreTaskToQueue(card);
-          break;
-        }
-        --retries;
-      }
-    }
-  }
-
-  private void cardDeletionTransaction(Entity card) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Transaction txn = datastore.beginTransaction(withXG(true));
     try {
       datastore.delete(card.getKey());
-      txn.commit();
-    } finally {
-      if (txn.isActive()) {
-        txn.rollback();
-      }
+    } catch (DatastoreFailureException e) {
+      throw e;
     }
-  }
-
-  private void addDatastoreTaskToQueue(Entity entity) {
-    Queue queue = QueueFactory.getDefaultQueue();
-    queue.add(
-        TaskOptions.Builder.withUrl("/datastoreWorker")
-            .param("key", KeyFactory.keyToString(entity.getKey())));
-  }
-
-  private void addBlobstoreTaskToQueue(String key) {
-    Queue queue = QueueFactory.getDefaultQueue();
-    queue.add(TaskOptions.Builder.withUrl("/blobstoreWorker").param("key", key));
   }
 }

@@ -17,13 +17,13 @@ function nextQuizWord() {
   if (Quiz[currentArray].length != 0) {
     nextWord = Quiz[currentArray].shift();
   } else {
-    currentArray++;
-    if (currentArray >= Quiz.length) {
-      return "!@end";
-    } else {
-      nextWord = Quiz[currentArray].shift();
+        currentArray++;
+        if (currentArray >= Quiz.length) {
+            return null;
+        } else {
+            nextWord = Quiz[currentArray].shift();
+        }
     }
-  }
   currentQuizWord = nextWord;
   return nextWord;
 }

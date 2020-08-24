@@ -65,7 +65,7 @@ public final class DeleteCardServletTest {
   }
 
   @Test
-  public void deleteCard() throws Exception {
+  public void deleteACardWithOneInside() throws Exception {
     // Generate testing card to add into datastore
     Card card =
         new Card.Builder()
@@ -93,7 +93,7 @@ public final class DeleteCardServletTest {
   }
 
   @Test
-  public void deleteCardAndThereAreOneLeft() throws Exception {
+  public void deleteACardWithTwoInside() throws Exception {
     // Generate testing cards to add into datastore
     Card cardA =
         new Card.Builder()

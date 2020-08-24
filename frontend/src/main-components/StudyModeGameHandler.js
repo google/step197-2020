@@ -39,4 +39,4 @@ function getRound() {
     return currentArray;
 }
 
-export { startquiz, updateWordQueues, nextquizWord, getRound };
+export { startQuiz, updateWordQueues, nextQuizWord, getRound };

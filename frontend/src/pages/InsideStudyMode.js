@@ -5,6 +5,7 @@ import StudyModeContent from "../main-components/StudyModeContent";
 import { startQuiz } from "../main-components/StudyModeGameHandler";
 import css from "./template.css";
 import queryString from "query-string";
+
 class InsideStudyMode extends React.Component {
   constructor(props) {
     super(props);

@@ -49,9 +49,9 @@ public class ProcessNearestNeighbors {
     InMemoryLookupTable lookupTable = (InMemoryLookupTable) vec.lookupTable();
     VocabCache lookupCache = (VocabCache) vec.vocab();
 
-    // Create HashMap that maps word to index,
-    // where the index represents where the word is
-    // in the word vector matrix 300,000 x 300
+    /* Create HashMap that maps word to index,
+    *  where the index represents where the word is
+    *  in the word vector matrix 300,000 x 300 */
     Map<String, Integer> wordToIndex = new HashMap<>();
     Map<Integer, String> indexToWord = new HashMap<>();
     for (Object i : lookupCache.words()) {
@@ -61,13 +61,13 @@ public class ProcessNearestNeighbors {
       indexToWord.put(index, word);
     }
 
-    // Get raw word vectors 300,000 x 300 matrix (syn0) and normalize it (vecA)
-    // syn0 naming comes from the original Word2Vec paper
+    /* Get raw word vectors 300,000 x 300 matrix (syn0) and normalize it (vecA)
+    *  syn0 naming comes from the original Word2Vec paper */
     INDArray syn0 = lookupTable.getSyn0();
     INDArray vecA = syn0.divColumnVector(syn0.norm2(1));
 
-    // There are about 300,000 words, so we want to iterate 600 times
-    // each iteration computes a batch of 500 words
+    /* There are about 300,000 words, so we want to iterate 600 times
+    *  each iteration computes a batch of 500 words */
     int rangeStart = 0;
     int rangeEnd = 499;
     for (int i = 0; i < 600; i++) {

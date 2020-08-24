@@ -1,4 +1,4 @@
-let Quiz;
+let quiz = [];
 let currentQuizWord = {};
 let currentArray;
 
@@ -7,21 +7,21 @@ async function startQuiz(folderKey) {
   await fetch(`/study?folderKey=${folderKey}`)
      .then(res => res.json())
      .then(result => {
-         Quiz = result;
-         return Quiz.length;
+         quiz = result;
+         return quiz.length;
     }).catch("Could not find any cards");
 }
 
 function nextQuizWord() {
-  let nextWord = {};
-  if (Quiz[currentArray].length != 0) {
-    nextWord = Quiz[currentArray].shift();
-  } else {
+    let nextWord = {};
+    if (quiz[currentArray].length != 0) {
+        nextWord = quiz[currentArray].shift();
+    } else {
         currentArray++;
-        if (currentArray >= Quiz.length) {
+        if (currentArray >= quiz.length) {
             return null;
         } else {
-            nextWord = Quiz[currentArray].shift();
+            nextWord = quiz[currentArray].shift();
         }
     }
   currentQuizWord = nextWord;
@@ -30,9 +30,9 @@ function nextQuizWord() {
 
 function updateWordQueues(correct, cardKey) {
   if (correct == "false" && currentArray < Quiz.length - 1) {
-    Quiz[currentArray + 1].push(currentQuizWord);
+    quiz[currentArray + 1].push(currentQuizWord);
   }
-  // Updates the card's familarity score 
+  // Updates the card's familarity score and stores it
   fetch('/study', {
     method: 'POST',
     body: `cardKey=${cardKey}&answeredCorrectly=${correct}`,

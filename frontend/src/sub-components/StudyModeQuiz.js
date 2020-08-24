@@ -9,10 +9,12 @@ class StudyModeQuiz extends React.Component {
   render() {
     return (
       <div id='studyContainer' className='Container'>
+        
         <div id='rounds'>
           <RoundLights
             currentRound={this.props.currentRound}
-            totalRounds={this.props.totalRounds}></RoundLights>
+            totalRounds={this.props.totalRounds}>
+          </RoundLights>
         </div>
 
         <div id='studyMain'>
@@ -23,9 +25,11 @@ class StudyModeQuiz extends React.Component {
           <div id='options'>
             <Options
               options={this.props.options}
-              func={this.props.optionSelected}></Options>
+              func={this.props.optionSelected}>
+            </Options>
           </div>
         </div>
+
       </div>
     );
   }

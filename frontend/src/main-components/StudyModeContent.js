@@ -18,6 +18,7 @@ class StudyModeContent extends React.Component {
   }
 
   componentDidMount() {
+    // Grabs the first word in the game
     const word = nextQuizWord();
     const round = getRound();
     this.setState({
@@ -37,6 +38,10 @@ class StudyModeContent extends React.Component {
       correct = "true";
     }
 
+    /**
+     * If the selected word was incorrect then this function
+     * will repeat this word at the end of another round if possible.
+     */
     updateWordQueues(correct, this.state.cardKey);
     const word = nextQuizWord();
 
@@ -44,14 +49,14 @@ class StudyModeContent extends React.Component {
       this.setState({ end: true });
     }
 
-     const round = getRound();
-     this.setState({
+    const round = getRound();
+    this.setState({
        quizWord: word.quizWord,
        options: word.possibleResponses,
        correctAnswer: word.correctAnswer,
        cardKey: word.cardKey,
        currentRound: round
-     });
+    });
   }
 
   render() {

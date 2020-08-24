@@ -5,6 +5,11 @@ class RoundLights extends React.Component {
   constructor(props) {
     super(props);
     this.statusColors = [];
+    /**
+     * Each rounds color status is appended to the status color array,
+     * where green represents completed and gray represents rounds
+     * that have not yet been completed.
+     */
     for (let i = 0; i < this.props.currentRound; i++) {
       this.statusColors.push("#1aa260");
     }

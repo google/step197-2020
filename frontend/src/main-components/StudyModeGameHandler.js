@@ -12,6 +12,11 @@ async function startQuiz(folderKey) {
     }).catch("Could not find any cards");
 }
 
+/**
+ * Checks if the current array has any cards left to return and if
+ * not then it moves onto the next array. If there are no more
+ * arrays left then the function returns null.
+ */
 function nextQuizWord() {
     let nextWord = {};
     if (quiz[currentArray].length != 0) {

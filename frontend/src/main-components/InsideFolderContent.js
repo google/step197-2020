@@ -40,7 +40,7 @@ class InsideFolderContent extends React.Component {
         flashcards = data.userCards.map((flashcard) => (
 	      <Flashcard
             key={flashcard.key}
-            image={flashcard.blobKey}
+            image={flashcard.imageBlobKey}
             text={flashcard.rawText}
             translation={flashcard.textTranslated}
           />

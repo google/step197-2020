@@ -65,7 +65,7 @@ public final class DeleteCardServletTest {
   }
 
   @Test
-  public void DeleteCard() throws Exception {
+  public void deleteCard() throws Exception {
     // Generate testing card to add into datastore
     Card card =
         new Card.Builder()
@@ -79,7 +79,7 @@ public final class DeleteCardServletTest {
     Entity folder = new Entity("Folder", "testID");
     String folderKey = KeyFactory.keyToString(folder.getKey());
 
-    Card cardInDatastore = storeCardInDatastore(card, datastore, folderKey);
+    Card cardInDatastore = Card.storeCardInDatastore(card, datastore, folderKey);
     String cardKey = cardInDatastore.getCardKey();
 
     when(mockRequest.getParameter("cardKey")).thenReturn(cardKey);
@@ -93,7 +93,7 @@ public final class DeleteCardServletTest {
   }
 
   @Test
-  public void DeleteCardAndThereAreOneLeft() throws Exception {
+  public void deleteCardAndThereAreOneLeft() throws Exception {
     // Generate testing cards to add into datastore
     Card cardA =
         new Card.Builder()
@@ -113,8 +113,8 @@ public final class DeleteCardServletTest {
     Entity folder = new Entity("Folder", "testID");
     String folderKey = KeyFactory.keyToString(folder.getKey());
 
-    storeCardInDatastore(cardB, datastore, folderKey);
-    storeCardInDatastore(cardA, datastore, folderKey);
+    Card.storeCardInDatastore(cardB, datastore, folderKey);
+    Card.storeCardInDatastore(cardA, datastore, folderKey);
     String cardAKey = cardA.getCardKey();
 
     when(mockRequest.getParameter("cardKey")).thenReturn(cardAKey);
@@ -125,15 +125,5 @@ public final class DeleteCardServletTest {
         datastore
             .prepare(new Query("Card").setAncestor(folder.getKey()))
             .countEntities(withLimit(10)));
-  }
-
-  public Card storeCardInDatastore(Card card, DatastoreService datastore, String folderKey) {
-    card.setParentKey(folderKey);
-    Entity cardEntity = card.createEntity();
-    datastore.put(cardEntity);
-
-    card.setCardKey(KeyFactory.keyToString(cardEntity.getKey()));
-
-    return card;
   }
 }

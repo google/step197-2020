@@ -1,24 +1,13 @@
 package com.google.sps.servlets;
 
-import static com.google.appengine.api.datastore.TransactionOptions.Builder.*;
-
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.DatastoreFailureException;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.EntityNotFoundException;
-
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
-
-import com.google.appengine.api.blobstore.BlobstoreFailureException;
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.sps.tool.ResponseSerializer;
+import com.google.sps.data.Card;
 
 @WebServlet("/deletecard")
 public class DeleteCardServlet extends HttpServlet {
@@ -45,8 +35,9 @@ public class DeleteCardServlet extends HttpServlet {
         response.setContentType("application/json;");
         response.getWriter().println(new Gson().toJson(jsonErrorInfo));
       } else {
-        deleteBlob(card);
-        deleteCard(card);
+        String imageBlobKey = (String) card.getProperty("imageBlobKey");
+        Card.deleteBlob(imageBlobKey);
+        deleteCardWithRetries(card);
       }
     }
   }
@@ -60,36 +51,15 @@ public class DeleteCardServlet extends HttpServlet {
     }
   }
 
-  private void deleteBlob(Entity card) throws IOException {
-    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-    String imageBlobKey = (String) card.getProperty("imageBlobKey");
-    if (imageBlobKey != "null") {
-      BlobKey key = new BlobKey(imageBlobKey);
-      int retries = 5;
-      while (true) {
-        try {
-          blobstoreService.delete(key);
-          break;
-        } catch (BlobstoreFailureException e) {
-          if (retries == 0) {
-            addBlobstoreTaskToQueue(key.getKeyString());
-            break;
-          }
-          --retries;
-        }
-      }
-    }
-  }
-
-  private void deleteCard(Entity card) {
+  private void deleteCardWithRetries(Entity card) {
     int retries = 5;
     while (true) {
       try {
-        cardDeletionTransaction(card);
+        deleteCard(card);
         break;
       } catch (Exception e) {
         if (retries == 0) {
-          addDatastoreTaskToQueue(card);
+          Card.addDatastoreDeleteTaskToQueue(card);
           break;
         }
         --retries;
@@ -97,28 +67,12 @@ public class DeleteCardServlet extends HttpServlet {
     }
   }
 
-  private void cardDeletionTransaction(Entity card) {
+  private void deleteCard(Entity card) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Transaction txn = datastore.beginTransaction(withXG(true));
     try {
       datastore.delete(card.getKey());
-      txn.commit();
-    } finally {
-      if (txn.isActive()) {
-        txn.rollback();
-      }
+    } catch (DatastoreFailureException e) {
+      throw e;
     }
-  }
-
-  private void addDatastoreTaskToQueue(Entity entity) {
-    Queue queue = QueueFactory.getDefaultQueue();
-    queue.add(
-        TaskOptions.Builder.withUrl("/datastoreWorker")
-            .param("key", KeyFactory.keyToString(entity.getKey())));
-  }
-
-  private void addBlobstoreTaskToQueue(String key) {
-    Queue queue = QueueFactory.getDefaultQueue();
-    queue.add(TaskOptions.Builder.withUrl("/blobstoreWorker").param("key", key));
   }
 }

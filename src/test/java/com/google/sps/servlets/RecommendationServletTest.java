@@ -53,6 +53,18 @@ public class RecommendationServletTest {
   }
 
   @Test
+  public void wordHasNoNearestNeighbors() throws Exception {
+    when(mockRequest.getParameter("queryWord")).thenReturn("sdsagdsjhdgjmgf");
+    when(mockRequest.getParameter("numOfWordsRequested")).thenReturn("10");
+
+    servlet.doGet(mockRequest, mockResponse);
+    String response = responseWriter.toString();
+    System.out.println(response);
+    String expectedResponse = "{\"error\":\"Cannot find similar words at the moment\"}";
+    assertTrue(compareJson(response, expectedResponse));
+  }
+
+  @Test
   public void queryForCandyTop10NearestNeighbors() throws Exception {
     when(mockRequest.getParameter("queryWord")).thenReturn("candy");
     when(mockRequest.getParameter("numOfWordsRequested")).thenReturn("10");

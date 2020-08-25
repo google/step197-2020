@@ -20,6 +20,7 @@ import java.util.HashMap;
 public class RecommendationServlet extends HttpServlet {
   private DB db;
   private BTreeMap<String, String[]> queryNearestNeighbors;
+  private Map<String, String> jsonErrorInfo;
 
   @Override
   public void init() {
@@ -39,9 +40,11 @@ public class RecommendationServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    response.setContentType("application/json;");
+
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      String jsonErrorInfo = ResponseSerializer.getErrorJson("User not logged in");
+      jsonErrorInfo = ResponseSerializer.getErrorJson("User not logged in");
       response.setContentType("application/json;");
       response.getWriter().println(new Gson().toJson(jsonErrorInfo));
       return;
@@ -50,17 +53,21 @@ public class RecommendationServlet extends HttpServlet {
     String queryWord = request.getParameter("queryWord");
     int numOfWordsRequested = Integer.parseInt(request.getParameter("numOfWordsRequested"));
 
-    String[] neighbors = queryNearestNeighbors.get(queryWord);
+    try {
+      String[] neighbors = queryNearestNeighbors.get(queryWord);
 
-    // We skip neighbors[0] because that is the same word as "queryWord"
-    String[] requestedNeighbors = new String[numOfWordsRequested];
-    for (int i = 1; i < numOfWordsRequested + 1; i++) {
-      requestedNeighbors[i - 1] = neighbors[i];
+      // We skip neighbors[0] because that is the same word as "queryWord"
+      String[] requestedNeighbors = new String[numOfWordsRequested];
+      for (int i = 1; i < numOfWordsRequested + 1; i++) {
+        requestedNeighbors[i - 1] = neighbors[i];
+      }
+
+      Map<String, String[]> jsonInfo = new HashMap<>();
+      jsonInfo.put(queryWord, requestedNeighbors);
+      response.getWriter().println(new Gson().toJson(jsonInfo));
+    } catch (NullPointerException e) {
+      jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot find similar words at the moment");
+      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
     }
-
-    Map<String, String[]> jsonInfo = new HashMap<>();
-    jsonInfo.put(queryWord, requestedNeighbors);
-    response.setContentType("application/json;");
-    response.getWriter().println(new Gson().toJson(jsonInfo));
   }
 }

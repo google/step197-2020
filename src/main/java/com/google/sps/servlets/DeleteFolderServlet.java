@@ -8,15 +8,6 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.KeyFactory;
 
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
-
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreFailureException;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
-
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 
@@ -29,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.sps.tool.ResponseSerializer;
 import com.google.sps.data.Card;
 import com.google.sps.data.Folder;
+import com.google.sps.tool.BlobstoreUtil;
 
 @WebServlet("/deletefolder")
 public class DeleteFolderServlet extends HttpServlet {
@@ -77,36 +69,10 @@ public class DeleteFolderServlet extends HttpServlet {
       for (Entity card : results.asIterable()) {
         String imageBlobKey = (String) card.getProperty("imageBlobKey");
         if (imageBlobKey != "null") {
-          deleteBlobWithRetries(imageBlobKey);
+          BlobstoreUtil.deleteBlobWithRetries(imageBlobKey);
         }
         Card.deleteCardWithRetries(card);
       }
     }
-  }
-
-  private void deleteBlobWithRetries(String blobKey) throws IOException {
-    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-    BlobKey key = new BlobKey(blobKey);
-
-    int retries = 5;
-    while (retries != 0) {
-      try {
-        blobstoreService.delete(key);
-        break;
-      } catch (BlobstoreFailureException e) {
-        if (retries == 0) {
-          --retries;
-        }
-      }
-    }
-
-    if (retries == 0) {
-      addBlobstoreDeleteTaskToQueue(key.getKeyString());
-    }
-  }
-
-  private void addBlobstoreDeleteTaskToQueue(String key) {
-    Queue queue = QueueFactory.getDefaultQueue();
-    queue.add(TaskOptions.Builder.withUrl("/blobstoreKeyDeletionWorker").param("key", key));
   }
 }

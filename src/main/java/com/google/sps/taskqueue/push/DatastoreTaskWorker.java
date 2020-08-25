@@ -1,8 +1,5 @@
 package com.google.sps.taskqueue.push;
 
-import static com.google.appengine.api.datastore.TransactionOptions.Builder.*;
-
-import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.KeyFactory;

@@ -10,8 +10,6 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 import java.io.IOException;
 import com.google.appengine.api.datastore.DatastoreFailureException;
 
-import org.mockito.plugins.MockMaker.StaticMockControl;
-
 public final class Folder {
 
   enum FolderStatus {

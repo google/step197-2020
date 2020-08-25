@@ -4,17 +4,18 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreFailureException;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
-import java.io.IOException;
 import com.google.appengine.api.datastore.DatastoreFailureException;
 
 public final class Card {
+
+  enum ClassStatus {
+    ALIVE,
+    DELETED,
+    OTHER
+  }
 
   public static class Builder {
     private String imageBlobKey = "null";
@@ -118,7 +119,7 @@ public final class Card {
     card.setProperty("imageBlobKey", this.imageBlobKey);
     card.setProperty("rawText", this.rawText);
     card.setProperty("textTranslated", this.textTranslated);
-    card.setProperty("status", true);
+    card.setProperty("status", ClassStatus.ALIVE.toString());
 
     return card;
   }
@@ -143,24 +144,15 @@ public final class Card {
     }
   }
 
-  public static void markCardAsDeleted(Entity card) {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    card.setProperty("status", false);
-    datastore.put(card);
-  }
-
-  public static void deleteBlob(String blobKey) throws IOException {
-    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-    BlobKey key = new BlobKey(blobKey);
-
+  public static void deleteCardWithRetries(Entity card) {
     int retries = 5;
     while (true) {
       try {
-        blobstoreService.delete(key);
+        deleteCard(card);
         break;
-      } catch (BlobstoreFailureException e) {
+      } catch (Exception e) {
         if (retries == 0) {
-          addBlobstoreDeleteTaskToQueue(key.getKeyString());
+          addDatastoreDeleteTaskToQueue(card);
           break;
         }
         --retries;
@@ -168,9 +160,10 @@ public final class Card {
     }
   }
 
-  public static void addBlobstoreDeleteTaskToQueue(String key) {
-    Queue queue = QueueFactory.getDefaultQueue();
-    queue.add(TaskOptions.Builder.withUrl("/blobstoreWorker").param("key", key));
+  public static void markCardAsDeleted(Entity card) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    card.setProperty("status", ClassStatus.DELETED.toString());
+    datastore.put(card);
   }
 
   public static void addDatastoreDeleteTaskToQueue(Entity entity) {

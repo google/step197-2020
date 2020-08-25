@@ -2,6 +2,7 @@ package com.google.sps.servlets;
 
 import static com.google.appengine.api.datastore.FetchOptions.Builder.withLimit;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
@@ -75,8 +76,9 @@ public final class DeleteFolderServletTest {
     Entity user = new Entity("User", "testId");
     String userKey = KeyFactory.keyToString(user.getKey());
 
-    Folder folderInDatastore = Folder.storeFolderInDatastore(folder, datastore, userKey);
-    String folderKey = folderInDatastore.getFolderKey();
+    Folder.storeFolderInDatastore(folder, datastore, userKey);
+    assertNotNull(datastore.get(KeyFactory.stringToKey(folder.getFolderKey())));
+    String folderKey = folder.getFolderKey();
 
     when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
 
@@ -106,10 +108,12 @@ public final class DeleteFolderServletTest {
     Entity user = new Entity("User", "testId");
     String userKey = KeyFactory.keyToString(user.getKey());
 
-    Folder folderInDatastore = Folder.storeFolderInDatastore(folder, datastore, userKey);
-    String folderKey = folderInDatastore.getFolderKey();
+    Folder.storeFolderInDatastore(folder, datastore, userKey);
+    assertNotNull(datastore.get(KeyFactory.stringToKey(folder.getFolderKey())));
+    String folderKey = folder.getFolderKey();
 
     Card.storeCardInDatastore(card, datastore, folderKey);
+    assertNotNull(datastore.get(KeyFactory.stringToKey(card.getCardKey())));
 
     when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
 

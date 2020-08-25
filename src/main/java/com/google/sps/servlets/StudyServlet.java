@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Collections;
+import org.joda.time.DateTimeUtils;
 
 /**
  * Handles the study mode questions and responses by adjusting and sorting a card's based on their
@@ -90,7 +91,7 @@ public class StudyServlet extends HttpServlet {
     Double newScore;
     String answeredCorrectly = request.getParameter("answeredCorrectly");
     String cardKey = request.getParameter("cardKey");
-    long time = System.currentTimeMillis();
+    long time = DateTimeUtils.currentTimeMillis();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     try {
@@ -140,7 +141,6 @@ public class StudyServlet extends HttpServlet {
 
   private Card initializeCard(Entity entity) {
     // If cards don't have a familarity score then provide default value
-    System.out.println(entity.getProperty("familarityScore"));
     if (!entity.hasProperty("familarityScore")) {
       entity.setProperty("familarityScore", .5);
       entity.setProperty("timeTested", System.currentTimeMillis());
@@ -167,7 +167,7 @@ public class StudyServlet extends HttpServlet {
   }
 
   private Double incFamilarityScore(long time, Double currentScore, long prevTime) {
-    Double numHours = (double) (time - prevTime) / 3600;
+    Double numHours = (double) (time - prevTime) / 3600000;
     if (numHours > 168) {
       numHours = 168.0;
     }

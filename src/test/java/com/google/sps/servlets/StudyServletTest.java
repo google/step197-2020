@@ -11,9 +11,11 @@ import org.junit.Test;
 import org.junit.After;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.joda.time.DateTimeUtils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.security.KeyFactorySpi;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +34,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.sps.data.Card;
 import java.util.List;
 import java.util.ArrayList;
+import java.lang.Math;
 
 @RunWith(JUnit4.class)
 public final class StudyServletTest {
@@ -55,12 +58,10 @@ public final class StudyServletTest {
 
   @Before
   public void setUp() throws Exception {
-
     helper.setUp();
     servlet = new StudyServlet();
     mockRequest = mock(HttpServletRequest.class);
     mockResponse = mock(HttpServletResponse.class);
-
     // Set up a fake HTTP response
     responseWriter = new StringWriter();
     when(mockResponse.getWriter()).thenReturn(new PrintWriter(responseWriter));
@@ -72,6 +73,7 @@ public final class StudyServletTest {
   public void tearDown() throws Exception {
     helper.setEnvIsLoggedIn(true);
     helper.tearDown();
+    DateTimeUtils.setCurrentMillisSystem();
   }
 
   @Test
@@ -174,8 +176,6 @@ public final class StudyServletTest {
 
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
-    System.out.println("grabSortedStudyModeQuiz1-----------------");
-    System.out.println(response);
     String expectedResponse =
         "["
             + "[{\"quizWord\":\"translatedTest2\", \"cardKey\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAIM\","
@@ -216,6 +216,39 @@ public final class StudyServletTest {
     assertTrue(compareJson(response, expectedResponse));
   }
 
+  @Test
+  public void userAnswersCorrectly() throws Exception {
+    DateTimeUtils.setCurrentMillisFixed(162000000L);
+    // The time gap between when the user created the card and when its being tested is 45 hours
+    cardA =
+        new Card.Builder()
+            .setFamilarityScore(.5)
+            .setTimeTested(0L)
+            .setImageBlobKey("null")
+            .setRawText("test")
+            .setTextTranslated("translatedTest")
+            .build();
+
+    Entity folder = new Entity("Folder", "testID");
+    String folderKey = KeyFactory.keyToString(folder.getKey());
+
+    Card cardInDatastore = storeCardInDatastore(cardA, datastore, folderKey);
+    String cardKey = cardInDatastore.getCardKey();
+
+    when(mockRequest.getParameter("answeredCorrectly")).thenReturn("true");
+    when(mockRequest.getParameter("cardKey")).thenReturn(cardKey);
+
+    servlet.doPost(mockRequest, mockResponse);
+
+    Entity updatedCard = datastore.get(KeyFactory.stringToKey(cardKey));
+    Card cardAUpdated = new Card(updatedCard);
+    Double response = cardAUpdated.getFamilarityScore();
+    long time = cardAUpdated.getTimeTested();
+    Double expectedResponse = (Double) 2.142857142;
+
+    assertTrue(compareDoubles(response, expectedResponse));
+  }
+
   public Card storeCardInDatastore(Card card, DatastoreService datastore, String folderKey) {
     card.setParentKey(folderKey);
     Entity cardEntity = card.createEntity();
@@ -224,5 +257,12 @@ public final class StudyServletTest {
     card.setCardKey(KeyFactory.keyToString(cardEntity.getKey()));
 
     return card;
+  }
+
+  public Boolean compareDoubles(Double value1, Double value2) {
+    if (Math.abs(value1 - value2) < .0001) {
+      return true;
+    }
+    return false;
   }
 }

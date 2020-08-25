@@ -175,7 +175,7 @@ public class StudyServlet extends HttpServlet {
   }
 
   private Double decFamilarityScore(long time, Double currentScore, long prevTime) {
-    Double numHours = (double) (time - prevTime) / 3600;
+    Double numHours = (double) (time - prevTime) / 3600000;
     if (numHours > 24) {
       numHours = 0.0;
     } else {

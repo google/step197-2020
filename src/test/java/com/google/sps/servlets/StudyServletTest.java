@@ -58,6 +58,8 @@ public final class StudyServletTest {
 
   @Before
   public void setUp() throws Exception {
+    // Freezes time for testing at 45 hours from january first
+    DateTimeUtils.setCurrentMillisFixed(162000000L);
     helper.setUp();
     servlet = new StudyServlet();
     mockRequest = mock(HttpServletRequest.class);
@@ -73,6 +75,7 @@ public final class StudyServletTest {
   public void tearDown() throws Exception {
     helper.setEnvIsLoggedIn(true);
     helper.tearDown();
+    // Ensures that time runs normally when deployed
     DateTimeUtils.setCurrentMillisSystem();
   }
 
@@ -218,7 +221,6 @@ public final class StudyServletTest {
 
   @Test
   public void userAnswersCorrectly() throws Exception {
-    DateTimeUtils.setCurrentMillisFixed(162000000L);
     // The time gap between when the user created the card and when its being tested is 45 hours
     cardA =
         new Card.Builder()
@@ -249,6 +251,37 @@ public final class StudyServletTest {
     assertTrue(compareDoubles(response, expectedResponse));
   }
 
+  @Test
+  public void userAnswersInCorrectly() throws Exception {
+    // The time gap between when the user created the card and when its being tested is 10 hours
+    cardA =
+        new Card.Builder()
+            .setFamilarityScore(.5)
+            .setTimeTested(126000000L)
+            .setImageBlobKey("null")
+            .setRawText("test")
+            .setTextTranslated("translatedTest")
+            .build();
+
+    Entity folder = new Entity("Folder", "testID");
+    String folderKey = KeyFactory.keyToString(folder.getKey());
+
+    Card cardInDatastore = storeCardInDatastore(cardA, datastore, folderKey);
+    String cardKey = cardInDatastore.getCardKey();
+
+    when(mockRequest.getParameter("answeredCorrectly")).thenReturn("false");
+    when(mockRequest.getParameter("cardKey")).thenReturn(cardKey);
+
+    servlet.doPost(mockRequest, mockResponse);
+
+    Entity updatedCard = datastore.get(KeyFactory.stringToKey(cardKey));
+    Card cardAUpdated = new Card(updatedCard);
+    Double response = cardAUpdated.getFamilarityScore();
+    long time = cardAUpdated.getTimeTested();
+    Double expectedResponse = (Double) 0.74;
+    assertTrue(compareDoubles(response, (-1) * expectedResponse));
+  }
+
   public Card storeCardInDatastore(Card card, DatastoreService datastore, String folderKey) {
     card.setParentKey(folderKey);
     Entity cardEntity = card.createEntity();
@@ -259,6 +292,10 @@ public final class StudyServletTest {
     return card;
   }
 
+  /**
+   * Compares two doubles and ignores garbage values that could accumulate when calculating the
+   * familarity score.
+   */
   public Boolean compareDoubles(Double value1, Double value2) {
     if (Math.abs(value1 - value2) < .0001) {
       return true;

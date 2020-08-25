@@ -22,11 +22,10 @@ import com.google.sps.tool.WordSearch;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Collections;
 
 /**
  * Handles the study mode questions and responses by adjusting and sorting a card's based on their
- * familarity score and last time seen.
+ * familiarity score and last time seen.
  */
 @WebServlet("/study")
 public class StudyServlet extends HttpServlet {
@@ -44,16 +43,10 @@ public class StudyServlet extends HttpServlet {
     }
   }
 
-  class SortByFamilarity implements Comparator<Card> {
-    public int compare(Card a, Card b) {
-      return (int) (a.getFamilarityScore() - b.getFamilarityScore());
-    }
-  }
-
   private int numOfCardsPerRound = 1;
   private int maxNumOfRounds = 4;
 
-  // Returns QuizCard's that are sorted by familarity score as json
+  // Returns QuizCard's that are sorted by familiarity score as json
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
@@ -67,12 +60,12 @@ public class StudyServlet extends HttpServlet {
 
       if (results != null) {
         for (Entity entity : results.asIterable()) {
-          // If the card has no familarity score then it's set to the default value
+          // If the card has no familiarity score then it's set to the default value
           userCards.add(initializeCard(entity));
         }
       }
-      // Sorts cards in increasing order of familarity score
-      Collections.sort(userCards, new SortByFamilarity());
+      // Sorts cards in increasing order of familiarity score
+      UserCards.sort((Card c1, Card c2) -> Double.compare(c1.getFamiliarityScore(), c2.getFamiliarityScore()));
       List<List<QuizCard>> quiz = createQuizRounds(userCards);
 
       Gson gson = new Gson();
@@ -82,7 +75,7 @@ public class StudyServlet extends HttpServlet {
     }
   }
 
-  // Updates and stores a card's new familarity score
+  // Updates and stores a card's new familiarity score
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Entity cardEntity;
@@ -101,11 +94,11 @@ public class StudyServlet extends HttpServlet {
     if (cardEntity != null) {
       Card card = new Card(cardEntity);
       if (answeredCorrectly.equals("true")) {
-        newScore = incFamilarityScore(time, card.getFamilarityScore(), card.getTimeTested());
+        newScore = incFamiliarityScore(time, card.getFamiliarityScore(), card.getTimeTested());
       } else {
-        newScore = decFamilarityScore(time, card.getFamilarityScore(), card.getTimeTested());
+        newScore = decFamiliarityScore(time, card.getFamiliarityScore(), card.getTimeTested());
       }
-      cardEntity.setProperty("familarityScore", newScore);
+      cardEntity.setProperty("familiarityScore", newScore);
       cardEntity.setProperty("timeTested", time);
       datastore.put(cardEntity);
     }
@@ -138,9 +131,9 @@ public class StudyServlet extends HttpServlet {
   }
 
   private Card initializeCard(Entity entity) {
-    // If cards don't have a familarity score then provide default value
-    if (!entity.hasProperty("familarityScore")) {
-      entity.setProperty("familarityScore", .5);
+    // If cards don't have a familiarity score then provide default value
+    if (!entity.hasProperty("familiarityScore")) {
+      entity.setProperty("familiarityScore", .5);
       entity.setProperty("timeTested", System.currentTimeMillis());
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(entity);
@@ -149,7 +142,7 @@ public class StudyServlet extends HttpServlet {
     return card;
   }
 
-  private Double incFamilarityScore(long time, Double currentScore, long prevTime) {
+  private Double incFamiliarityScore(long time, Double currentScore, long prevTime) {
     Double numHours = (double) (time - prevTime) / 3600;
     if (numHours > 168) {
       numHours = 168.0;
@@ -157,7 +150,7 @@ public class StudyServlet extends HttpServlet {
     return (currentScore + ((numHours / 168) * 2.4)) + 1;
   }
 
-  private Double decFamilarityScore(long time, Double currentScore, long prevTime) {
+  private Double decFamiliarityScore(long time, Double currentScore, long prevTime) {
     Double numHours = (double) (time - prevTime) / 3600;
     if (numHours > 24) {
       numHours = 0.0;

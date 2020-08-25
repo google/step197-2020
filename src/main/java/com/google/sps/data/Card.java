@@ -56,7 +56,7 @@ public final class Card {
   private String textTranslated = "null";
   private String key;
   private String parentKey;
-  private Double familarityScore;
+  private Double familiarityScore;
   private Long timeTested;
 
   private Card() {}
@@ -66,12 +66,12 @@ public final class Card {
     this.rawText = (String) entity.getProperty("rawText");
     this.textTranslated = (String) entity.getProperty("textTranslated");
     this.key = KeyFactory.keyToString(entity.getKey());
-    this.familarityScore = (Double) entity.getProperty("familarityScore");
+    this.familiarityScore = (Double) entity.getProperty("familiarityScore");
     this.timeTested = (Long) entity.getProperty("timeTested");
   }
 
-  public Double getFamilarityScore() {
-    return this.familarityScore;
+  public Double getFamiliarityScore() {
+    return this.familiarityScore;
   }
 
   public String getImageBlobKey() {
@@ -94,8 +94,8 @@ public final class Card {
     return this.key;
   }
 
-  public void setFamilarityScore(Double newScore) {
-    this.familarityScore = newScore;
+  public void setFamiliarityScore(Double newScore) {
+    this.familiarityScore = newScore;
   }
 
   public void setImageBlobKey(String newImageBlobKey) {

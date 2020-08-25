@@ -16,6 +16,7 @@ import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.sps.tool.ResponseSerializer;
 import com.google.sps.data.Card;
+import com.google.sps.tool.BlobstoreUtil;
 
 @WebServlet("/deletecard")
 public class DeleteCardServlet extends HttpServlet {
@@ -40,8 +41,8 @@ public class DeleteCardServlet extends HttpServlet {
       response.getWriter().println(new Gson().toJson(jsonErrorInfo));
     } else {
       String imageBlobKey = (String) card.getProperty("imageBlobKey");
-      Card.deleteBlob(imageBlobKey);
-      deleteCardWithRetries(card);
+      BlobstoreUtil.deleteBlobWithRetries(imageBlobKey);
+      Card.deleteCardWithRetries(card);
     }
   }
 
@@ -51,22 +52,6 @@ public class DeleteCardServlet extends HttpServlet {
       return datastore.get(KeyFactory.stringToKey(cardKey));
     } catch (EntityNotFoundException e) {
       return null;
-    }
-  }
-
-  private void deleteCardWithRetries(Entity card) {
-    int retries = 5;
-    while (true) {
-      try {
-        Card.deleteCard(card);
-        break;
-      } catch (Exception e) {
-        if (retries == 0) {
-          Card.addDatastoreDeleteTaskToQueue(card);
-          break;
-        }
-        --retries;
-      }
     }
   }
 }

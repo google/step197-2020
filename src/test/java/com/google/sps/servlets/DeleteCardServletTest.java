@@ -2,6 +2,7 @@ package com.google.sps.servlets;
 
 import static com.google.appengine.api.datastore.FetchOptions.Builder.withLimit;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
@@ -65,7 +66,7 @@ public final class DeleteCardServletTest {
   }
 
   @Test
-  public void deleteACardWithOneInside() throws Exception {
+  public void deleteACardWithOneInDatastore() throws Exception {
     // Generate testing card to add into datastore
     Card card =
         new Card.Builder()
@@ -79,8 +80,9 @@ public final class DeleteCardServletTest {
     Entity folder = new Entity("Folder", "testID");
     String folderKey = KeyFactory.keyToString(folder.getKey());
 
-    Card cardInDatastore = Card.storeCardInDatastore(card, datastore, folderKey);
-    String cardKey = cardInDatastore.getCardKey();
+    Card.storeCardInDatastore(card, datastore, folderKey);
+    assertNotNull(datastore.get(KeyFactory.stringToKey(card.getCardKey())));
+    String cardKey = card.getCardKey();
 
     when(mockRequest.getParameter("cardKey")).thenReturn(cardKey);
 
@@ -93,7 +95,7 @@ public final class DeleteCardServletTest {
   }
 
   @Test
-  public void deleteACardWithTwoInside() throws Exception {
+  public void deleteACardWithTwoInDatastore() throws Exception {
     // Generate testing cards to add into datastore
     Card cardA =
         new Card.Builder()
@@ -114,7 +116,10 @@ public final class DeleteCardServletTest {
     String folderKey = KeyFactory.keyToString(folder.getKey());
 
     Card.storeCardInDatastore(cardB, datastore, folderKey);
+    assertNotNull(datastore.get(KeyFactory.stringToKey(cardB.getCardKey())));
+
     Card.storeCardInDatastore(cardA, datastore, folderKey);
+    assertNotNull(datastore.get(KeyFactory.stringToKey(cardA.getCardKey())));
     String cardAKey = cardA.getCardKey();
 
     when(mockRequest.getParameter("cardKey")).thenReturn(cardAKey);

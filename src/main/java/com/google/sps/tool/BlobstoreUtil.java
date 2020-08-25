@@ -11,7 +11,7 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 import java.io.IOException;
 
 public class BlobstoreUtil {
-    
+
   public static void deleteBlobWithRetries(String blobKey) throws IOException {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     BlobKey key = new BlobKey(blobKey);

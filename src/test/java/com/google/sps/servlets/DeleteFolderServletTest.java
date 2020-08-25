@@ -67,7 +67,7 @@ public final class DeleteFolderServletTest {
   }
 
   @Test
-  public void deleteFolderWithNoCardInside() throws Exception {
+  public void deleteFolderWithNoCardInDatastore() throws Exception {
     // Generate testing folder to add into datastore
     Folder folder = new Folder("FIRSTFOLDER", "en");
 

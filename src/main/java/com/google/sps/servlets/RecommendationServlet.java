@@ -18,16 +18,15 @@ import java.util.HashMap;
 
 @WebServlet("/recommendation")
 public class RecommendationServlet extends HttpServlet {
-  private DB mainDB;
+  private DB db;
   private BTreeMap<String, String[]> queryNearestNeighbors;
 
   @Override
   public void init() {
     String path = Paths.get("/home/ngothomas/downloads/webapp/step197-2020/word2vec.db").toString();
-    mainDB = DBMaker.fileDB(path).make();
+    db = DBMaker.fileDB(path).make();
     queryNearestNeighbors =
-        mainDB
-            .treeMap("Main")
+        db.treeMap("Main")
             .keySerializer(Serializer.STRING)
             .valueSerializer(Serializer.JAVA)
             .createOrOpen();
@@ -35,7 +34,7 @@ public class RecommendationServlet extends HttpServlet {
 
   @Override
   public void destroy() {
-    mainDB.close();
+    db.close();
   }
 
   @Override

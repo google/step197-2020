@@ -9,22 +9,20 @@ import java.util.Collections;
 import java.util.Random;
 
 public class WordSearch {
-  private static HashMap<Character, ArrayList<String>> firstLetterMap =
+  private static HashMap<Character, ArrayList<String>> alphabetWordMap =
       new HashMap<Character, ArrayList<String>>();
 
   public static ArrayList<String> generateWordOptions(String correctAnswer) {
     ArrayList<String> quizWords = new ArrayList<>();
     quizWords.add(correctAnswer);
 
-    if (!firstLetterMap.containsKey('a')) {
-      // If hashmap can't read file then it should just return the correct Answer
-      if (!initMap()) {
-        return quizWords;
-      }
+    if (!alphabetWordMap.containsKey('a') && !initMap()) {
+      // If the dictionary file can't be read then it just return the correct Answer
+      return quizWords;
     }
 
     char firstLetter = correctAnswer.charAt(0);
-    ArrayList<String> wordList = firstLetterMap.get(Character.toLowerCase(firstLetter));
+    ArrayList<String> wordList = alphabetWordMap.get(Character.toLowerCase(firstLetter));
     Boolean wordFound = false;
 
     for (int i = 0; i < wordList.size(); i++) {
@@ -83,10 +81,10 @@ public class WordSearch {
         while (reader.hasNextLine()) {
           String word = reader.nextLine();
           char firstLetter = word.charAt(0);
-          if (!firstLetterMap.containsKey(firstLetter)) {
-            firstLetterMap.put(firstLetter, new ArrayList<String>());
+          if (!alphabetWordMap.containsKey(firstLetter)) {
+            alphabetWordMap.put(firstLetter, new ArrayList<String>());
           }
-          firstLetterMap.get(firstLetter).add(word);
+          alphabetWordMap.get(firstLetter).add(word);
         }
 
         reader.close();
@@ -97,7 +95,7 @@ public class WordSearch {
         }
         // If parsing fails try again
         retries--;
-        firstLetterMap.clear();
+        alphabetWordMap.clear();
       }
     }
     return true;

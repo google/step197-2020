@@ -82,7 +82,7 @@ public final class StudyServletTest {
   @Test
   public void grabNewStudyModeCards() throws Exception {
     /**
-     * Cards have not been initialized and all have the same default familarity score. Therefore,
+     * Cards have not been initialized and all have the same default familiarity score. Therefore,
      * they will be returned in the order created.
      */
     cardA =
@@ -136,26 +136,26 @@ public final class StudyServletTest {
   @Test
   public void grabStudyModeCards() throws Exception {
     /*
-     * These cards  have familarity scores and should be sorted and
-     * returned in order of increasing familarity score.
+     * These cards  have familiarity scores and should be sorted and
+     * returned in order of increasing familiarity score.
      */
     cardA =
         new Card.Builder()
-            .setFamilarityScore(3.67)
+            .setFamiliarityScore(3.67)
             .setImageBlobKey("null")
             .setRawText("test")
             .setTextTranslated("translatedTest")
             .build();
     cardB =
         new Card.Builder()
-            .setFamilarityScore(-.54)
+            .setFamiliarityScore(-.54)
             .setImageBlobKey("null")
             .setRawText("test2")
             .setTextTranslated("translatedTest2")
             .build();
     cardC =
         new Card.Builder()
-            .setFamilarityScore(9.3)
+            .setFamiliarityScore(9.3)
             .setImageBlobKey("null")
             .setRawText("test3")
             .setTextTranslated("translatedTest3")
@@ -224,7 +224,7 @@ public final class StudyServletTest {
     // The time gap between when the user created the card and when its being tested is 45 hours
     cardA =
         new Card.Builder()
-            .setFamilarityScore(.5)
+            .setFamiliarityScore(.5)
             .setTimeTested(0L)
             .setImageBlobKey("null")
             .setRawText("test")
@@ -244,7 +244,7 @@ public final class StudyServletTest {
 
     Entity updatedCard = datastore.get(KeyFactory.stringToKey(cardKey));
     Card cardAUpdated = new Card(updatedCard);
-    Double response = cardAUpdated.getFamilarityScore();
+    Double response = cardAUpdated.getFamiliarityScore();
     long time = cardAUpdated.getTimeTested();
     Double expectedResponse = (Double) 2.142857142;
 
@@ -256,7 +256,7 @@ public final class StudyServletTest {
     // The time gap between when the user created the card and when its being tested is 10 hours
     cardA =
         new Card.Builder()
-            .setFamilarityScore(.5)
+            .setFamiliarityScore(.5)
             .setTimeTested(126000000L)
             .setImageBlobKey("null")
             .setRawText("test")
@@ -276,7 +276,7 @@ public final class StudyServletTest {
 
     Entity updatedCard = datastore.get(KeyFactory.stringToKey(cardKey));
     Card cardAUpdated = new Card(updatedCard);
-    Double response = cardAUpdated.getFamilarityScore();
+    Double response = cardAUpdated.getFamiliarityScore();
     long time = cardAUpdated.getTimeTested();
     Double expectedResponse = (Double) 0.74;
     assertTrue(compareDoubles(response, (-1) * expectedResponse));
@@ -294,7 +294,7 @@ public final class StudyServletTest {
 
   /**
    * Compares two doubles and ignores garbage values that could accumulate when calculating the
-   * familarity score.
+   * familiarity score.
    */
   public Boolean compareDoubles(Double value1, Double value2) {
     if (Math.abs(value1 - value2) < .0001) {

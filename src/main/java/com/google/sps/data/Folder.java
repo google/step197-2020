@@ -14,6 +14,12 @@ import org.mockito.plugins.MockMaker.StaticMockControl;
 
 public final class Folder {
 
+  enum FolderStatus {
+    ACTIVE,
+    DELETED,
+    OTHER,
+  }
+
   private String folderName;
   private String folderDefaultLanguage;
   private String folderKey;
@@ -59,7 +65,7 @@ public final class Folder {
     Entity folder = new Entity("Folder", KeyFactory.stringToKey(this.parentKey));
     folder.setProperty("folderName", this.folderName);
     folder.setProperty("folderDefaultLanguage", this.folderDefaultLanguage);
-    folder.setProperty("status", true);
+    folder.setProperty("status", FolderStatus.ACTIVE.toString());
 
     return folder;
   }
@@ -85,16 +91,32 @@ public final class Folder {
     }
   }
 
+  public static void deleteFolderWithRetries(Entity folder) {
+    int retries = 5;
+    while (true) {
+      try {
+        Folder.deleteFolder(folder);
+        break;
+      } catch (Exception e) {
+        if (retries == 0) {
+          Folder.addDatastoreDeleteTaskToQueue(folder);
+          break;
+        }
+        --retries;
+      }
+    }
+  }
+
   public static void markFolderAsDeleted(Entity folder) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    folder.setProperty("status", false);
+    folder.setProperty("status", FolderStatus.DELETED.toString());
     datastore.put(folder);
   }
 
   public static void addDatastoreDeleteTaskToQueue(Entity entity) {
     Queue queue = QueueFactory.getDefaultQueue();
     queue.add(
-        TaskOptions.Builder.withUrl("/datastoreWorker")
+        TaskOptions.Builder.withUrl("/datastoreEntityDeletionWorker")
             .param("key", KeyFactory.keyToString(entity.getKey())));
   }
 }

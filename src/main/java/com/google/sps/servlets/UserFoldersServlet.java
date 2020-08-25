@@ -51,8 +51,7 @@ public class UserFoldersServlet extends HttpServlet {
 
       if (results != null) {
         for (Entity entity : results.asIterable()) {
-          // Check if the folder entity is marked as deleted
-          if (!(boolean) entity.getProperty("status")) {
+          if (entity.getProperty("status") == "DELETED") {
             continue;
           }
           Folder folder = new Folder(entity);

@@ -8,6 +8,15 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.KeyFactory;
 
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreFailureException;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 
@@ -44,7 +53,7 @@ public class DeleteFolderServlet extends HttpServlet {
       response.getWriter().println(new Gson().toJson(jsonErrorInfo));
     } else {
       deleteAllCardsInsideFolder(folder);
-      deleteFolderWithRetries(folder);
+      Folder.deleteFolderWithRetries(folder);
     }
   }
 
@@ -57,53 +66,47 @@ public class DeleteFolderServlet extends HttpServlet {
     }
   }
 
-  private void deleteFolderWithRetries(Entity folder) {
-    int retries = 5;
-    while (true) {
-      try {
-        Folder.deleteFolder(folder);
-        break;
-      } catch (Exception e) {
-        if (retries == 0) {
-          Folder.addDatastoreDeleteTaskToQueue(folder);
-          break;
-        }
-        --retries;
-      }
-    }
-  }
-
   private void deleteAllCardsInsideFolder(Entity folder) throws IOException {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query cardQuery = new Query("Card").setAncestor(folder.getKey());
     PreparedQuery results = datastore.prepare(cardQuery);
 
-    // TODO(ngothomas): bug with testing local blobstore
-    // which is why there is a conditional statement for imageBlobKey
+    // TODO(ngothomas): There is a bug with deleting blobs on the
+    // test server. It throws exceptions.
     if (results != null) {
       for (Entity card : results.asIterable()) {
         String imageBlobKey = (String) card.getProperty("imageBlobKey");
         if (imageBlobKey != "null") {
-          Card.deleteBlob(imageBlobKey);
+          deleteBlobWithRetries(imageBlobKey);
         }
-        deleteCardWithRetries(card);
+        Card.deleteCardWithRetries(card);
       }
     }
   }
 
-  private void deleteCardWithRetries(Entity card) {
+  private void deleteBlobWithRetries(String blobKey) throws IOException {
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    BlobKey key = new BlobKey(blobKey);
+
     int retries = 5;
-    while (true) {
+    while (retries != 0) {
       try {
-        Card.deleteCard(card);
+        blobstoreService.delete(key);
         break;
-      } catch (Exception e) {
+      } catch (BlobstoreFailureException e) {
         if (retries == 0) {
-          Card.addDatastoreDeleteTaskToQueue(card);
-          break;
+          --retries;
         }
-        --retries;
       }
     }
+
+    if (retries == 0) {
+      addBlobstoreDeleteTaskToQueue(key.getKeyString());
+    }
+  }
+
+  private void addBlobstoreDeleteTaskToQueue(String key) {
+    Queue queue = QueueFactory.getDefaultQueue();
+    queue.add(TaskOptions.Builder.withUrl("/blobstoreKeyDeletionWorker").param("key", key));
   }
 }

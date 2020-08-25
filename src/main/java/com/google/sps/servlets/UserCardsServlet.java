@@ -49,8 +49,7 @@ public class UserCardsServlet extends HttpServlet {
 
       if (results != null) {
         for (Entity entity : results.asIterable()) {
-          // Check if card entity is marked as deleted
-          if (!(boolean) entity.getProperty("status")) {
+          if (entity.getProperty("status") == "DELETED") {
             continue;
           }
           Card card = new Card(entity);

@@ -22,7 +22,7 @@ public class TranslationServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      String jsonErrorInfo = ResponseSerializer.getErrorJson("User not logged in");
+      Map<String, String> jsonErrorInfo = ResponseSerializer.getErrorJson("User not logged in");
       response.setContentType("application/json;");
       response.getWriter().println(new Gson().toJson(jsonErrorInfo));
       return;

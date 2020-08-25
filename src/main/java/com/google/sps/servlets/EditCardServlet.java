@@ -32,7 +32,7 @@ public class EditCardServlet extends HttpServlet {
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      String jsonErrorInfo = ResponseSerializer.getErrorJson("User not logged in");
+      Map<String, String> jsonErrorInfo = ResponseSerializer.getErrorJson("User not logged in");
       response.setContentType("application/json;");
       response.getWriter().println(new Gson().toJson(jsonErrorInfo));
       return;
@@ -47,7 +47,7 @@ public class EditCardServlet extends HttpServlet {
     Entity card = getExistingCardInDatastore(response, datastore, cardKey);
 
     if (card == null) {
-      String jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot edit Card at the moment");
+      Map<String, String> jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot edit Card at the moment");
       response.setContentType("application/json;");
       response.getWriter().println(new Gson().toJson(jsonErrorInfo));
     } else {

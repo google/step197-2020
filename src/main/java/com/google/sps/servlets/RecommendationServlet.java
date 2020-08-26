@@ -20,11 +20,10 @@ import java.util.HashMap;
 public class RecommendationServlet extends HttpServlet {
   private DB db;
   private BTreeMap<String, String[]> queryNearestNeighbors;
-  private Map<String, String> jsonErrorInfo;
 
   @Override
   public void init() {
-    String path = Paths.get("/home/ngothomas/downloads/webapp/step197-2020/word2vec.db").toString();
+    String path = Paths.get("").toAbsolutePath().toString() + "/word2vec.db";
     db = DBMaker.fileDB(path).make();
     queryNearestNeighbors =
         db.treeMap("Main")
@@ -44,6 +43,7 @@ public class RecommendationServlet extends HttpServlet {
 
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
+      Map<String, String> jsonErrorInfo;
       jsonErrorInfo = ResponseSerializer.getErrorJson("User not logged in");
       response.setContentType("application/json;");
       response.getWriter().println(new Gson().toJson(jsonErrorInfo));
@@ -66,6 +66,7 @@ public class RecommendationServlet extends HttpServlet {
       jsonInfo.put(queryWord, requestedNeighbors);
       response.getWriter().println(new Gson().toJson(jsonInfo));
     } catch (NullPointerException e) {
+      Map<String, String> jsonErrorInfo;
       jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot find similar words at the moment");
       response.getWriter().println(new Gson().toJson(jsonErrorInfo));
     }

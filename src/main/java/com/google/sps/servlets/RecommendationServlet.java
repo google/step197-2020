@@ -50,7 +50,7 @@ public class RecommendationServlet extends HttpServlet {
       return;
     }
 
-    String queryWord = request.getParameter("queryWord");
+    String queryWord = request.getParameter("queryWord").toLowerCase();
     int numOfWordsRequested = Integer.parseInt(request.getParameter("numOfWordsRequested"));
 
     try {

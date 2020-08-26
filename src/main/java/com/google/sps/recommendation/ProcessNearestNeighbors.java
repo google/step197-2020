@@ -65,9 +65,9 @@ public class ProcessNearestNeighbors {
     /* There are about 300,000 words, so we want to iterate 600 times
      * each iteration computes a batch of 500 words */
     int rangeStart = 0;
-    int rangeEnd = 499;
+    int rangeEnd = 500;
     for (int i = 0; i < 600; i++) {
-      int[] range = IntStream.rangeClosed(rangeStart, rangeEnd).toArray();
+      int[] range = IntStream.range(rangeStart, rangeEnd).toArray();
       INDArray arrayIndex = Nd4j.create(range, new long[] {1, 500}, DataType.FLOAT);
 
       // Slice matrix into a batch of 500 x 300
@@ -80,7 +80,7 @@ public class ProcessNearestNeighbors {
       // Truncate matrix to 500 x 50 and store in file
       storeInFile(similarityMatrix, indexToWord, rangeStart);
 
-      rangeStart = rangeEnd + 1;
+      rangeStart = rangeEnd;
       rangeEnd += 500;
     }
   }

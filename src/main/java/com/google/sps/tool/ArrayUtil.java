@@ -5,7 +5,8 @@ import java.util.Arrays;
 
 public class ArrayUtil {
 
-  // Jave implementation of Numpy's argsort
+  // Java implementation of Numpy's argsort
+  // https://numpy.org/doc/stable/reference/generated/numpy.argsort.html
   public static int[] argsort(float[] a) {
     return argsort(a, true);
   }

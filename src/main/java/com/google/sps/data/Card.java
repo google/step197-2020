@@ -11,12 +11,6 @@ import com.google.appengine.api.datastore.DatastoreFailureException;
 
 public final class Card {
 
-  enum ClassStatus {
-    ALIVE,
-    DELETED,
-    OTHER
-  }
-
   public static class Builder {
     private String imageBlobKey = "null";
     private String rawText = "null";
@@ -119,7 +113,7 @@ public final class Card {
     card.setProperty("imageBlobKey", this.imageBlobKey);
     card.setProperty("rawText", this.rawText);
     card.setProperty("textTranslated", this.textTranslated);
-    card.setProperty("status", ClassStatus.ALIVE.toString());
+    card.setProperty("deleted", false);
 
     return card;
   }
@@ -144,32 +138,30 @@ public final class Card {
     }
   }
 
-  public static void deleteCardWithRetries(Entity card) {
-    int retries = 5;
-    while (true) {
+  public static void deleteCardWithRetries(Entity card, int retries) {
+    while (retries != 0) {
       try {
         deleteCard(card);
         break;
       } catch (Exception e) {
-        if (retries == 0) {
-          addDatastoreDeleteTaskToQueue(card);
-          break;
-        }
         --retries;
       }
+    }
+    if (retries == 0) {
+      addDatastoreDeleteTaskToQueue(card);
     }
   }
 
   public static void markCardAsDeleted(Entity card) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    card.setProperty("status", ClassStatus.DELETED.toString());
+    card.setProperty("deleted", true);
     datastore.put(card);
   }
 
   public static void addDatastoreDeleteTaskToQueue(Entity entity) {
     Queue queue = QueueFactory.getDefaultQueue();
     queue.add(
-        TaskOptions.Builder.withUrl("/datastoreWorker")
+        TaskOptions.Builder.withUrl("/datastoreEntityDeletionWorker")
             .param("key", KeyFactory.keyToString(entity.getKey())));
   }
 }

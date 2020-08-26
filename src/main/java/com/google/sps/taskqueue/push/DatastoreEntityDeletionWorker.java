@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/datastoreEntityDeletionWorker")
-public class DatastoreTaskWorker extends HttpServlet {
+public class DatastoreEntityDeletionWorker extends HttpServlet {
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {

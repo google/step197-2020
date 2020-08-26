@@ -1,0 +1,68 @@
+#searchContainer {
+    @import "~material-design-icons/iconfont/material-icons.css";
+      position: relative;
+      display: flex;
+      flex: 8;
+      align-items: center;
+      justify-content: center;
+}
+
+#searchButton {
+     width: 14%;
+      border-radius: 2rem 0 0 2rem;
+      border: 0.25rem solid #1D303D;
+      background-color: #136F9F;
+      color: white;
+      @media (max-width: 700px) {
+        width: 20%;
+      }
+}
+
+#searchForm {
+    width: 50%;
+      position: relative;
+      display: flex;
+      @media (max-width: 700px) {
+        width: 100%;
+        height: 2.75rem;
+      }
+}
+
+#searchNum {
+    margin-left: .5rem;
+    background-color: #c4c4c4;
+    border: 0.25rem solid #1D303D;
+    font-size: 3rem;
+    border-radius: 1rem;
+    width:12%;
+}
+
+#searchNum:focus {
+    background-color: white;
+    text-decoration-color: black;
+    border: 0.25rem solid #1d303d;
+}
+
+#searchBar {
+     background-color: #c4c4c4;
+      border-radius: 0 2rem 2rem 0;
+      border: 0.25rem solid #136F9F;
+      border-left: none;
+      outline: none;
+      width: 60%;
+      font-size: 2.5rem;
+}
+
+#searchBar:focus {
+    background-color: white;
+    text-decoration-color: black;
+    border: 0.25rem solid #1d303d;
+}
+
+/* Mobile layout */
+@media (max-width: 700px) {
+    #searchBar {
+        width: 70%;
+        font-size: 2rem;
+    }
+}

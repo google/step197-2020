@@ -45,7 +45,7 @@ public class DeleteFolderServlet extends HttpServlet {
       response.getWriter().println(new Gson().toJson(jsonErrorInfo));
     } else {
       deleteAllCardsInsideFolder(folder);
-      Folder.deleteFolderWithRetries(folder);
+      Folder.deleteFolderWithRetries(folder, /*retries=*/ 5);
     }
   }
 
@@ -69,9 +69,9 @@ public class DeleteFolderServlet extends HttpServlet {
       for (Entity card : results.asIterable()) {
         String imageBlobKey = (String) card.getProperty("imageBlobKey");
         if (imageBlobKey != "null") {
-          BlobstoreUtil.deleteBlobWithRetries(imageBlobKey);
+          BlobstoreUtil.deleteBlobWithRetries(imageBlobKey, /*retries=*/ 5);
         }
-        Card.deleteCardWithRetries(card);
+        Card.deleteCardWithRetries(card, /*retries=*/ 5);
       }
     }
   }

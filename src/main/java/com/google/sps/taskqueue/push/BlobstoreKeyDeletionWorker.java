@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/blobstoreKeyDeletionWorker")
-public class BlobstoreTaskWorker extends HttpServlet {
+public class BlobstoreKeyDeletionWorker extends HttpServlet {
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {

@@ -51,7 +51,7 @@ public class UserFoldersServlet extends HttpServlet {
 
       if (results != null) {
         for (Entity entity : results.asIterable()) {
-          if (entity.getProperty("status") == "DELETED") {
+          if ((boolean) entity.getProperty("deleted") == true) {
             continue;
           }
           Folder folder = new Folder(entity);

@@ -12,12 +12,6 @@ import com.google.appengine.api.datastore.DatastoreFailureException;
 
 public final class Folder {
 
-  enum FolderStatus {
-    ACTIVE,
-    DELETED,
-    OTHER,
-  }
-
   private String folderName;
   private String folderDefaultLanguage;
   private String folderKey;
@@ -63,7 +57,7 @@ public final class Folder {
     Entity folder = new Entity("Folder", KeyFactory.stringToKey(this.parentKey));
     folder.setProperty("folderName", this.folderName);
     folder.setProperty("folderDefaultLanguage", this.folderDefaultLanguage);
-    folder.setProperty("status", FolderStatus.ACTIVE.toString());
+    folder.setProperty("deleted", false);
 
     return folder;
   }
@@ -89,25 +83,23 @@ public final class Folder {
     }
   }
 
-  public static void deleteFolderWithRetries(Entity folder) {
-    int retries = 5;
-    while (true) {
+  public static void deleteFolderWithRetries(Entity folder, int retries) {
+    while (retries != 0) {
       try {
-        Folder.deleteFolder(folder);
+        deleteFolder(folder);
         break;
       } catch (Exception e) {
-        if (retries == 0) {
-          Folder.addDatastoreDeleteTaskToQueue(folder);
-          break;
-        }
         --retries;
       }
+    }
+    if (retries == 0) {
+      addDatastoreDeleteTaskToQueue(folder);
     }
   }
 
   public static void markFolderAsDeleted(Entity folder) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    folder.setProperty("status", FolderStatus.DELETED.toString());
+    folder.setProperty("deleted", true);
     datastore.put(folder);
   }
 

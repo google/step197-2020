@@ -12,19 +12,16 @@ import java.io.IOException;
 
 public class BlobstoreUtil {
 
-  public static void deleteBlobWithRetries(String blobKey) throws IOException {
+  public static void deleteBlobWithRetries(String blobKey, int retries) throws IOException {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     BlobKey key = new BlobKey(blobKey);
 
-    int retries = 5;
     while (retries != 0) {
       try {
         blobstoreService.delete(key);
         break;
       } catch (BlobstoreFailureException e) {
-        if (retries == 0) {
-          --retries;
-        }
+        --retries;
       }
     }
 

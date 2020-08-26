@@ -8,7 +8,6 @@ function MyFolders(props) {
   // Handles mobile menu button and updates sidebar view
   const [sideSetting, setSideSetting] = useState("f");
   const handleClick = (e) => {
-    console.log("Clicked");
     if (sideSetting === "f") {
       setSideSetting("t");
     } else {
@@ -16,8 +15,8 @@ function MyFolders(props) {
     }
   };
 
-    let word;
-    let numWords;
+  let word;
+  let numWords;
   (() => {
     const values = queryString.parse(props.location.search);
     word = values.word;
@@ -29,7 +28,7 @@ function MyFolders(props) {
       <Header id='head' handleClick={handleClick}></Header>
       <div id='main'>
         <Sidebar bool={sideSetting}></Sidebar>
-        <SimilarWordsContent></SimilarWordsContent>
+        <SimilarWordsContent word={word} numWords={numWords}></SimilarWordsContent>
       </div>
     </div>
   );

@@ -38,7 +38,8 @@ public class EditFolderServlet extends HttpServlet {
     Entity folderEntity = getExistingFolderInDatastore(response, datastore, folderKey);
 
     if (folderEntity == null) {
-      Map<String, String> jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot edit Folder at the moment");
+      Map<String, String> jsonErrorInfo =
+          ResponseSerializer.getErrorJson("Cannot edit Folder at the moment");
       response.setContentType("application/json;");
       response.getWriter().println(new Gson().toJson(jsonErrorInfo));
     } else {

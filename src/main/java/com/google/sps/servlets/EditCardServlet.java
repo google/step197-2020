@@ -47,7 +47,8 @@ public class EditCardServlet extends HttpServlet {
     Entity card = getExistingCardInDatastore(response, datastore, cardKey);
 
     if (card == null) {
-      Map<String, String> jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot edit Card at the moment");
+      Map<String, String> jsonErrorInfo =
+          ResponseSerializer.getErrorJson("Cannot edit Card at the moment");
       response.setContentType("application/json;");
       response.getWriter().println(new Gson().toJson(jsonErrorInfo));
     } else {

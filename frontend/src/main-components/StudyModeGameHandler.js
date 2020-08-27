@@ -1,14 +1,13 @@
 class Quiz {
-  constructor() {
+  constructor(studyService) {
     this.quiz = {};
     this.currentArray = 0;
     this.currentQuizWord = {};
+    this.studyService = studyService;
   }
 
   async start(folderKey) {
-    const quiz = await fetch(`/study?folderKey=${folderKey}`)
-      .then((result) => result.json())
-      .catch(alert("Could not find words for Study Mode"));
+    const quiz = await this.studyService.getWordsFromFolder(folderKey);
     this.quiz = quiz;
     this.currentArray = 0;
   }
@@ -33,7 +32,7 @@ class Quiz {
   }
 
   getCurrentRound() {
-    return this.currentArray;
+    return this.currentArray + 1;
   }
 
   getTotalRounds() {
@@ -41,4 +40,24 @@ class Quiz {
   }
 }
 
-export { Quiz };
+class StudyService {
+  async getWordsFromFolder(folderKey) {
+    const words = fetch(`/study?folderKey=${folderKey}`)
+      .then((result) => result.json())
+      .catch(alert("Could not find words for Study Mode"));
+    return words;
+  }
+}
+
+class MockStudyService {
+  constructor(words) {
+    this.words = words;
+  }
+  
+  getWordsFromFolder(folderKey) {
+    return this.words;
+  }
+
+}
+
+export { Quiz, StudyService, MockStudyService };

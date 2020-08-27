@@ -23,6 +23,7 @@ class StudyModeContent extends React.Component {
 
   componentDidMount() {
     // Grabs the first word in the game
+    console.log(this.props.quiz);
     const word = this.props.quiz.nextQuizWord();
     const round = this.props.quiz.getCurrentRound();
     this.setState({

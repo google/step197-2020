@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../main-components/Header";
 import Sidebar from "../main-components/Sidebar";
 import StudyModeContent from "../main-components/StudyModeContent";
-import { Quiz } from "../main-components/StudyModeGameHandler";
+import { Quiz, StudyService } from "../main-components/StudyModeGameHandler";
 import css from "./template.css";
 import queryString from "query-string";
 
@@ -19,8 +19,8 @@ class InsideStudyMode extends React.Component {
 
   // Initializes a new game
   async componentDidMount() {
-    const parameters = queryString.parse(props.location.search);
-    const quiz = Quiz(); 
+    const parameters = queryString.parse(this.props.location.search);
+    const quiz = new Quiz(new StudyService()); 
     await quiz.start(parameters.folderKey);
     this.setState({ quiz, isDataFetched: true });
   }
@@ -48,7 +48,7 @@ class InsideStudyMode extends React.Component {
         <Header id='head' handleClick={this.handleClick}></Header>
         <div id='main'>
           <Sidebar bool={this.state.sideSetting}></Sidebar>
-          <StudyModeContent Quiz={this.state.quiz}></StudyModeContent>
+          <StudyModeContent quiz={this.state.quiz}></StudyModeContent>
         </div>
       </div>
     );

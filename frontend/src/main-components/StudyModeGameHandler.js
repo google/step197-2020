@@ -1,42 +1,45 @@
-let quiz = [];
-let currentQuizWord = {};
-let currentArray = 0;
+class Quiz {
+  constructor() {
+    this.quiz = {};
+    this.currentArray = 0;
+    this.currentQuizWord = {};
+  }
 
-function startQuiz(folderKey) {
-    fetch(`/study?folderKey=${folderKey}`, { method: 'POST' })
-        .then(result => result.json())
-        .then(arrays => {
-            quiz = arrays;
-            return arrays.length;
-        })
-        .catch(alert("Could not find words for Study Mode"));
-}
+  async startQuiz(folderKey) {
+    const quiz = await fetch(`/study?folderKey=${folderKey}`, {
+      method: "POST",
+    })
+      .then((result) => result.json())
+      .then((arrays) => {})
+      .catch(alert("Could not find words for Study Mode"));
+    this.quiz = quiz;
+    this.currentArray = 0;
+  }
 
-function nextQuizWord() {
-    let nextWord = {};
-    if (quiz[currentArray].length != 0) {
-        nextWord = quiz[currentArray].shift();
-    } else {
-        currentArray++;
-        if (currentArray >= quiz.length) {
-            return null;
-        } else {
-            nextWord = quiz[currentArray].shift();
-        }
+  nextQuizWord() {
+    while (
+      this.currentArray < this.quiz.length &&
+      this.quiz[this.currentArray].length == 0
+    ) {
+      this.currentArray++;
     }
-    currentQuizWord = nextWord;
-    return nextWord;
-}
+    if (this.currentArray == this.quiz.length) {
+      return null;
+    }
+    this.currentQuizWord = this.quiz[this.currentArray].shift();
+    return this.currentQuizWord;
+  }
 
-function updateWordQueues(correct) {
-    if (correct === "false" && currentArray < (quiz.length - 1)) {
-        quiz[currentArray + 1].push(currentQuizWord);
+  updateWordQueues(correct) {
+    if (correct === "false" && this.currentArray < this.quiz.length - 1) {
+      this.quiz[this.currentArray + 1].push(this.currentQuizWord);
     }
     //TODO(esaaracay): Fetch /study to update familarity score
+  }
+
+  getRound() {
+    return this.currentArray;
+  }
 }
 
-function getRound() {
-    return currentArray;
-}
-
-export { startQuiz, updateWordQueues, nextQuizWord, getRound };
+export { Quiz };

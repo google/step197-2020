@@ -1,6 +1,14 @@
 import React from "react";
 import styled from "@emotion/styled";
 
+const Dot = styled.div`
+  display: flex;
+  height: 6rem;
+  width: 6rem;
+  border-radius: 50%;
+  margin-right: 10%;
+`;
+
 class RoundLights extends React.Component {
   constructor(props) {
     super(props);
@@ -20,16 +28,8 @@ class RoundLights extends React.Component {
   }
 
   render() {
-    const Dot = styled.div`
-      display:flex;
-      height: 6rem;
-      width: 6rem;
-      border-radius: 50%;
-      margin-right: 10%;
-    `;
-
     return this.statusColors.map((color, i) => {
-      return <Dot style={{backgroundColor:`${color}`}} key={i}></Dot>;
+      return <Dot style={{ backgroundColor: `${color}` }} key={i}></Dot>;
     });
   }
 }

@@ -10,11 +10,15 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.NDArrayIndex;
 
+import org.mapdb.DB;
+import org.mapdb.DBMaker;
+import org.mapdb.BTreeMap;
+import org.mapdb.Serializer;
+
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.stream.IntStream;
 import com.google.sps.tool.ArrayUtil;
-import org.mapdb.*;
 
 /* This function of this file is to ONLY pre-process the nearest neigbors of 300,000 words.
  * It will create/update a binary .db file. Time results and optimal batch size
@@ -66,7 +70,7 @@ public class ProcessNearestNeighbors {
      * each iteration computes a batch of 500 words */
     int rangeStart = 0;
     int rangeEnd = 500;
-    for (int i = 0; i < 600; i++) {
+    for (int i = 0; i < 1; i++) {
       int[] range = IntStream.range(rangeStart, rangeEnd).toArray();
       INDArray arrayIndex = Nd4j.create(range, new long[] {1, 500}, DataType.FLOAT);
 
@@ -86,7 +90,7 @@ public class ProcessNearestNeighbors {
   }
 
   public static void storeInFile(INDArray similarityMatrix, String[] indexToWord, int rangeStart) {
-    DB db = DBMaker.fileDB("/home/ngothomas/downloads/webapp/step197-2020/word2vec.db").make();
+    DB db = DBMaker.fileDB("/home/ngothomas/downloads/webapp/step197-2020/w2v.db").make();
 
     BTreeMap<String, String[]> map =
         db.treeMap("Main")

@@ -22,7 +22,7 @@ public class ReactServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     String servletPath = request.getServletPath();
-    if(servletPath.equals("/homePage")) {
+    if (servletPath.equals("/homePage")) {
       request.setAttribute("TITLE", "Home");
       ServletUtils.RenderReact("homePage", request, response);
     }

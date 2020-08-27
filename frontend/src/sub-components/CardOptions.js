@@ -13,12 +13,14 @@ const Option = styled.div`
     border: 0.25rem solid #136f9f;
   }
 `;
+
 const Input = styled.input`
   margin-left: 5%;
   width: 3.5rem;
   height: 3.5rem;
   background: #a9a9a9;
 `;
+
 const Label = styled.label`
   font-size: 4rem;
   margin-right: auto;

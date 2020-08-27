@@ -27,7 +27,7 @@ class CreateFolderContent extends Component {
    */
   render() {
     return (
-      <div className='Container'>
+      <div className='container'>
         <div id='innerContainer'>
           <div id='folderPreview'>
             <h2 id='previewFolderName'>{this.state.folderName}</h2>

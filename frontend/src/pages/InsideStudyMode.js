@@ -6,13 +6,9 @@ import css from "./template.css";
 
 function InsideStudyMode(props) {
   // Handles mobile menu button and updates sidebar view
-  const [sideSetting, setSideSetting] = useState("f");
+  const [sideSetting, setSideSetting] = useState(false);
   const handleClick = (e) => {
-    if (sideSetting === "f") {
-      setSideSetting("t");
-    } else {
-      setSideSetting("f");
-    }
+    setSideSetting((sideSetting) => !sideSetting);
   };
 
   return (

@@ -10,7 +10,7 @@ html {
   width: 80%;
 }
 
-#CardPreview {
+#cardPreview {
   align-content: space-between;
   display: flex;
   flex: 3;
@@ -90,7 +90,7 @@ li {
     flex-direction: column;
   }
 
-  #CardPreview {
+  #cardPreview {
     min-height: 100vh;
     padding-right: 0;
   }

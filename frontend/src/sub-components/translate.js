@@ -2,7 +2,7 @@
  * Fetches translated text using the Google Translate API
  */
 async function getTranslation(term, fromLang, toLang) {
-  const searchParams = URLSearchParams();
+  const searchParams = new URLSearchParams();
   searchParams.append("rawText", term);
   searchParams.append("toLang", toLang);
   searchParams.append("fromLang", fromLang);

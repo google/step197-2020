@@ -160,14 +160,9 @@ class ImageInterfaceContent extends React.Component {
 										<button className="Button" onClick={this.handleReset}>
 											Reset to Default
 										</button>
-										<form method="POST" enctype="multipart/form-data" action={this.state.imageUploadUrl}>
-											<input
-												className="Button"
-												type="submit"
-												onClick={this.handleImageCrop}
-												value="Crop"
-											></input>
-										</form>
+										<button className="Button" onClick={this.handleImageCrop}>
+											Crop
+										</button>
 									</div>
 								</div>
 							</div>

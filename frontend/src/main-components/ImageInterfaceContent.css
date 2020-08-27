@@ -1,4 +1,4 @@
-.Container{
+.Container {
   flex: 9;
   display: flex;
   border: 1rem solid white;
@@ -9,19 +9,19 @@
   font-family: "Montserrat", sans-serif;
   font-size: 1.5rem;
 }
-.ContentContainer{
+.ContentContainer {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
 }
-.FormContainer{
+.FormContainer {
   border-color: #1d303d;
   border-width: 1rem;
   display: flex;
-  flex:1;
+  flex: 1;
   align-items: center;
   justify-content: center;
-  margin:5vh 5vw;
+  margin: 5vh 5vw;
   flex-direction: column;
 }
 .Button {
@@ -40,40 +40,43 @@
 .Button:hover {
   background-color: #1d303d;
 }
-.ButtonContainer{
+.ButtonContainer {
   display: flex;
   flex-direction: row;
   flex-flow: wrap;
   justify-content: space-around;
   align-items: center;
 }
-.ImageContainer{
-  flex:2;
-  display:flex;
+.ImageContainer {
+  flex: 2;
+  display: flex;
   text-align: center;
   justify-content: center;
   align-items: center;
-  width:100%;
+  width: 100%;
   height: 60vh;
   margin: 2%;
   flex-direction: column;
 }
-.CroppedImage{
-  width:60vh;
+.CroppedImage {
+  width: 60vh;
 }
-.CropContainer{
-  width:90%;
+.CropContainer {
+  width: 90%;
   position: relative;
   height: 90%;
 }
-.ControlsContainer{
+.ControlsContainer {
   display: block;
 }
-.NoImageContainer{
-  flex:2;
-  padding:30vh 10vw;
-  background-color:#c4c4c4;;
-  margin:5%;
+.NoImageContainer {
+  flex: 2;
+  padding: 30vh 10vw;
+  background-color: #c4c4c4;
+  margin: 5%;
   text-align: center;
   font-size: 1.5rem;
+}
+.HiddenForm{
+  display:none;
 }

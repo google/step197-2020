@@ -2,6 +2,24 @@ import React from "react";
 import styled from "@emotion/styled";
 import Folder from "../flashcards/Folder.js";
 import { logDebugMessage } from "./LogDebugMessage";
+
+const Container = styled.div`
+  flex: 9;
+  display: flex;
+  border: 1rem solid white;
+  border-radius: 1rem;
+  background-color: white;
+  margin: 1%;
+  flex-direction: column;
+`;
+
+const folderStyle = {
+  display: "flex",
+  flexFlow: "row wrap",
+  justifyContent: "space-around",
+  alignItems: "start",
+};
+
 class MyFoldersContent extends React.Component {
   constructor(props) {
     super(props);
@@ -24,21 +42,6 @@ class MyFoldersContent extends React.Component {
   }
 
   render() {
-    const Container = styled.div`
-      flex: 9;
-      display: flex;
-      border: 1rem solid white;
-      border-radius: 1rem;
-      background-color: white;
-      margin: 1%;
-      flex-direction: column;
-    `;
-    const folderStyle = {
-      display: "flex",
-      flexFlow: "row wrap",
-      justifyContent: "space-around",
-      alignItems: "start",
-    };
     let headingText =
       "You have no folders at the moment. Please make a new folder by clicking on the side menu.";
     if (!this.state.isDataFetched) {

@@ -2,7 +2,11 @@
  * Fetches translated text using the Google Translate API
  */
 async function getTranslation(term, fromLang, toLang) {
-  const response = await fetch(`/translation?rawText=${term}&toLang=${toLang}&fromLang=${fromLang}`)
+  const searchParams = URLSearchParams();
+  searchParams.append("rawText", term);
+  searchParams.append("toLang", toLang);
+  searchParams.append("fromLang", fromLang);
+  const response = await fetch(('/translation?'+ searchParams.toString()))
     .then(res => res.json())
     .then((result) => {
       return result;

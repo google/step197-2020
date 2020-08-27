@@ -12,7 +12,7 @@ class InsideStudyMode extends React.Component {
     this.state = {
       isDataFetched: false,
       rounds: 0,
-      sideSetting: "f",
+      sideSetting: false,
     };
     this.handleClick = this.handleClick.bind(this);
   }
@@ -25,12 +25,10 @@ class InsideStudyMode extends React.Component {
   }
 
   handleClick(event) {
-    if (sideSetting === "f") {
-      this.setState({ sideSetting: "t" });
-    } else {
-      this.setState({ sideSetting: "f" });
-    }
-  };
+    this.setState((prevState) => {
+      return { sideSetting: !prevState.sideSetting };
+    })
+  }
 
   render() {
     // Handles mobile menu button and updates sidebar view

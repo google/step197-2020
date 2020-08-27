@@ -11,11 +11,11 @@ import javax.servlet.ServletException;
 @WebServlet(
     urlPatterns = {
       "/MyFolders",
-      "createCard",
-      "createFolder",
-      "imageInterface",
-      "youtubeInterface",
-      "insideFolder"
+      "/CreateCard",
+      "/CreateFolder",
+      "/ImageInterface",
+      "/YoutubeInterface",
+      "/InsideFolder"
     })
 public class ReactServlet2 extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)

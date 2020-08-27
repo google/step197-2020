@@ -70,7 +70,7 @@ public class ProcessNearestNeighbors {
      * each iteration computes a batch of 500 words */
     int rangeStart = 0;
     int rangeEnd = 500;
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < 600; i++) {
       int[] range = IntStream.range(rangeStart, rangeEnd).toArray();
       INDArray arrayIndex = Nd4j.create(range, new long[] {1, 500}, DataType.FLOAT);
 
@@ -90,7 +90,7 @@ public class ProcessNearestNeighbors {
   }
 
   public static void storeInFile(INDArray similarityMatrix, String[] indexToWord, int rangeStart) {
-    DB db = DBMaker.fileDB("/home/ngothomas/downloads/webapp/step197-2020/w2v.db").make();
+    DB db = DBMaker.fileDB("/home/ngothomas/downloads/webapp/step197-2020/word2vec.db").make();
 
     BTreeMap<String, String[]> map =
         db.treeMap("Main")

@@ -23,8 +23,8 @@ class StudyModeContent extends React.Component {
 
   componentDidMount() {
     // Grabs the first word in the game
-    const word = nextQuizWord();
-    const round = getRound();
+    const word = this.props.quiz.nextQuizWord();
+    const round = this.props.quiz.getCurrentRound();
     this.setState({
       quizWord: word.quizWord,
       options: word.possibleResponses,
@@ -44,13 +44,13 @@ class StudyModeContent extends React.Component {
      * If the selected word was incorrect then this function
      * will repeat this word at the end of another round if possible.
      */
-    updateWordQueues(correct);
-    const word = nextQuizWord();
+    this.props.quiz.updateWordQueues(correct);
+    const word = this.props.quiz.nextQuizWord();
     if (word === null) {
       this.setState({ end: true });
     }
 
-    const round = getRound();
+    const round = this.props.quiz.getCurrentRound();
     this.setState({
       quizWord: word.quizWord,
       options: word.possibleResponses,
@@ -71,7 +71,7 @@ class StudyModeContent extends React.Component {
     return (
       <StudyModeQuiz
         currentRound={this.state.currentRound}
-        totalRounds={this.props.totalRounds}
+        totalRounds={this.props.quiz.getTotalRounds()}
         quizWord={this.state.quizWord}
         options={this.state.options}
         optionSelected={this.optionSelected}>

@@ -5,22 +5,17 @@ class Quiz {
     this.currentQuizWord = {};
   }
 
-  async startQuiz(folderKey) {
-    const quiz = await fetch(`/study?folderKey=${folderKey}`, {
-      method: "POST",
-    })
+  async start(folderKey) {
+    const quiz = await fetch(`/study?folderKey=${folderKey}`)
       .then((result) => result.json())
-      .then((arrays) => {})
       .catch(alert("Could not find words for Study Mode"));
     this.quiz = quiz;
     this.currentArray = 0;
   }
 
   nextQuizWord() {
-    while (
-      this.currentArray < this.quiz.length &&
-      this.quiz[this.currentArray].length == 0
-    ) {
+    while (this.currentArray < this.quiz.length &&
+      this.quiz[this.currentArray].length == 0) {
       this.currentArray++;
     }
     if (this.currentArray == this.quiz.length) {
@@ -37,8 +32,12 @@ class Quiz {
     //TODO(esaaracay): Fetch /study to update familarity score
   }
 
-  getRound() {
+  getCurrentRound() {
     return this.currentArray;
+  }
+
+  getTotalRounds() {
+    return this.quiz.length;
   }
 }
 

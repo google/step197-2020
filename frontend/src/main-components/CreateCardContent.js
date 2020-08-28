@@ -5,7 +5,6 @@ import BackCard from "../flashcards/FlashcardBackPreview";
 import { getTranslation } from "../sub-components/translate";
 import LangaugeScroll from "../sub-components/languageScroll";
 import FolderScroll from "../sub-components/folderScroll";
-import queryString from "query-string";
 
 class CreateCardContent extends Component {
   constructor(props) {

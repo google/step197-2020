@@ -83,7 +83,7 @@ public class UserCardsServlet extends HttpServlet {
 
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(cardEntity);
-      response.sendRedirect("/insideFolder?folderKey=" + folderKey);
+      response.sendRedirect("/InsideFolder?folderKey=" + folderKey);
     }
   }
 

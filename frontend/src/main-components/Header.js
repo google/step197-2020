@@ -50,7 +50,7 @@ const Header = (props) => {
     );
   }
     return (
-      <Head class="flex-container">
+      <Head className="flex-container">
         <Box>{display}</Box>
         <Search></Search>
       </Head>

@@ -13,8 +13,7 @@ class LandingPage extends React.Component {
         this.message = "My Folders";
         this.color = "#F4B400"
         this.clickHandling = this.props.folderClick;
-      }
-
+      }   
     }
   
     render() {

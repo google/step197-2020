@@ -13,10 +13,6 @@ const container = {
 };
 
 class LabelScroll extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     if (!this.props.labels) {
       return <p>Loading... Try refreshing the page.</p>;

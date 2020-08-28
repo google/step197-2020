@@ -1,4 +1,4 @@
-.Container {
+.container {
   flex: 9;
   display: flex;
   border: 1rem solid white;
@@ -6,15 +6,15 @@
   background-color: white;
   margin: 1%;
   flex-direction: column;
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.5rem;
 }
-.ContentContainer {
+.contentContainer {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
 }
-.FormContainer {
+.formContainer {
   border-color: #1d303d;
   border-width: 1rem;
   display: flex;
@@ -24,7 +24,7 @@
   margin: 5vh 5vw;
   flex-direction: column;
 }
-.Button {
+.button {
   display: block;
   background-color: #136f9f;
   border: none;
@@ -37,17 +37,17 @@
   text-decoration: none;
 }
 
-.Button:hover {
+.button:hover {
   background-color: #1d303d;
 }
-.ButtonContainer {
+.buttonContainer {
   display: flex;
   flex-direction: row;
   flex-flow: wrap;
   justify-content: space-around;
   align-items: center;
 }
-.ImageContainer {
+.imageContainer {
   flex: 2;
   display: flex;
   text-align: center;
@@ -58,25 +58,22 @@
   margin: 2%;
   flex-direction: column;
 }
-.CroppedImage {
+.croppedImage {
   width: 60vh;
 }
-.CropContainer {
+.cropContainer {
   width: 90%;
   position: relative;
   height: 90%;
 }
-.ControlsContainer {
+.controlsContainer {
   display: block;
 }
-.NoImageContainer {
+.noImageContainer {
   flex: 2;
   padding: 30vh 10vw;
   background-color: #c4c4c4;
   margin: 5%;
   text-align: center;
   font-size: 1.5rem;
-}
-.HiddenForm {
-  display: none;
 }

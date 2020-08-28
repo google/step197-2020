@@ -119,10 +119,10 @@ class ImageInterfaceContent extends React.Component {
 
   render() {
     return (
-      <div className="Container">
-        <div className="ContentContainer">
+      <div className="container">
+        <div className="contentContainer">
           {this.state.imageCropped ? (
-            <div className="FormContainer">
+            <div className="formContainer">
               <p>Please select a label that best describes the image:</p>
               <form>
                 <LabelScroll
@@ -135,13 +135,13 @@ class ImageInterfaceContent extends React.Component {
               <Link
                 to={`/CreateCard?image=${this.state.croppedImageURL}?text=${this.state.selectedLabel}`}
               >
-                <button className="Button">
+                <button className="button">
                   Create flashcard with this label
                 </button>
               </Link>
             </div>
           ) : (
-            <div className="FormContainer">
+            <div className="formContainer">
               <form id="imageForm">
                 <label for="img">Please Upload an Image for Analysis:</label>
                 <br />
@@ -155,7 +155,7 @@ class ImageInterfaceContent extends React.Component {
               </form>
               <br />
               {this.state.imageURL ? (
-                <button className="Button" onClick={this.handleImageUpload}>
+                <button className="button" onClick={this.handleImageUpload}>
                   Upload this Image
                 </button>
               ) : null}
@@ -163,15 +163,15 @@ class ImageInterfaceContent extends React.Component {
           )}
           {this.state.imageUploaded ? (
             this.state.imageCropped ? (
-              <div className="ImageContainer">
+              <div className="imageContainer">
                 <img
-                  className="CroppedImage"
+                  className="croppedImage"
                   src={this.state.croppedImageURL}
                 />
               </div>
             ) : (
-              <div className="ImageContainer">
-                <div className="CropContainer">
+              <div className="imageContainer">
+                <div className="cropContainer">
                   <Cropper
                     image={this.state.imageURL}
                     crop={this.state.crop}
@@ -186,13 +186,13 @@ class ImageInterfaceContent extends React.Component {
                   />
                 </div>
                 <br />
-                <div className="ControlsContainer">
+                <div className="controlsContainer">
                   <p>Controls: Zoom = Scoll, Pan = MouseDrag</p>
-                  <div className="ButtonContainer">
-                    <button className="Button" onClick={this.handleReset}>
+                  <div className="buttonContainer">
+                    <button className="button" onClick={this.handleReset}>
                       Reset to Default
                     </button>
-                    <button className="Button" onClick={this.handleImageCrop}>
+                    <button className="button" onClick={this.handleImageCrop}>
                       Crop
                     </button>
                   </div>
@@ -200,7 +200,7 @@ class ImageInterfaceContent extends React.Component {
               </div>
             )
           ) : (
-            <div className="NoImageContainer">
+            <div className="noImageContainer">
               Please Upload an Image to use the Image Analysis feature.
             </div>
           )}

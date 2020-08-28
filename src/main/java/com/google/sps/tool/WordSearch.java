@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.Collections;
 import java.util.Random;
+import java.lang.Math;
 
 public class WordSearch {
   private static HashMap<Character, ArrayList<String>> alphabetWordMap =
@@ -18,11 +19,11 @@ public class WordSearch {
 
     if (!alphabetWordMap.containsKey('a') && !initMap()) {
       // If the dictionary file can't be read then it just return the correct Answer
-        return quizWords;
+      return quizWords;
     }
 
-    char firstLetter = correctAnswer.charAt(0);
-    ArrayList<String> wordList = alphabetWordMap.get(Character.toLowerCase(firstLetter));
+    char firstLetterOfAnswer = correctAnswer.charAt(0);
+    ArrayList<String> wordList = alphabetWordMap.get(Character.toLowerCase(firstLetterOfAnswer));
     Boolean wordFound = false;
 
     for (int i = 0; i < wordList.size(); i++) {
@@ -38,7 +39,11 @@ public class WordSearch {
       Random random = new Random();
       for (int i = 0; i < 3; i++) {
         int index = random.nextInt(wordList.size());
-        quizWords.add(wordList.get(index));
+        if (!quizWords.contains(wordList.get(index))) {
+          quizWords.add(wordList.get(index));
+        } else {
+          i--;
+        }
       }
     }
 
@@ -50,24 +55,20 @@ public class WordSearch {
       Integer origin, ArrayList<String> wordList, ArrayList<String> quizWords) {
     Random random = new Random();
     for (int i = 0; i < 3; i++) {
-      try {
-        int index = random.nextInt(20) - 10;
-        String possibleWord = wordList.get(origin + index);
-        // Ensures that we don't have repeating words
-        if (!quizWords.contains(possibleWord)) {
-          quizWords.add(possibleWord);
-        } else {
-          i--;
-        }
-      } catch (ArrayIndexOutOfBoundsException e) {
-        // Trying again if we get a word thats out of bounds
+      int index = origin + random.nextInt(20) - 10;
+      index = Math.min(Math.max(index, 0), wordList.size() - 1);
+      String possibleWord = wordList.get(index);
+      // Ensures that we don't have repeating words
+      if (!quizWords.contains(possibleWord)) {
+        quizWords.add(possibleWord);
+      } else {
         i--;
       }
     }
   }
 
   /**
-   * Goes through a text file of words in the english dictionary and creates a hashmap where the key
+   * Goes through a text file of words in the English dictionary and creates a hashmap where the key
    * is a letter of the alphabet and the value is a list of words that begin with that letter.
    */
   private static Boolean initMap() {

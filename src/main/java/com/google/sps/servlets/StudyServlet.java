@@ -9,6 +9,8 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.TransactionOptions.Builder;
+import com.google.appengine.api.datastore.Transaction;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,6 +31,7 @@ import java.util.Comparator;
  */
 @WebServlet("/study")
 public class StudyServlet extends HttpServlet {
+
   public class QuizCard {
     private String quizWord;
     private String cardKey;
@@ -51,28 +54,34 @@ public class StudyServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     List<Card> userCards = new ArrayList<>();
-
-    if (userService.isUserLoggedIn()) {
-      String folderKey = request.getParameter("folderKey");
-      Query cardQuery = new Query("Card").setAncestor(KeyFactory.stringToKey(folderKey));
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      PreparedQuery results = datastore.prepare(cardQuery);
-
-      if (results != null) {
-        for (Entity entity : results.asIterable()) {
-          // If the card has no familiarity score then it's set to the default value
-          userCards.add(initializeCard(entity));
-        }
-      }
-      // Sorts cards in increasing order of familiarity score
-      UserCards.sort((Card c1, Card c2) -> Double.compare(c1.getFamiliarityScore(), c2.getFamiliarityScore()));
-      List<List<QuizCard>> quiz = createQuizRounds(userCards);
-
-      Gson gson = new Gson();
-      String jsonResponse = gson.toJson(quiz);
-      response.setContentType("application/json;");
-      response.getWriter().println(jsonResponse);
+    // Handles a logged out user
+    if (!userService.isUserLoggedIn()) {
+      response.sendRedirect("/StudyMode");
+      return;
     }
+
+    String folderKey = request.getParameter("folderKey");
+    Query cardQuery = new Query("Card").setAncestor(KeyFactory.stringToKey(folderKey));
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(cardQuery);
+
+    if (results != null) {
+      for (Entity entity : results.asIterable()) {
+        // If the card has no familiarity score then it's set to the default value
+        Entity updatedEntity = initializeCard(entity);
+        Card storedCard = storeCard(updatedEntity);
+        userCards.add(storedCard);
+      }
+    }
+    // Sorts cards in increasing order of familiarity score
+    userCards.sort(
+        (Card c1, Card c2) -> Double.compare(c1.getFamiliarityScore(), c2.getFamiliarityScore()));
+    List<List<QuizCard>> quiz = createQuizRounds(userCards);
+
+    Gson gson = new Gson();
+    String jsonResponse = gson.toJson(quiz);
+    response.setContentType("application/json;");
+    response.getWriter().println(jsonResponse);
   }
 
   // Updates and stores a card's new familiarity score
@@ -80,28 +89,29 @@ public class StudyServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Entity cardEntity;
     Double newScore;
-    String answeredCorrectly = request.getParameter("answeredCorrectly");
+    Boolean answeredCorrectly = Boolean.parseBoolean(request.getParameter("answeredCorrectly"));
     String cardKey = request.getParameter("cardKey");
     long time = System.currentTimeMillis();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
     try {
       cardEntity = datastore.get(KeyFactory.stringToKey(cardKey));
     } catch (EntityNotFoundException e) {
       cardEntity = null;
     }
 
-    if (cardEntity != null) {
-      Card card = new Card(cardEntity);
-      if (answeredCorrectly.equals("true")) {
-        newScore = incFamiliarityScore(time, card.getFamiliarityScore(), card.getTimeTested());
-      } else {
-        newScore = decFamiliarityScore(time, card.getFamiliarityScore(), card.getTimeTested());
-      }
-      cardEntity.setProperty("familiarityScore", newScore);
-      cardEntity.setProperty("timeTested", time);
-      datastore.put(cardEntity);
+    // Handles a null entity
+    if (cardEntity == null) {
+      return;
     }
+    Card card = new Card(cardEntity);
+    if (answeredCorrectly) {
+      newScore = incFamiliarityScore(time, card.getFamiliarityScore(), card.getTimeTested());
+    } else {
+      newScore = decFamiliarityScore(time, card.getFamiliarityScore(), card.getTimeTested());
+    }
+    cardEntity.setProperty("familiarityScore", newScore);
+    cardEntity.setProperty("timeTested", time);
+    storeCard(cardEntity);
   }
 
   /**
@@ -110,7 +120,6 @@ public class StudyServlet extends HttpServlet {
    */
   private List<List<QuizCard>> createQuizRounds(List<Card> userCards) {
     List<List<QuizCard>> quiz = new ArrayList<List<QuizCard>>();
-    List<QuizCard> holder = new ArrayList<QuizCard>();
     int numRounds = userCards.size() / numOfCardsPerRound;
     int start = 0;
     if (numRounds > maxNumOfRounds) {
@@ -130,13 +139,26 @@ public class StudyServlet extends HttpServlet {
     return quiz;
   }
 
-  private Card initializeCard(Entity entity) {
+  private Entity initializeCard(Entity entity) {
     // If cards don't have a familiarity score then provide default value
     if (!entity.hasProperty("familiarityScore")) {
       entity.setProperty("familiarityScore", .5);
       entity.setProperty("timeTested", System.currentTimeMillis());
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      datastore.put(entity);
+    }
+
+    return entity;
+  }
+
+  private Card storeCard(Entity entity) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Transaction txn = datastore.beginTransaction(Builder.withXG(true));
+    try {
+      datastore.put(txn, entity);
+      txn.commit();
+    } finally {
+      if (txn.isActive()) {
+        txn.rollback();
+      }
     }
     Card card = new Card(entity);
     return card;

@@ -5,15 +5,10 @@ import ImageInterfaceContent from "../main-components/ImageInterfaceContent";
 
 function ImageInterface() {
   // Handles mobile menu button and updates sidebar view
-  const [sideSetting, setSideSetting] = useState("f");
-  const handleClick = (e) => {
-    console.log("Clicked");
-    if (sideSetting === "f") {
-      setSideSetting("t");
-    } else {
-      setSideSetting("f");
-    }
-  };
+   const [sideSetting, setSideSetting] = useState(false);
+   const handleClick = (e) => {
+     setSideSetting((sideSetting) => !sideSetting);
+   };
 
   return (
     <div className="App">

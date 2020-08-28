@@ -1,6 +1,17 @@
 import React, { Component } from "react";
 import styled from "@emotion/styled";
 
+const Options = styled.select`
+  width: 30%;
+  min-width: 12rem;
+  height: 5rem;
+  border: 0.2rem solid #136f9f;
+  background-color: white;
+  color: black;
+  border-radius: 0.5rem;
+  font-size: 1.75rem;
+`;
+
 class FolderScroll extends Component {
   constructor(props) {
     super(props);
@@ -13,7 +24,9 @@ class FolderScroll extends Component {
   async componentDidMount() {
     try {
       const folders = await fetch("/userfolders");
-      const foldersData = await (folders.json()).then(res => res['userFolders']);
+      const foldersData = await folders
+        .json()
+        .then((res) => res["userFolders"]);
       if (!folders.ok) {
         throw Error(foldersData.statusText);
       }
@@ -24,16 +37,6 @@ class FolderScroll extends Component {
   }
 
   render() {
-    const Options = styled.select`
-      width: 30%;
-      min-width: 12rem;
-      height: 5rem;
-      border: 0.2rem solid #136f9f;
-      background-color: white;
-      color: black;
-      border-radius: 0.5rem;
-      font-size: 1.75rem;
-    `;
     if (!this.state.isDataFetched) {
       return <h5>loading</h5>;
     }

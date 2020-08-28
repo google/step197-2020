@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../main-components/Header";
 import Sidebar from "../main-components/Sidebar";
 import StudyModeContent from "../main-components/StudyModeContent";
-import { startQuiz } from "../main-components/StudyModeGameHandler";
+import { Quiz, StudyService } from "../main-components/StudyModeGameHandler";
 import css from "./template.css";
 import queryString from "query-string";
 
@@ -11,8 +11,8 @@ class InsideStudyMode extends React.Component {
     super(props);
     this.state = {
       isDataFetched: false,
-      rounds: 0,
-      sideSetting: "f",
+      quiz: {},
+      sideSetting: false,
     };
     this.handleClick = this.handleClick.bind(this);
   }
@@ -20,20 +20,19 @@ class InsideStudyMode extends React.Component {
   // Initializes a new game
   async componentDidMount() {
     const parameters = queryString.parse(this.props.location.search);
-    const rounds = await startQuiz(parameters.folderKey);
-    if (rounds === 0) {
+    const quiz = new Quiz(new StudyService()); 
+    await quiz.start(parameters.folderKey);
+      if (quiz.getTotalRounds() === 0) {
       alert("No cards were found");
       window.location = "/MyFolders";
     }
-    this.setState({ rounds, isDataFetched: true });
+    this.setState({ quiz, isDataFetched: true });
   }
 
   handleClick(event) {
-    if (sideSetting === "f") {
-      this.setState({ sideSetting: "t" });
-    } else {
-      this.setState({ sideSetting: "f" });
-    }
+    this.setState((prevState) => {
+      return { sideSetting: !prevState.sideSetting };
+    });
   }
 
   render() {
@@ -53,7 +52,7 @@ class InsideStudyMode extends React.Component {
         <Header id='head' handleClick={this.handleClick}></Header>
         <div id='main'>
           <Sidebar bool={this.state.sideSetting}></Sidebar>
-          <StudyModeContent totalRounds={this.state.rounds}></StudyModeContent>
+          <StudyModeContent quiz={this.state.quiz}></StudyModeContent>
         </div>
       </div>
     );

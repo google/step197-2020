@@ -8,7 +8,7 @@ class StudyModeQuiz extends React.Component {
 
   render() {
     return (
-      <div id='studyContainer' className='Container'>
+      <div id='studyContainer' className='container'>
         
         <div id='rounds'>
           <RoundLights

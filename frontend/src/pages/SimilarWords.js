@@ -17,18 +17,18 @@ function MyFolders(props) {
 
   let word;
   let numWords;
-  (() => {
-    const values = queryString.parse(props.location.search);
-    word = values.word;
-    numWords = values.numWords;
-  });
+  const values = queryString.parse(props.location.search);
+  word = values.queryWord;
+  numWords = values.numOfWordsRequested;
 
   return (
     <div className='App'>
       <Header id='head' handleClick={handleClick}></Header>
       <div id='main'>
         <Sidebar bool={sideSetting}></Sidebar>
-        <SimilarWordsContent word={word} numWords={numWords}></SimilarWordsContent>
+        <SimilarWordsContent
+          word={word}
+          numWords={numWords}></SimilarWordsContent>
       </div>
     </div>
   );

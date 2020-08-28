@@ -11,7 +11,7 @@ const Search = (props) => {
           <button id="searchButton" type="submit" className="material-icons">
           <i className="material-icons">search</i>
           </button>
-        <input id="searchBar" type="text" placeholder="Search for similar words..." name="search-input"></input>
+        <input id="searchBar" type="text" placeholder="Search for similar words..." name="queryWord"></input>
         <input id="searchNum" type="number" name="numOfWordsRequested" min="1" max="45" defaultValue="10"></input>
         </form>
       </div>

@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import com.google.gson.Gson;
 import com.google.sps.tool.ResponseSerializer;
 import com.google.sps.data.Card;
 import com.google.sps.tool.BlobstoreUtil;
@@ -25,9 +24,7 @@ public class DeleteCardServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      String jsonErrorInfo = ResponseSerializer.getErrorJson("User not logged in");
-      response.setContentType("application/json;");
-      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+      ResponseSerializer.sendErrorJson(response, "User not logged in");
       return;
     }
 
@@ -36,9 +33,8 @@ public class DeleteCardServlet extends HttpServlet {
     Entity card = getExistingCardInDatastore(datastore, cardKey);
 
     if (card == null) {
-      String jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot delete Card at the moment");
-      response.setContentType("application/json;");
-      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+      ResponseSerializer.sendErrorJson(response, "Cannot edit Card");
+      return;
     } else {
       String imageBlobKey = (String) card.getProperty("imageBlobKey");
       BlobstoreUtil.deleteBlobWithRetries(imageBlobKey);

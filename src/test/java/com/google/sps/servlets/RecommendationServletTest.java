@@ -57,6 +57,7 @@ public class RecommendationServletTest {
 
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
+    System.out.println(response);
     String expectedResponse = "{\"error\":\"Cannot find similar words\"}";
     assertTrue(compareJson(response, expectedResponse));
   }

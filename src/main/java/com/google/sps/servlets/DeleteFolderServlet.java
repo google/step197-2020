@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import com.google.gson.Gson;
 import com.google.sps.tool.ResponseSerializer;
 import com.google.sps.data.Card;
 import com.google.sps.data.Folder;
@@ -29,9 +28,7 @@ public class DeleteFolderServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      String jsonErrorInfo = ResponseSerializer.getErrorJson("User not logged in");
-      response.setContentType("application/json;");
-      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+      ResponseSerializer.sendErrorJson(response, "User not logged in");
       return;
     }
 
@@ -40,12 +37,11 @@ public class DeleteFolderServlet extends HttpServlet {
     Entity folder = getExistingFolderInDatastore(datastore, folderKey);
 
     if (folder == null) {
-      String jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot delete Folder at the moment");
-      response.setContentType("application/json;");
-      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+      ResponseSerializer.sendErrorJson(response, "Cannot delete Folder");
+      return;
     } else {
       deleteAllCardsInsideFolder(folder);
-      Folder.deleteFolderWithRetries(folder, /*retries=*/ 5);
+      Folder.deleteFolderWithRetries(folder);
     }
   }
 
@@ -69,9 +65,9 @@ public class DeleteFolderServlet extends HttpServlet {
       for (Entity card : results.asIterable()) {
         String imageBlobKey = (String) card.getProperty("imageBlobKey");
         if (imageBlobKey != "null") {
-          BlobstoreUtil.deleteBlobWithRetries(imageBlobKey, /*retries=*/ 5);
+          BlobstoreUtil.deleteBlobWithRetries(imageBlobKey);
         }
-        Card.deleteCardWithRetries(card, /*retries=*/ 5);
+        Card.deleteCardWithRetries(card);
       }
     }
   }

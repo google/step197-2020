@@ -32,7 +32,7 @@ public class RecommendationServlet extends HttpServlet {
       response.getWriter().println(new Gson().toJson(jsonErrorInfo));
       return;
     }
-    
+
     String queryWord = request.getParameter("queryWord").toLowerCase();
     int numOfWordsRequested = Integer.parseInt(request.getParameter("numOfWordsRequested"));
     if (checkforWordRequestedBound(response, numOfWordsRequested)) {
@@ -59,7 +59,7 @@ public class RecommendationServlet extends HttpServlet {
       response.setContentType("application/json;");
       response.getWriter().println(new Gson().toJson(jsonInfo));
     } catch (NullPointerException e) {
-      ResponseSerializer.sendErrorJson(response, "Cannot find similar words at the moment");
+      ResponseSerializer.sendErrorJson(response, "Cannot find similar words");
       return;
     }
     db.close();

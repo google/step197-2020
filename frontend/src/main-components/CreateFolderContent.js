@@ -1,22 +1,86 @@
-import React from "react";
-import styled from "@emotion/styled";
+import React, { Component } from "react";
+import css from "./CreateFolderContent.css";
+import supportedLang from "../sub-components/SupportedLang.json";
 
-const CreateFolderContent = (props) => {
-  const Container = styled.div`
-    flex: 9;
-    display: flex;
-    border: 1rem solid white;
-    border-radius: 1rem;
-    background-color: white;
-    margin: 1%;
-  `;
+class CreateFolderContent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      folderName: "None",
+      folderLang: "English",
+    };
+    this.handleFolderName = this.handleFolderName.bind(this);
+    this.handleFolderLang = this.handleFolderLang.bind(this);
+  }
 
-  //Code for new page goes here
-  return (
-    <Container>
-      <h1>Creating a new Folder</h1>
-    </Container>
-  );
-};
+  handleFolderName(event) {
+    this.setState({ folderName: event.target.value });
+  }
+
+  handleFolderLang(event) {
+    this.setState({ folderLang: event.target.value });
+  }
+
+  /**
+   * This React component renders a form that makes a post
+   * request to UserFoldersServlet for folder creation.
+   */
+  render() {
+    return (
+      <div id='container'>
+        <div id='innerContainer'>
+          <div id='folderPreview'>
+            <h2 id='previewFolderName'>{this.state.folderName}</h2>
+            <h4 id='previewFolderLang'>{this.state.folderLang}</h4>
+          </div>
+          <div id='formBox'>
+            <ul>
+              <form id='myForm' action='/userfolders' method='POST'>
+                <li>
+                  <label>Folder Name: </label>
+                </li>
+                <li>
+                  <input
+                    id='folderName'
+                    name='folderName'
+                    type='text'
+                    placeholder={this.state.folderName}
+                    onBlur={this.handleFolderName}
+                    required></input>
+                </li>
+                <li>
+                  <label>Folder Language:</label>
+                </li>
+                <li>
+                  <div id='scroll'>
+                    <select
+                      id='language'
+                      name='language'
+                      value={this.state.folderLang}
+                      onChange={this.handleFolderLang}
+                      required>
+                      {
+                        supportedLang.languages.map((lang, i) => {
+                          return (
+                            <option key={i} value={lang.language}>
+                              {lang.language}
+                            </option>
+                          );
+                        })
+                      }
+                    </select>
+                  </div>
+                </li>
+                <li>
+                  <input id='submission' type='submit' value='Submit' />
+                </li>
+              </form>
+            </ul>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
 
 export default CreateFolderContent;

@@ -3,6 +3,7 @@ package com.google.sps.taskqueue.push;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.sps.tool.ResponseSerializer;
 import com.google.appengine.api.blobstore.BlobstoreFailureException;
 
 import java.io.IOException;
@@ -18,6 +19,14 @@ public class BlobstoreKeyDeletionWorker extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     String key = request.getParameter("key");
+    String accessCode = request.getParameter("accessCode");
+
+    // Ensure that arbitrary user does not have access to this servlet
+    if (accessCode == "s197") {
+      ResponseSerializer.sendErrorJson(
+          response, "You do not have access to deleting the blobs directly");
+      return;
+    }
 
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     BlobKey blobKey = new BlobKey(key);

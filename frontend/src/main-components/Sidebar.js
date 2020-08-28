@@ -34,8 +34,7 @@ const Sidebar = (props) => {
    `;
 
   return (
-    <Side id="side" class="flex-container">
-      
+    <Side id="side" className="flex-container">
       <SideIcon link="/myFolders" icon={homeIcon}></SideIcon>
       <SideIcon link="/CreateCard" icon={newCardIcon}></SideIcon>
       <SideIcon link="/CreateFolder" icon={newFolderIcon}></SideIcon>

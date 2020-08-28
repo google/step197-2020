@@ -12,6 +12,12 @@ import java.io.IOException;
 
 public class BlobstoreUtil {
 
+  private static final int DEFAULT_NUM_RETRIES = 5;
+
+  public static void deleteBlobWithRetries(String blobKey) throws IOException {
+    deleteBlobWithRetries(blobKey, DEFAULT_NUM_RETRIES);
+  }
+
   public static void deleteBlobWithRetries(String blobKey, int retries) throws IOException {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     BlobKey key = new BlobKey(blobKey);
@@ -32,6 +38,9 @@ public class BlobstoreUtil {
 
   public static void addBlobstoreDeleteTaskToQueue(String key) {
     Queue queue = QueueFactory.getDefaultQueue();
-    queue.add(TaskOptions.Builder.withUrl("/blobstoreKeyDeletionWorker").param("key", key));
+    queue.add(
+        TaskOptions.Builder.withUrl("/blobstoreKeyDeletionWorker")
+            .param("key", key)
+            .param("accessCode", "s197"));
   }
 }

@@ -27,12 +27,18 @@ public class RecommendationServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      ResponseSerializer.sendErrorJson(response, "User not logged in");
+      Map<String, String> jsonErrorInfo = ResponseSerializer.getErrorJson("User not logged in");
+      response.setContentType("application/json;");
+      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+      return;
     }
-
+    
     String queryWord = request.getParameter("queryWord").toLowerCase();
     int numOfWordsRequested = Integer.parseInt(request.getParameter("numOfWordsRequested"));
-    checkforWordRequestedBound(response, numOfWordsRequested);
+    if (checkforWordRequestedBound(response, numOfWordsRequested)) {
+      ResponseSerializer.sendErrorJson(response, "Number of words requested reaches query limit");
+      return;
+    }
 
     // Ensures db is opened in read only to avoid data perturbation
     String path = Paths.get("").toAbsolutePath().toString() + "/word2vec.db";
@@ -54,15 +60,17 @@ public class RecommendationServlet extends HttpServlet {
       response.getWriter().println(new Gson().toJson(jsonInfo));
     } catch (NullPointerException e) {
       ResponseSerializer.sendErrorJson(response, "Cannot find similar words at the moment");
+      return;
     }
     db.close();
   }
 
-  private void checkforWordRequestedBound(HttpServletResponse response, int numOfWordsRequested)
+  private boolean checkforWordRequestedBound(HttpServletResponse response, int numOfWordsRequested)
       throws IOException {
-    if (numOfWordsRequested > 50 || numOfWordsRequested < 1) {
-      ResponseSerializer.sendErrorJson(response, "Number of words requested reaches query limit");
+    if (numOfWordsRequested > 49 || numOfWordsRequested < 1) {
+      return true;
     }
+    return false;
   }
 
   private BTreeMap<String, String[]> getIndexTable(DB db) {

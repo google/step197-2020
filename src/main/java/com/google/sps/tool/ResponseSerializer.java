@@ -18,6 +18,5 @@ public class ResponseSerializer {
     Map<String, String> jsonErrorInfo = getErrorJson(error);
     response.setContentType("application/json;");
     response.getWriter().println(new Gson().toJson(jsonErrorInfo));
-    return;
   }
 }

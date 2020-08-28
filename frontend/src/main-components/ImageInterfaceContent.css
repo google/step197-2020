@@ -1,0 +1,79 @@
+.container {
+  flex: 9;
+  display: flex;
+  border: 1rem solid white;
+  border-radius: 1rem;
+  background-color: white;
+  margin: 1%;
+  flex-direction: column;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+}
+.contentContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.formContainer {
+  border-color: #1d303d;
+  border-width: 1rem;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  margin: 5vh 5vw;
+  flex-direction: column;
+}
+.button {
+  display: block;
+  background-color: #136f9f;
+  border: none;
+  border-radius: 1rem;
+  color: white;
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+  padding: 1.2rem 3rem;
+  text-align: center;
+  text-decoration: none;
+}
+
+.button:hover {
+  background-color: #1d303d;
+}
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  flex-flow: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+.imageContainer {
+  flex: 2;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 60vh;
+  margin: 2%;
+  flex-direction: column;
+}
+.croppedImage {
+  width: 60vh;
+}
+.cropContainer {
+  width: 90%;
+  position: relative;
+  height: 90%;
+}
+.controlsContainer {
+  display: block;
+}
+.noImageContainer {
+  flex: 2;
+  padding: 30vh 10vw;
+  background-color: #c4c4c4;
+  margin: 5%;
+  text-align: center;
+  font-size: 1.5rem;
+}

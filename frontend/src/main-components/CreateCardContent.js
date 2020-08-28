@@ -5,13 +5,14 @@ import BackCard from "../flashcards/FlashcardBackPreview";
 import { getTranslation } from "../sub-components/translate";
 import LangaugeScroll from "../sub-components/languageScroll";
 import FolderScroll from "../sub-components/folderScroll";
+import queryString from "query-string";
 
 class CreateCardContent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       imgSrc: "",
-      text: "none",
+      text: "",
       translation: "none",
       fromLang: "none",
       toLang: "none",
@@ -24,16 +25,22 @@ class CreateCardContent extends Component {
     this.toLangSelected = this.toLangSelected.bind(this);
     this.folderSelected = this.folderSelected.bind(this);
     this.imageSelected = this.imageSelected.bind(this);
+    this.textChanged = this.textChanged.bind(this);
   }
 
   async componentDidMount() {
+    const text = this.props.word;
     try {
       const uploadResponse = await fetch("/upload");
       const uploadUrl = await uploadResponse.text();
       if (!uploadResponse.ok) {
         throw Error(uploadUrl.statusText);
       }
-      this.setState({ imageUploadUrl: uploadUrl, uploadUrlFetched: true });
+      this.setState({
+        imageUploadUrl: uploadUrl,
+        uploadUrlFetched: true,
+        text,
+      });
     } catch (error) {
       alert("Refresh page to create a card");
     }
@@ -48,16 +55,21 @@ class CreateCardContent extends Component {
     // Ensures that languages have been selected before translating
     if (this.state.fromLang !== "none" && this.state.toLang !== "none") {
       (async () => {
+        const toLang = this.state.toLang;
         // If an error is thrown it is caught inside of get translation
         const translated = await getTranslation(
           text,
           this.state.fromLang,
           this.state.toLang
         );
-        this.setState({ translation: translated.translation, text: text });
+        this.setState((prevState) => {
+          // Checks if fields have been changed since the request to getTranslation
+          if (prevState.toLang != toLang || prevState.text != text) {
+            return;
+          }
+          return { translation: translated.translation, text };
+        });
       })();
-    } else {
-      this.setState({ text });
     }
   }
 
@@ -79,6 +91,10 @@ class CreateCardContent extends Component {
 
   imageSelected(event) {
     this.setState({ imgSrc: URL.createObjectURL(event.target.files[0]) });
+  }
+
+  textChanged(event) {
+    this.setState({ text: event.target.value });
   }
 
   render() {
@@ -127,8 +143,9 @@ class CreateCardContent extends Component {
                     id='mainText'
                     type='text'
                     name='rawText'
-                    placeholder={this.state.text}
+                    value={this.state.text}
                     onBlur={this.translateText}
+                    onChange={this.textChanged}
                     required></input>
                 </li>
                 <li>

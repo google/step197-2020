@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   flex: 9;
@@ -22,14 +23,17 @@ const WordContainer = styled.div`
 const Word = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-top: 3%;
-  width: 22%;
+  width: 23%;
+  min-height: 18%;
   margin-right: 5%;
   margin-left: 5%;
   background-color: white;
   border-radius: 4rem;
   box-shadow: rgba(255, 153, 0, 0.9) 0px 1px 8px;
-  font-size: 4rem;
+  font-size: 3.5rem;
+  flex-wrap: wrap;
 `;
 
 class MyFoldersContent extends React.Component {
@@ -48,8 +52,9 @@ class MyFoldersContent extends React.Component {
     searchParams.append("queryWord", this.props.word);
     searchParams.append("numOfWordsRequested", this.props.numWords);
     try {
-      const response = await fetch("/recommendation?" + searchParams.toString())
-        .then((res) => res.json());
+      const response = await fetch(
+        "/recommendation?" + searchParams.toString()
+      ).then((res) => res.json());
       if ("error" in response) {
         this.setState({ error: true, errorMessage: response.error });
       }
@@ -74,7 +79,15 @@ class MyFoldersContent extends React.Component {
       <Container>
         <WordContainer>
           {this.state.words.map((word) => {
-            return <Word key={word}>{word}</Word>;
+            return (
+              <Word key={word}>
+                <Link
+                  to={`/CreateCard?word=${word}`}
+                  style={{ textDecoration: "none", color: "black" }}>
+                  word
+                </Link>
+              </Word>
+            );
           })}
         </WordContainer>
       </Container>

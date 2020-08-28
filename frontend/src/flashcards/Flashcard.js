@@ -2,6 +2,9 @@ import React from 'react';
 import FlashcardFront from './FlashcardFront';
 import FlashcardBack from './FlashcardBack';
 import ReactCardFlip from 'react-card-flip';
+import deleteIcon from '../SVG/delete-24px.svg';
+import editIcon from '../SVG/edit-24px.svg';
+import { motion } from 'framer-motion';
 
 /**
  * This is the styling for the main flashcard.
@@ -10,7 +13,14 @@ const flipStyle = {
 	width: '300px',
 	height: '350px',
 };
-
+const iconStyle = {
+	display: 'flex',
+	justifyContent: 'flex-end',
+	paddingTop: '1%',
+};
+const imageStyle = {
+	paddingLeft: '2%',
+};
 /**
  * The Flashcard component renders a flipping
  * flashcard with both a front and a back.
@@ -48,6 +58,14 @@ class Flashcard extends React.Component {
 					<FlashcardFront text={this.props.text} image={this.props.image} />
 					<FlashcardBack text={this.props.translation} />
 				</ReactCardFlip>
+				<div className="Icons" style={iconStyle}>
+					<motion.div whileHover={{ scale: 1.2 }}>
+						<img style={imageStyle} src={editIcon} alt="icon option"></img>
+					</motion.div>
+					<motion.div whileHover={{ scale: 1.2 }}>
+						<img style={imageStyle} src={deleteIcon} alt="icon option"></img>
+					</motion.div>
+				</div>
 			</div>
 		);
 	}

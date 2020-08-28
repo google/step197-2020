@@ -4,14 +4,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/uploadForImageAnalysis")
+@WebServlet("/ObjectDetectionUpoload")
 public class UploadOnBlobstoreServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 
-    String uploadUrl = blobstoreService.createUploadUrl("/imageAnalysis");
+    String uploadUrl = blobstoreService.createUploadUrl("/ObjectDetection");
     response.setContentType("text/html");
     response.getWriter().println(uploadUrl);
   }

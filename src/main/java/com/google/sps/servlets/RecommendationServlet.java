@@ -11,9 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
 
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
@@ -29,6 +26,11 @@ public class RecommendationServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    UserService userService = UserServiceFactory.getUserService();
+    if (!userService.isUserLoggedIn()) {
+      ResponseSerializer.sendErrorJson(response, "User not logged in");
+      return;
+    }
 
     String queryWord = request.getParameter("queryWord").toLowerCase();
     int numOfWordsRequested = Integer.parseInt(request.getParameter("numOfWordsRequested"));

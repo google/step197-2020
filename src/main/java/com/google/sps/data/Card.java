@@ -57,6 +57,7 @@ public final class Card {
     }
   }
 
+  private static final int DEFAULT_NUM_RETRIES = 5;
   private String imageBlobKey = "null";
   private String rawText = "null";
   private String textTranslated = "null";
@@ -138,6 +139,10 @@ public final class Card {
     }
   }
 
+  public static void deleteCardWithRetries(Entity card) {
+    deleteCardWithRetries(card, DEFAULT_NUM_RETRIES);
+  }
+
   public static void deleteCardWithRetries(Entity card, int retries) {
     while (retries != 0) {
       try {
@@ -162,6 +167,7 @@ public final class Card {
     Queue queue = QueueFactory.getDefaultQueue();
     queue.add(
         TaskOptions.Builder.withUrl("/datastoreEntityDeletionWorker")
-            .param("key", KeyFactory.keyToString(entity.getKey())));
+            .param("key", KeyFactory.keyToString(entity.getKey()))
+            .param("accessCode", "s197"));
   }
 }

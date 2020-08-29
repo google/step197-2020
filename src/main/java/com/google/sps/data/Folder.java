@@ -12,6 +12,7 @@ import com.google.appengine.api.datastore.DatastoreFailureException;
 
 public final class Folder {
 
+  private static final int DEFAULT_NUM_RETRIES = 5;
   private String folderName;
   private String folderDefaultLanguage;
   private String folderKey;
@@ -83,6 +84,10 @@ public final class Folder {
     }
   }
 
+  public static void deleteFolderWithRetries(Entity folder) {
+    deleteFolderWithRetries(folder, DEFAULT_NUM_RETRIES);
+  }
+
   public static void deleteFolderWithRetries(Entity folder, int retries) {
     while (retries != 0) {
       try {
@@ -107,6 +112,7 @@ public final class Folder {
     Queue queue = QueueFactory.getDefaultQueue();
     queue.add(
         TaskOptions.Builder.withUrl("/datastoreEntityDeletionWorker")
-            .param("key", KeyFactory.keyToString(entity.getKey())));
+            .param("key", KeyFactory.keyToString(entity.getKey()))
+            .param("accessCode", "s197"));
   }
 }

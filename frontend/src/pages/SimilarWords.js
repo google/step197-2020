@@ -6,9 +6,9 @@ import queryString from "query-string";
 
 function MyFolders(props) {
   // Handles mobile menu button and updates sidebar view
-   const [sideBarVisibility, setSideBarVisibility] = useState(false);
+   const [sidebarVisibility, setSidebarVisibility] = useState(false);
    const handleClick = (e) => {
-     setSideBarVisibility((sideBarVisibility) => !sideBarVisibility);
+     setSidebarVisibility((sidebarVisibility) => !sidebarVisibility);
    };
 
   const values = queryString.parse(props.location.search);
@@ -19,7 +19,7 @@ function MyFolders(props) {
     <div className='App'>
       <Header id='head' handleClick={handleClick}></Header>
       <div id='main'>
-        <Sidebar bool={sideBarVisibility}></Sidebar>
+        <Sidebar bool={sidebarVisibility}></Sidebar>
         <SimilarWordsContent
           word={word}
           numWords={numWords}></SimilarWordsContent>

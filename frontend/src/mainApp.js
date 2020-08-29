@@ -20,7 +20,6 @@ function App() {
         <Route exact path='/CreateCard' component={CreateCard} />
         <Route exact path='/MyFolders' component={MyFolders} />
         <Route exact path='/ImageInterface' component={ImageInterface} />
-        <Route exact path='/YoutubeInterface' component={YoutubeDetect} />
         <Route exact path='/CreateFolder' component={CreateFolder} />
         <Route exact path='/InsideFolder' component={InsideFolder} />
         <Route exact path='/SimilarWords' component={SimilarWords} />

@@ -52,9 +52,8 @@ class MyFoldersContent extends React.Component {
     searchParams.append("queryWord", this.props.word);
     searchParams.append("numOfWordsRequested", this.props.numWords);
     try {
-      const response = await fetch(
-        ("/recommendation?" + searchParams.toString())
-      ).then((res) => res.json());
+      const response = await fetch("/recommendation?" + searchParams.toString())
+        .then(res => res.json());
       if ("error" in response) {
         this.setState({ error: true, errorMessage: response.error });
       }

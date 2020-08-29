@@ -1,68 +1,68 @@
 #searchContainer {
-    @import "~material-design-icons/iconfont/material-icons.css";
-      position: relative;
-      display: flex;
-      flex: 8;
-      align-items: center;
-      justify-content: center;
+  @import "~material-design-icons/iconfont/material-icons.css";
+  align-items: center;
+  display: flex;
+  flex: 8;
+  justify-content: center;
+  position: relative;
 }
 
 #searchButton {
-     width: 14%;
-      border-radius: 2rem 0 0 2rem;
-      border: 0.25rem solid #1D303D;
-      background-color: #136F9F;
-      color: white;
-      @media (max-width: 700px) {
-        width: 20%;
-      }
+  background-color: #136f9f;
+  border: 0.25rem solid #1d303d;
+  border-radius: 2rem 0 0 2rem;
+  color: white;
+  width: 14%;
+  @media (max-width: 700px) {
+    width: 20%;
+  }
 }
 
 #searchForm {
-    width: 50%;
-      position: relative;
-      display: flex;
-      @media (max-width: 700px) {
-        width: 100%;
-        height: 2.75rem;
-      }
+  display: flex;
+  position: relative;
+  width: 50%;
+  @media (max-width: 700px) {
+    height: 2.75rem;
+    width: 100%;
+  }
 }
 
 #searchNum {
-    margin-left: .5rem;
-    background-color: #c4c4c4;
-    border: 0.25rem solid #1D303D;
-    font-size: 3rem;
-    border-radius: 1rem;
-    width:12%;
+  background-color: #c4c4c4;
+  border: 0.25rem solid #1d303d;
+  border-radius: 1rem;
+  font-size: 3rem;
+  margin-left: 0.5rem;
+  width: 12%;
 }
 
 #searchNum:focus {
-    background-color: white;
-    text-decoration-color: black;
-    border: 0.25rem solid #1d303d;
+  background-color: white;
+  border: 0.25rem solid #1d303d;
+  text-decoration-color: black;
 }
 
 #searchBar {
-     background-color: #c4c4c4;
-      border-radius: 0 2rem 2rem 0;
-      border: 0.25rem solid #136F9F;
-      border-left: none;
-      outline: none;
-      width: 60%;
-      font-size: 2.5rem;
+  background-color: #c4c4c4;
+  border: 0.25rem solid #136f9f;
+  border-left: none;
+  border-radius: 0 2rem 2rem 0;
+  font-size: 2.5rem;
+  outline: none;
+  width: 60%;
 }
 
 #searchBar:focus {
-    background-color: white;
-    text-decoration-color: black;
-    border: 0.25rem solid #1d303d;
+  background-color: white;
+  border: 0.25rem solid #1d303d;
+  text-decoration-color: black;
 }
 
 /* Mobile layout */
 @media (max-width: 700px) {
-    #searchBar {
-        width: 70%;
-        font-size: 2rem;
-    }
+  #searchBar {
+    font-size: 2rem;
+    width: 70%;
+  }
 }

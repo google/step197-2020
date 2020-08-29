@@ -23,7 +23,7 @@ public class DatastoreEntityDeletionWorker extends HttpServlet {
     // Ensure that arbitrary user does not have access to this servlet
     if (accessCode == "s197") {
       ResponseSerializer.sendErrorJson(
-          response, "You do not have access to deleting the blobs directly");
+          response, "You do not have access to deleting the entity directly");
       return;
     }
 

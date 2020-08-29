@@ -8,14 +8,24 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import javax.servlet.ServletException;
 
-@WebServlet("/homePage")
+@WebServlet(
+    urlPatterns = {
+      "/homePage",
+      "/MyFolders",
+      "/CreateCard",
+      "/CreateFolder",
+      "/ImageInterface",
+      "/InsideFolder"
+    })
 public class ReactServlet extends HttpServlet {
-
-  // If User does not exist in database, we create a new User entity. Page redirected to the
-  // /MyFolder Url
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+    String servletPath = request.getServletPath();
+    if (servletPath.equals("/homePage")) {
+      request.setAttribute("TITLE", "Home");
+      ServletUtils.RenderReact("homePage", request, response);
+    }
     request.setAttribute("TITLE", "Frame.cards");
-    ServletUtils.RenderReact("homePage", request, response);
+    ServletUtils.RenderReact("mainApp", request, response);
   }
 }

@@ -26,23 +26,22 @@ class InsideFolderContent extends React.Component {
     super(props);
       this.state = {
       isDataFetched: false,
-      flashcards: [],
+        flashcards: [],
+      flashcardCount: 0,
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     let flashcards = [];
-    const fetchPromise = fetch(`/usercards?folderKey=${this.props.folderKey}`, { method: 'GET' });
-    fetchPromise
-      .then((result) => result.json())
+    const fetchPromise = await fetch(`/usercards?folderKey=${this.props.folderKey}`)
+      .then(res => res.json())
       .then((data) => {
-        flashcards = data.map((flashcard) => (
+        flashcards = data.userCards.map((flashcard) => (
 	      <Flashcard
-            key={flashcard.cardKey}
-            image={flashcard.blobKey}
+            key={flashcard.key}
+            image={flashcard.imageBlobKey}
             text={flashcard.rawText}
             translation={flashcard.textTranslated}
-            labels={flashcard.labels}
           />
         ));
       })

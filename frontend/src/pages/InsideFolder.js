@@ -17,7 +17,7 @@ function InsideFolder(props) {
 	let folderKey;
 	const values = queryString.parse(props.location.search);
 	folderKey = values.folderKey;
-
+	
 	return (
 		<div className="App">
 			<Header id="head" handleClick={handleClick}></Header>

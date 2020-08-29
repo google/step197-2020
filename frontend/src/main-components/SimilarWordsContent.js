@@ -84,7 +84,7 @@ class MyFoldersContent extends React.Component {
                 <Link
                   to={`/CreateCard?word=${word}`}
                   style={{ textDecoration: "none", color: "black" }}>
-                  word
+                  {word}
                 </Link>
               </Word>
             );

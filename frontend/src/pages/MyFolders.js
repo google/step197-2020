@@ -25,7 +25,8 @@ function MyFolders(props) {
         <MyFoldersContent
           userKey={userKey}
           mainURL='/InsideFolder'
-          headingText='main'></MyFoldersContent>
+          headingText='main'>
+        </MyFoldersContent>
       </div>
     </div>
   );

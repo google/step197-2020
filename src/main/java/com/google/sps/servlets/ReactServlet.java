@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
       "/homePage",
       "/MyFolders",
       "/CreateCard",
+      "/EditCardContent",
       "/CreateFolder",
       "/ImageInterface",
       "/InsideFolder"

@@ -1,26 +1,21 @@
-import privateInfo from "../../../../../credentials/token.json";
-
 /**
  * Fetches translated text using the Google Translate API
  */
-export function getTranslation(term, fromLang, toLang) {
-  const response = fetch("/translation", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      rawText: `${term}`,
-      toLang: `${toLang}`,
-      fromLang: `${fromLang}`,
-    }),
-  })
-    .then((res) => res.json())
+async function getTranslation(term, fromLang, toLang) {
+  const searchParams = new URLSearchParams();
+  searchParams.append("rawText", term);
+  searchParams.append("toLang", toLang);
+  searchParams.append("fromLang", fromLang);
+  const response = await fetch(('/translation?'+ searchParams.toString()))
+    .then(res => res.json())
     .then((result) => {
-      return result.translation;
+      return result;
     })
     .catch((error) => {
       return "Text could not be translated";
     });
+  
+  return response;
 }
+
+export {getTranslation}

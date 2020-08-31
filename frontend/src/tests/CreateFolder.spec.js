@@ -17,7 +17,7 @@ describe('Creating Folder Page testing', () => {
 
   test("When selecting a language live preview is displayed", () => {
     const wrapper = mount(<CreateFolderContent />);
-    wrapper.find("#language").simulate("change", { target: { value: "Spanish" } });
+    wrapper.find("#folderDefaultLanguage").simulate("change", { target: { value: "Spanish" } });
     expect(wrapper.find("#previewFolderLang").text()).toEqual("Spanish");
   });
 });

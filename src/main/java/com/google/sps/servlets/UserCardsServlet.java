@@ -71,7 +71,6 @@ public class UserCardsServlet extends HttpServlet {
       String rawText = request.getParameter("rawText");
       String textTranslated = request.getParameter("translatedText");
       String imageBlobKey = getImageBlobKey(request);
-
       Card card =
           new Card.Builder()
               .setImageBlobKey(imageBlobKey)
@@ -84,6 +83,7 @@ public class UserCardsServlet extends HttpServlet {
 
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(cardEntity);
+      response.sendRedirect("/InsideFolder?folderKey=" + folderKey);
     }
   }
 

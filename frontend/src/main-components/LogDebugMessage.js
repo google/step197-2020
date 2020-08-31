@@ -1,7 +1,7 @@
-const LogDebugMessage = (message) => {
+const logDebugMessage = (message) => {
   if (true) {
 	console.log(message);
   }
 };
 
-export { LogDebugMessage };
+export { logDebugMessage };

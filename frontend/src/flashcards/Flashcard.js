@@ -32,6 +32,8 @@ class Flashcard extends React.Component {
 		super(props);
 		this.handleClick = this.handleClick.bind(this);
 		this.state = { isFlipped: false };
+		this.handleDeleteCard = this.handleDeleteCard.bind(this);
+		this.handleEditCard = this.handleEditCard.bind(this);
 	}
 
 	/**
@@ -40,6 +42,12 @@ class Flashcard extends React.Component {
 	 */
 	handleClick(e) {
 		this.setState((prevState) => ({ isFlipped: !prevState.isFlipped }));
+	}
+
+	handleDeleteCard(e) {
+	}
+
+	handleEditCard(e) {
 	}
 
 	render() {
@@ -58,13 +66,17 @@ class Flashcard extends React.Component {
 					<FlashcardFront text={this.props.text} image={this.props.image} />
 					<FlashcardBack text={this.props.translation} />
 				</ReactCardFlip>
-				<div className="Icons" style={iconStyle}>
-					<motion.div whileHover={{ scale: 1.2 }}>
-						<img style={imageStyle} src={editIcon} alt="icon option"></img>
-					</motion.div>
-					<motion.div whileHover={{ scale: 1.2 }}>
-						<img style={imageStyle} src={deleteIcon} alt="icon option"></img>
-					</motion.div>
+				<div className="icons" style={iconStyle}>
+					<div className="edit" onClick={this.handleEditCard}>
+						<motion.div whileHover={{ scale: 1.2 }}>
+							<img style={imageStyle} src={editIcon} alt="icon option"></img>
+						</motion.div>
+					</div>
+					<div className="delete" onClick={this.handleDeleteCard}>
+						<motion.div whileHover={{ scale: 1.2 }}>
+							<img style={imageStyle} src={deleteIcon} alt="icon option"></img>
+						</motion.div>
+					</div>
 				</div>
 			</div>
 		);

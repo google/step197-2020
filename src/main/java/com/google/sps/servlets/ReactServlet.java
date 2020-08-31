@@ -15,7 +15,6 @@ import javax.servlet.ServletException;
       "/CreateCard",
       "/CreateFolder",
       "/ImageInterface",
-      "/YoutubeInterface",
       "/InsideFolder"
     })
 public class ReactServlet extends HttpServlet {

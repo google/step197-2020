@@ -10,11 +10,15 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.NDArrayIndex;
 
+import org.mapdb.DB;
+import org.mapdb.DBMaker;
+import org.mapdb.BTreeMap;
+import org.mapdb.Serializer;
+
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.stream.IntStream;
 import com.google.sps.tool.ArrayUtil;
-import org.mapdb.*;
 
 /* This function of this file is to ONLY pre-process the nearest neigbors of 300,000 words.
  * It will create/update a binary .db file. Time results and optimal batch size

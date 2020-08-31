@@ -11,7 +11,7 @@ class CreateCardContent extends Component {
     super(props);
     this.state = {
       imgSrc: "",
-      text: "none",
+      text: "",
       translation: "none",
       fromLang: "none",
       toLang: "none",
@@ -22,16 +22,16 @@ class CreateCardContent extends Component {
     this.translateText = this.translateText.bind(this);
     this.fromLangSelected = this.fromLangSelected.bind(this);
     this.toLangSelected = this.toLangSelected.bind(this);
+    this.folderSelected = this.folderSelected.bind(this);
     this.imageSelected = this.imageSelected.bind(this);
-    this.imageUploadUrl = "";
+    this.textChanged = this.textChanged.bind(this);
   }
 
   async componentDidMount() {
     try {
-      const uploadUrl = await fetch("/upload").then((response) =>
-        response.text()
-      );
-      if (!uploadUrl.ok) {
+      const uploadResponse = await fetch("/upload");
+      const uploadUrl = await uploadResponse.text();
+      if (!uploadResponse.ok) {
         throw Error(uploadUrl.statusText);
       }
       this.setState({ imageUploadUrl: uploadUrl, uploadUrlFetched: true });
@@ -49,25 +49,21 @@ class CreateCardContent extends Component {
     // Ensures that languages have been selected before translating
     if (this.state.fromLang !== "none" && this.state.toLang !== "none") {
       (async () => {
-        try {
-          const translated = await getTranslation(
-            text,
-            this.state.fromLang,
-            this.state.toLang
-          );
-          if (!translated.ok) {
-            throw Error(translated.statusText);
+        const toLang = this.state.toLang;
+        // If an error is thrown it is caught inside of get translation
+        const translated = await getTranslation(
+          text,
+          this.state.fromLang,
+          this.state.toLang
+        );
+        this.setState((prevState) => {
+          // Checks if fields have been changed since the request to getTranslation
+          if (prevState.toLang != toLang || prevState.text != text) {
+            return;
           }
-          this.setState({ translation: translated, text: text });
-        } catch (error) {
-          this.setState({
-            translation: "Text could not be translated",
-            text: text,
-          });
-        }
+          return { translation: translated.translation, text };
+        });
       })();
-    } else {
-      this.setState({ text });
     }
   }
 
@@ -89,6 +85,10 @@ class CreateCardContent extends Component {
 
   imageSelected(event) {
     this.setState({ imgSrc: URL.createObjectURL(event.target.files[0]) });
+  }
+
+  textChanged(event) {
+    this.setState({text: event.target.value})
   }
 
   render() {
@@ -136,8 +136,10 @@ class CreateCardContent extends Component {
                   <input
                     id='mainText'
                     type='text'
+                    name='rawText'
                     placeholder={this.state.text}
                     onBlur={this.translateText}
+                    onChange={this.textChanged}
                     required></input>
                 </li>
                 <li>
@@ -145,7 +147,8 @@ class CreateCardContent extends Component {
                   <input
                     id='translated'
                     type='text'
-                    placeholder={this.state.translation}
+                    name='translatedText'
+                    value={this.state.translation}
                     readOnly></input>
                 </li>
                 <li>
@@ -154,7 +157,7 @@ class CreateCardContent extends Component {
                     <input
                       type='file'
                       id='image'
-                      name='imageSelect'
+                      name='image'
                       onChange={this.imageSelected}></input>
                   </span>
                   <span className='inline'>

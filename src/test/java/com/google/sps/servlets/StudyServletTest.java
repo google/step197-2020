@@ -245,14 +245,12 @@ public final class StudyServletTest {
     Entity updatedCard = datastore.get(KeyFactory.stringToKey(cardKey));
     Card cardAUpdated = new Card(updatedCard);
     Double response = cardAUpdated.getFamiliarityScore();
-    long time = cardAUpdated.getTimeTested();
-    Double expectedResponse = (Double) 2.142857142;
 
-    assertTrue(compareDoubles(response, expectedResponse));
+    assertTrue(compareDoubles(response, (Double) 2.142857142));
   }
 
   @Test
-  public void userAnswersInCorrectly() throws Exception {
+  public void userAnswersIncorrectly() throws Exception {
     // The time gap between when the user created the card and when its being tested is 10 hours
     cardA =
         new Card.Builder()
@@ -277,7 +275,6 @@ public final class StudyServletTest {
     Entity updatedCard = datastore.get(KeyFactory.stringToKey(cardKey));
     Card cardAUpdated = new Card(updatedCard);
     Double response = cardAUpdated.getFamiliarityScore();
-    long time = cardAUpdated.getTimeTested();
     Double expectedResponse = (Double) 0.74;
     assertTrue(compareDoubles(response, (-1) * expectedResponse));
   }
@@ -297,9 +294,6 @@ public final class StudyServletTest {
    * familiarity score.
    */
   public Boolean compareDoubles(Double value1, Double value2) {
-    if (Math.abs(value1 - value2) < .0001) {
-      return true;
-    }
-    return false;
+    return Math.abs(value1 - value2) < .0001
   }
 }

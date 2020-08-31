@@ -2,7 +2,6 @@ import React, { useState, Component } from "react";
 import ReactDOM from "react-dom";
 import NavBar from "./homePage/NavBar";
 import LandingPage from "./homePage/LandingPage";
-import About from "./homePage/About";
 
 class Home extends React.Component {
   constructor(props) {
@@ -68,7 +67,6 @@ class Home extends React.Component {
           folderClick={this.folderClick}
           Url={this.handleLoginClick}
         />
-        <About />
       </div>
     );
   }

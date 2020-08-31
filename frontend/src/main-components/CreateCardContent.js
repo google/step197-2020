@@ -5,6 +5,8 @@ import BackCard from "../flashcards/FlashcardBackPreview";
 import { getTranslation } from "../sub-components/translate";
 import LangaugeScroll from "../sub-components/languageScroll";
 import FolderScroll from "../sub-components/folderScroll";
+import PageLoading from "../sub-components/PageLoading";
+import TranslationLoading from "../sub-components/TranslationLoading";
 
 class CreateCardContent extends Component {
   constructor(props) {
@@ -18,6 +20,7 @@ class CreateCardContent extends Component {
       folder: "",
       uploadUrlFetched: false,
       imageUploadUrl: "",
+      loading:false,
     };
     this.translateText = this.translateText.bind(this);
     this.fromLangSelected = this.fromLangSelected.bind(this);
@@ -46,6 +49,7 @@ class CreateCardContent extends Component {
    */
   translateText(event) {
     const text = event.target.value;
+    this.setState({ loading: true });
     // Ensures that languages have been selected before translating
     if (this.state.fromLang !== "none" && this.state.toLang !== "none") {
       (async () => {
@@ -61,7 +65,7 @@ class CreateCardContent extends Component {
           if (prevState.toLang != toLang || prevState.text != text) {
             return;
           }
-          return { translation: translated.translation, text };
+          return { translation: translated.translation, loading: false, text};
         });
       })();
     }
@@ -93,7 +97,11 @@ class CreateCardContent extends Component {
 
   render() {
     if (!this.state.uploadUrlFetched) {
-      return <h1>Loading</h1>;
+      return (
+        <div className='loadingContainer'>
+        <PageLoading></PageLoading>
+        </div>
+      );
     }
     return (
       <div className='container'>
@@ -144,12 +152,13 @@ class CreateCardContent extends Component {
                 </li>
                 <li>
                   <label className='block'>Translation:</label>
-                  <input
-                    id='translated'
-                    type='text'
-                    name='translatedText'
-                    value={this.state.translation}
-                    readOnly></input>
+                    <input
+                      id='translated'
+                      type='text'
+                      name='translatedText'
+                      value={this.state.translation}
+                      readOnly></input>
+                    <TranslationLoading loading={this.state.loading}></TranslationLoading>
                 </li>
                 <li>
                   <span className='inline'>

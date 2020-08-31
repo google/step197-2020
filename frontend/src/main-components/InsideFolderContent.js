@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import Flashcard from '../flashcards/Flashcard.js';
 import NewCard from '../flashcards/NewCard.js';
 import { LogDebugMessage } from './LogDebugMessage.js';
+import PageLoading from "../sub-components/PageLoading";
 
 const ContainerStyle = {
   flex: '9',
@@ -50,10 +51,17 @@ class InsideFolderContent extends React.Component {
       });
     let count = flashcards?.length;
     flashcards.unshift(<NewCard />);
-    this.setState({ flashcards: flashcards, flashcardCount: count });
+    this.setState({ flashcards: flashcards, flashcardCount: count, isDataFetched: true });
   }
 
   render() {
+    if (!this.state.isDataFetched) {
+      return (
+        <div className='loadingContainer'>
+          <PageLoading></PageLoading>
+        </div>
+      );
+    }
     return (
 	  <div style={{ flex: '9', display: 'flex' }}>
         <div style={ContainerStyle}>

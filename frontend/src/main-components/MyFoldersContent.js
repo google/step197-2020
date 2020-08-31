@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import Folder from "../flashcards/Folder.js";
 import { logDebugMessage } from "./LogDebugMessage";
+import PageLoading from "../sub-components/PageLoading";
 
 const Container = styled.div`
   flex: 9;
@@ -43,7 +44,11 @@ class MyFoldersContent extends React.Component {
 
   render() {
     if (!this.state.isDataFetched) {
-      return <h1>loading</h1>;
+      return (
+        <div className='loadingContainer'>
+          <PageLoading></PageLoading>
+        </div>
+      );
     }
 
     let headingText =

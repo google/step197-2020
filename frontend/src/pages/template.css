@@ -7,3 +7,14 @@
   justify-content: center;
   margin: 1%;
 }
+
+.loadingContainer {
+  align-items: center;
+  background-color: white;
+  border: 1rem solid white;
+  border-radius: 1rem;
+  display: flex;
+  flex: 9;
+  justify-content: center;
+  margin: 1%;
+}

@@ -1,36 +1,37 @@
-import React from 'react';
-import './LandingPage.css';
-import LoginButton from './LoginButton.js';
+import React from "react";
+import "./LandingPage.css";
+import LoginButton from "./LoginButton.js";
 import { motion } from "framer-motion";
+import Background from "./LandingPageBackground";
 
 class LandingPage extends React.Component {
-    constructor(props) {
-      super(props);
-      this.message = "Get Started";
-      this.color = "#5A90A1";
-      this.clickHandling = this.props.loginClick;
-      if (this.props.loginStatus) {
-        this.message = "My Folders";
-        this.color = "#F4B400"
-        this.clickHandling = this.props.folderClick;
-      }   
-    }
-  
-    render() {
-      return (
-        <div className="LandingPage">
-          <h1>Frame.cards learning made easy</h1>
-          <motion.div whileHover={{scale:1.2}}>
-            <LoginButton
-              status={this.message}
-              color={this.color}
-              fontSize="32px"
-              clickFunction = {this.clickHandling}
-            ></LoginButton>
-          </motion.div>
-        </div>
-      );
+  constructor(props) {
+    super(props);
+    this.message = "Get Started";
+    this.color = "#5A90A1";
+    this.clickHandling = this.props.loginClick;
+    if (this.props.loginStatus) {
+      this.message = "My Folders";
+      this.color = "#F4B400";
+      this.clickHandling = this.props.folderClick;
     }
   }
+
+  render() {
+    return (
+      <div className='LandingPage'>
+        <Background></Background>
+        <h1>Frame.cards learning made easy</h1>
+        <motion.div whileHover={{ scale: 1.2 }}>
+          <LoginButton
+            status={this.message}
+            color={this.color}
+            fontSize='32px'
+            clickFunction={this.clickHandling}></LoginButton>
+        </motion.div>
+      </div>
+    );
+  }
+}
 
 export default LandingPage;

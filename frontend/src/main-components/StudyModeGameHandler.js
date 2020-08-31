@@ -66,4 +66,4 @@ class StudyService {
   }
 }
 
-export { Quiz, StudyService, MockStudyService };
+export { Quiz, StudyService };

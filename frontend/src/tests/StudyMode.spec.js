@@ -1,9 +1,6 @@
 import React from "react";
 import CreateFolderContent from "../main-components/CreateFolderContent";
-import {
-  Quiz,
-  MockStudyService,
-} from "../main-components/StudyModeGameHandler";
+import { Quiz } from "../main-components/StudyModeGameHandler";
 
 describe("Testing Quiz class", () => {
   class MockStudyService {

@@ -8,6 +8,9 @@ const EndGame = styled.h1`
   font-size: 10rem;
 `;
 
+const FALSE = "false";
+const TRUE = "true";
+
 class StudyModeContent extends React.Component {
   constructor(props) {
     super(props);
@@ -35,12 +38,12 @@ class StudyModeContent extends React.Component {
 
   optionSelected(event) {
     const selectedValue = event.currentTarget.value;
-    let correct = "false";
+    let correct = FALSE;
     if (selectedValue === this.state.correctAnswer) {
-      correct = "true";
+      correct = TRUE;
     }
 
-    /**
+    /*
      * If the selected word was incorrect then this function
      * will repeat this word at the end of another round if possible.
      */
@@ -48,15 +51,15 @@ class StudyModeContent extends React.Component {
     const word = this.props.quiz.nextQuizWord();
     if (word === null) {
       this.setState({ end: true });
+    } else {
+      const round = this.props.quiz.getCurrentRound();
+      this.setState({
+        quizWord: word.quizWord,
+        options: word.possibleResponses,
+        correctAnswer: word.correctAnswer,
+        currentRound: round,
+      });
     }
-
-    const round = this.props.quiz.getCurrentRound();
-    this.setState({
-      quizWord: word.quizWord,
-      options: word.possibleResponses,
-      correctAnswer: word.correctAnswer,
-      currentRound: round,
-     });
   }
 
   render() {

@@ -49,15 +49,4 @@ class StudyService {
   }
 }
 
-class MockStudyService {
-  constructor(words) {
-    this.words = words;
-  }
-  
-  getWordsFromFolder(folderKey) {
-    return this.words;
-  }
-
-}
-
 export { Quiz, StudyService, MockStudyService };

@@ -6,6 +6,16 @@ import {
 } from "../main-components/StudyModeGameHandler";
 
 describe("Testing Quiz class", () => {
+  class MockStudyService {
+    constructor(words) {
+      this.words = words;
+    }
+
+    getWordsFromFolder(folderKey) {
+      return this.words;
+    }
+  }
+
   const testObject = [
     [
       {
@@ -24,6 +34,7 @@ describe("Testing Quiz class", () => {
       },
     ],
   ];
+  
   const mockService = new MockStudyService(testObject);
   const quiz = new Quiz(mockService);
   quiz.start(1);

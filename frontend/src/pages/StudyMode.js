@@ -14,7 +14,7 @@ function StudyMode() {
     <div className='App'>
       <Header id='head' handleClick={handleClick}></Header>
       <div id='main'>
-        <Sidebar bool={sideSetting}></Sidebar>
+        <Sidebar visible={sideSetting}></Sidebar>
         <MyFoldersContent
           mainURL='/InsideStudyMode'
           headingText='Select a folder to begin studying'>

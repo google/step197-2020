@@ -38,7 +38,7 @@ class InsideStudyMode extends React.Component {
         <div className='App'>
           <Header id='head' handleClick={this.handleClick}></Header>
           <div id='main'>
-            <Sidebar bool={this.state.sideSetting}></Sidebar>
+            <Sidebar visible={this.state.sideSetting}></Sidebar>
           </div>
         </div>
       );

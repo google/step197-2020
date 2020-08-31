@@ -86,7 +86,7 @@ class ImageInterfaceContent extends React.Component {
 
 	async componentDidMount() {
 		console.log('Fetching upload URL!');
-		const uploadResponse = await fetch('/upload');
+		const uploadResponse = await fetch('/ObjectDetectionUpload');
 		const uploadUrl = await uploadResponse.text();
 		console.log('Got the response!');
 		if (!uploadResponse.ok) {

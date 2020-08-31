@@ -10,7 +10,7 @@ import SideIcon from "../sub-components/SideIcon";
 
 const Sidebar = (props) => {
   let sideStyling = "width: 0; border: none;";
-  if (props.bool) {
+  if (props.visible) {
     sideStyling =
       "width: 20%; border: .3rem solid black; align-items:flex-start;";
   }
@@ -34,12 +34,12 @@ const Sidebar = (props) => {
 
   return (
     <Side id='side' className='flex-container'>
-      <SideIcon link='/myFolders' icon={homeIcon}></SideIcon>
+      <SideIcon link='/MyFolders' icon={homeIcon}></SideIcon>
       <SideIcon link='/CreateCard' icon={newCardIcon}></SideIcon>
       <SideIcon link='/CreateFolder' icon={newFolderIcon}></SideIcon>
       <SideIcon link='/ImageInterface' icon={objectIcon}></SideIcon>
       <SideIcon link='/StudyMode' icon={gameIcon}></SideIcon>
-      <SideIcon link='/myFolders' icon={logoutIcon}></SideIcon>
+      <SideIcon link='/homePage' icon={logoutIcon}></SideIcon>
     </Side>
   );
 };

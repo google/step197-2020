@@ -44,11 +44,9 @@ class Flashcard extends React.Component {
 		this.setState((prevState) => ({ isFlipped: !prevState.isFlipped }));
 	}
 
-	handleDeleteCard(e) {
-	}
+	handleDeleteCard(e) {}
 
-	handleEditCard(e) {
-	}
+	handleEditCard(e) {}
 
 	render() {
 		return (

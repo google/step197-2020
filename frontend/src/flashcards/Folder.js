@@ -12,15 +12,13 @@ class Folder extends React.Component {
 		this.handleEditCard = this.handleEditCard.bind(this);
 	}
 
-	handleDeleteCard(e) {
-	}
+	handleDeleteCard(e) {}
 
-	handleEditCard(e) {
-	}
+	handleEditCard(e) {}
 
 	render() {
 		return (
-			<div className="folder" key={this.props.folderURL} >
+			<div className="folder" key={this.props.folderURL}>
 				<Link to={`/insideFolder?folderKey=${this.props.folderURL}`}>
 					<div className="FolderContent">
 						<br />
@@ -28,7 +26,7 @@ class Folder extends React.Component {
 						<p>{this.props.language}</p>
 					</div>
 				</Link>
-				<div className="icons" >
+				<div className="icons">
 					<div className="edit" onClick={this.handleEditCard}>
 						<motion.div whileHover={{ scale: 1.2 }}>
 							<img src={editIcon} alt="icon option"></img>

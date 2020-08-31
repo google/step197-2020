@@ -26,7 +26,8 @@ class StudyModeContent extends React.Component {
         <div id='rounds'>
           <RoundLights
             currentRound={this.state.currentRound}
-            totalRounds={this.state.totalRounds}></RoundLights>
+            totalRounds={this.state.totalRounds}>
+          </RoundLights>
         </div>
 
         <div id='studyMain'>
@@ -37,7 +38,8 @@ class StudyModeContent extends React.Component {
           <div id='options'>
             <Options
               options={["hello", "hola", "bonjour", "hi"]}
-              func={this.optionSelected}></Options>
+              func={this.optionSelected}>
+            </Options>
           </div>
         </div>
       </div>

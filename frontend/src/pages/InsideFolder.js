@@ -5,20 +5,19 @@ import InsideFolderContent from "../main-components/InsideFolderContent";
 import queryString from "query-string";
 
 function InsideFolder(props) {
-  const [sideSetting, setSideSetting] = useState(false);
+  const [sidebarVisibility, setSidebarVisibility] = useState(false);
   const handleClick = (e) => {
-    setSideSetting((sideSetting) => !sideSetting);
+    setSidebarVisibility((sidebarVisibility) => !sidebarVisibility);
   };
 
-  let folderKey;
   const values = queryString.parse(props.location.search);
-  folderKey = values.folderKey;
+  const folderKey = values.folderKey;
 
   return (
     <div className='App'>
       <Header id='head' handleClick={handleClick}></Header>
       <div id='main'>
-        <Sidebar bool={sideSetting}></Sidebar>
+        <Sidebar bool={sidebarVisibility}></Sidebar>
         <InsideFolderContent folderKey={folderKey}></InsideFolderContent>
       </div>
     </div>

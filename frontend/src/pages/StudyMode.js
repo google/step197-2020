@@ -5,16 +5,16 @@ import MyFoldersContent from "../main-components/MyFoldersContent";
 
 function StudyMode() {
   // Handles mobile menu button and updates sidebar view
-  const [sideSetting, setSideSetting] = useState(false);
+  const [sidebarVisibility, setSidebarVisibility] = useState(false);
   const handleClick = (e) => {
-    setSideSetting((sideSetting) => !sideSetting);
+    setSidebarVisibility((sidebarVisibility) => !sidebarVisibility);
   };
 
   return (
     <div className='App'>
       <Header id='head' handleClick={handleClick}></Header>
       <div id='main'>
-        <Sidebar bool={sideSetting}></Sidebar>
+        <Sidebar bool={sidebarVisibility}></Sidebar>
         <MyFoldersContent
           mainURL='/InsideStudyMode'
           headingText='Select a folder to begin studying'>

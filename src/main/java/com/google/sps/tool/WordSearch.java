@@ -97,7 +97,6 @@ public class WordSearch {
         // If parsing fails try again
         retries--;
         alphabetWordMap.clear();
-        initMap();
       }
     }
     return true;

@@ -24,6 +24,7 @@ import com.google.sps.tool.WordSearch;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
+import org.joda.time.DateTimeUtils;
 
 /**
  * Handles the study mode questions and responses by adjusting and sorting a card's based on their
@@ -91,7 +92,7 @@ public class StudyServlet extends HttpServlet {
     Double newScore;
     Boolean answeredCorrectly = Boolean.parseBoolean(request.getParameter("answeredCorrectly"));
     String cardKey = request.getParameter("cardKey");
-    long time = System.currentTimeMillis();
+    long time = DateTimeUtils.currentTimeMillis();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     try {
       cardEntity = datastore.get(KeyFactory.stringToKey(cardKey));
@@ -164,8 +165,23 @@ public class StudyServlet extends HttpServlet {
     return card;
   }
 
+  /** Parses optional parameters that allow for testing on fewer rounds with fewer cards. */
+  private void setOptionalQuizParameters(HttpServletRequest request) {
+    String optNumCards = request.getParameter("numCards");
+    String optNumRounds = request.getParameter("numRounds");
+    if (optNumCards != null && optNumRounds != null) {
+      try {
+        numOfCardsPerRound = Integer.parseInt(optNumCards);
+        maxNumOfRounds = Integer.parseInt(optNumRounds);
+      } catch (NumberFormatException e) {
+        numOfCardsPerRound = 5;
+        maxNumOfRounds = 4;
+      }
+    }
+  }
+
   private Double incFamiliarityScore(long time, Double currentScore, long prevTime) {
-    Double numHours = (double) (time - prevTime) / 3600;
+    Double numHours = (double) (time - prevTime) / 3600000;
     if (numHours > 168) {
       numHours = 168.0;
     }
@@ -173,7 +189,7 @@ public class StudyServlet extends HttpServlet {
   }
 
   private Double decFamiliarityScore(long time, Double currentScore, long prevTime) {
-    Double numHours = (double) (time - prevTime) / 3600;
+    Double numHours = (double) (time - prevTime) / 3600000;
     if (numHours > 24) {
       numHours = 0.0;
     } else {

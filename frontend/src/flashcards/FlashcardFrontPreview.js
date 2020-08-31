@@ -13,28 +13,30 @@ const imgStyle = {
   margin: "10px",
 };
 
+ const Contain = styled.div`
+   align-items: center;
+   background-color: white;
+   border-radius: 30px;
+   box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 8px;
+   color: black;
+   display: flex;
+   flex-direction: column;
+   font-family: "Montserrat", sans-serif;
+   font-size: 30px;
+   font-weight: 600;
+   height: 350px;
+   position: relative;
+   width: 100%;
+   text-align: center;
+   justify-content: center;
+   @media (max-width: 700px) {
+     height: 100%;
+     width: 100%;
+   }
+ `;
+
 class FlashcardFront extends React.Component {
   render() {
-    const Contain = styled.div`
-      align-items: center;
-      background-color: white;
-      border-radius: 30px;
-      box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 8px;
-      color: black;
-      display: flex;
-      flex-direction: column;
-      font-family: "Montserrat", sans-serif;
-      font-size: 30px;
-      font-weight: 600;
-      height: 350px;
-      position: relative;
-      width: 100%;
-      text-align: center;
-      justify-content: center;
-      @media (max-width: 700px) {
-        height: 100%;
-        width: 100%;
-      }`;
     
     return (
       <Contain className="FlashcardFront">

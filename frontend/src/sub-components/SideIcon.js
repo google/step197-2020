@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
-
 const SideIcon = (props) => {
   const Container = styled.div`
     width: 80%;
@@ -23,7 +22,6 @@ const SideIcon = (props) => {
     }
   `;
  
-
   return (
     <Container>
       <Link to={props.link}>

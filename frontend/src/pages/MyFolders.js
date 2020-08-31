@@ -6,14 +6,9 @@ import queryString from "query-string";
 
 function MyFolders(props) {
   // Handles mobile menu button and updates sidebar view
-  const [sideSetting, setSideSetting] = useState("f");
+  const [sidebarVisibility, setSidebarVisibility] = useState(false);
   const handleClick = (e) => {
-    console.log("Clicked");
-    if (sideSetting === "f") {
-      setSideSetting("t");
-    } else {
-      setSideSetting("f");
-    }
+    setSidebarVisibility((sidebarVisibility) => !sidebarVisibility);
   };
 
   let userKey;
@@ -23,13 +18,14 @@ function MyFolders(props) {
   });
 
   return (
-    <div className="App">
-      <Header id="head" handleClick={handleClick}></Header>
-      <div id="main">
-        <Sidebar bool={sideSetting}></Sidebar>
-        <MyFoldersContent userKey={userKey}
-          mainURL="/InsideFolder"
-          headingText="main">
+    <div className='App'>
+      <Header id='head' handleClick={handleClick}></Header>
+      <div id='main'>
+        <Sidebar visible={sidebarVisibility}></Sidebar>
+        <MyFoldersContent
+          userKey={userKey}
+          mainURL='/InsideFolder'
+          headingText='main'>
         </MyFoldersContent>
       </div>
     </div>

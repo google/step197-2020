@@ -294,6 +294,6 @@ public final class StudyServletTest {
    * familiarity score.
    */
   public Boolean compareDoubles(Double value1, Double value2) {
-    return Math.abs(value1 - value2) < .0001
+    return Math.abs(value1 - value2) < .0001;
   }
 }

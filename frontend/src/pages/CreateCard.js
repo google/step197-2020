@@ -7,23 +7,16 @@ import css from "./template.css"
 
 function CreateCard() {
   // Handles mobile menu button and updates sidebar view
-  const [sideSetting, setSideSetting] = useState("f");
+  const [sidebarVisibility, setSidebarVisibility] = useState(false);
   const handleClick = (e) => {
-    console.log("Clicked");
-    if (sideSetting === "f") {
-      setSideSetting("t");
-    } else {
-      setSideSetting("f");
-    }
+    setSidebarVisibility(sidebarVisibility => !sidebarVisibility);
   };
-    
-
     
     return (
       <div className="App">
         <Header id="head" handleClick={handleClick}></Header>
         <div id="main">
-          <Sidebar bool={sideSetting}></Sidebar>
+          <Sidebar visible={sidebarVisibility}></Sidebar>
           <CreateCardContent></CreateCardContent>
         </div>
       </div>

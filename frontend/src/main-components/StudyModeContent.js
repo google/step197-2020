@@ -3,6 +3,14 @@ import styled from "@emotion/styled";
 import StudyModeQuiz from "../sub-components/StudyModeQuiz";
 import { nextQuizWord, updateWordQueues, getRound } from "./StudyModeGameHandler";
 
+const EndGame = styled.h1`
+  color: #d4af37;
+  font-size: 10rem;
+`;
+
+const FALSE = "false";
+const TRUE = "true";
+
 class StudyModeContent extends React.Component {
   constructor(props) {
     super(props);
@@ -19,8 +27,8 @@ class StudyModeContent extends React.Component {
 
   componentDidMount() {
     // Grabs the first word in the game
-    const word = nextQuizWord();
-    const round = getRound();
+    const word = this.props.quiz.nextQuizWord();
+    const round = this.props.quiz.getCurrentRound();
     this.setState({
       quizWord: word.quizWord,
       options: word.possibleResponses,
@@ -32,42 +40,35 @@ class StudyModeContent extends React.Component {
 
   optionSelected(event) {
     const selectedValue = event.currentTarget.value;
-    let correct = "false";
-    
+    let correct = FALSE;
     if (selectedValue === this.state.correctAnswer) {
-      correct = "true";
+      correct = TRUE;
     }
 
-    /**
+    /*
      * If the selected word was incorrect then this function
      * will repeat this word at the end of another round if possible.
      */
-    updateWordQueues(correct, this.state.cardKey);
-    const word = nextQuizWord();
-
+    this.props.quiz.updateWordQueues(correct, this.state.cardKey);
+    this.props.quiz.updateWordQueues(correct);
+    const word = this.props.quiz.nextQuizWord();
     if (word === null) {
       this.setState({ end: true });
+    } else {
+      const round = this.props.quiz.getCurrentRound();
+      this.setState({
+        quizWord: word.quizWord,
+        options: word.possibleResponses,
+        correctAnswer: word.correctAnswer,
+        currentRound: round,
+      });
     }
-
-    const round = getRound();
-    this.setState({
-       quizWord: word.quizWord,
-       options: word.possibleResponses,
-       correctAnswer: word.correctAnswer,
-       cardKey: word.cardKey,
-       currentRound: round
-    });
   }
 
   render() {
-    const EndGame = styled.h1`
-        color: #D4AF37;
-        font-size: 10rem;
-    `;
-
     if (this.state.end) {
       return (
-        <div className="Container">
+        <div className="container">
           <EndGame>You Finished The Game</EndGame>
         </div>
       );
@@ -76,7 +77,7 @@ class StudyModeContent extends React.Component {
     return (
       <StudyModeQuiz
         currentRound={this.state.currentRound}
-        totalRounds={this.props.totalRounds}
+        totalRounds={this.props.quiz.getTotalRounds()}
         quizWord={this.state.quizWord}
         options={this.state.options}
         optionSelected={this.optionSelected}>

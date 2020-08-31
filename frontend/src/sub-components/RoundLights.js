@@ -1,11 +1,19 @@
 import React from "react";
 import styled from "@emotion/styled";
 
+const Dot = styled.div`
+  display: flex;
+  height: 6rem;
+  width: 6rem;
+  border-radius: 50%;
+  margin-right: 10%;
+`;
+
 class RoundLights extends React.Component {
   constructor(props) {
     super(props);
     this.statusColors = [];
-    /**
+    /*
      * Each rounds color status is appended to the status color array,
      * where green represents completed and gray represents rounds
      * that have not yet been completed.
@@ -20,16 +28,8 @@ class RoundLights extends React.Component {
   }
 
   render() {
-    const Dot = styled.div`
-      display:flex;
-      height: 6rem;
-      width: 6rem;
-      border-radius: 50%;
-      margin-right: 10%;
-    `;
-
     return this.statusColors.map((color, i) => {
-      return <Dot style={{backgroundColor:`${color}`}} key={i}></Dot>;
+      return <Dot style={{ backgroundColor: `${color}` }} key={i}></Dot>;
     });
   }
 }

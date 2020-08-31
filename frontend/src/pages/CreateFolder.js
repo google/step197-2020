@@ -5,21 +5,16 @@ import CreateFolderContent from "../main-components/CreateFolderContent";
 
 function CreateFolder() {
   // Handles mobile menu button and updates sidebar view
-  const [sideSetting, setSideSetting] = useState("f");
-  const handleClick = (e) => {
-    console.log("Clicked");
-    if (sideSetting === "f") {
-      setSideSetting("t");
-    } else {
-      setSideSetting("f");
-    }
-  };
+   const [sidebarVisibility, setSidebarVisibility] = useState(false);
+   const handleClick = (e) => {
+     setSidebarVisibility((sidebarVisibility) => !sidebarVisibility);
+   };
 
   return (
     <div className="App">
       <Header id="head" handleClick={handleClick}></Header>
       <div id="main">
-        <Sidebar bool={sideSetting}></Sidebar>
+        <Sidebar visible={sidebarVisibility}></Sidebar>
         <CreateFolderContent></CreateFolderContent>  
       </div>
     </div>

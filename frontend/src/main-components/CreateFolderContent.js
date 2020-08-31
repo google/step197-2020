@@ -27,7 +27,7 @@ class CreateFolderContent extends Component {
    */
   render() {
     return (
-      <div className='Container'>
+      <div className='container'>
         <div id='innerContainer'>
           <div id='folderPreview'>
             <h2 id='previewFolderName'>{this.state.folderName}</h2>
@@ -59,9 +59,9 @@ class CreateFolderContent extends Component {
                       value={this.state.folderLang}
                       onChange={this.handleFolderLang}
                       required>
-                      {supportedLang.languages.map((lang, i) => {
+                      {supportedLang.languages.map((lang) => {
                         return (
-                          <option key={i} value={lang.language}>
+                          <option key={lang.language} value={lang.language}>
                             {lang.language}
                           </option>
                         );

@@ -97,12 +97,6 @@ public final class StudyServletTest {
             .setRawText("test2")
             .setTextTranslated("translatedTest2")
             .build();
-    cardC =
-        new Card.Builder()
-            .setImageBlobKey("null")
-            .setRawText("test3")
-            .setTextTranslated("translatedTest3")
-            .build();
 
     Entity folder = new Entity("Folder", "testID");
     String folderKey = KeyFactory.keyToString(folder.getKey());
@@ -115,16 +109,14 @@ public final class StudyServletTest {
     List<Card> cards = new ArrayList<>();
     Card cardAInDatastore = storeCardInDatastore(cardA, datastore, folderKey);
     Card cardBInDatastore = storeCardInDatastore(cardB, datastore, folderKey);
-    Card cardCInDatastore = storeCardInDatastore(cardC, datastore, folderKey);
     cards.add(cardAInDatastore);
     cards.add(cardBInDatastore);
-    cards.add(cardCInDatastore);
 
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
     String expectedResponse =
         "["
-            + "[{\"quizWord\":\"translatedTest\", \"cardKey\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAEM\","
+            + "[{\"quizWord\":\"translatedTest\",\"cardKey\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAEM\","
             + "\"possibleResponses\":[\"test\"],\"correctAnswer\":\"test\"}],"
             + "[{\"quizWord\":\"translatedTest2\",\"cardKey\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAIM\","
             + "\"possibleResponses\":[\"test2\"],\"correctAnswer\":\"test2\"}]"
@@ -294,6 +286,6 @@ public final class StudyServletTest {
    * familiarity score.
    */
   public Boolean compareDoubles(Double value1, Double value2) {
-    return Math.abs(value1 - value2) < .0001
+    return Math.abs(value1 - value2) < .0001;
   }
 }

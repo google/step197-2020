@@ -32,7 +32,7 @@ public class RecommendationServlet extends HttpServlet {
       response.getWriter().println(new Gson().toJson(jsonErrorInfo));
       return;
     }
-    
+
     String queryWord = request.getParameter("queryWord").toLowerCase();
     int numOfWordsRequested = Integer.parseInt(request.getParameter("numOfWordsRequested"));
     if (checkforWordRequestedBound(response, numOfWordsRequested)) {
@@ -41,7 +41,7 @@ public class RecommendationServlet extends HttpServlet {
     }
 
     // Ensures db is opened in read only to avoid data perturbation
-    String path = Paths.get("").toAbsolutePath().toString() + "/word2vec.db";
+    String path = "./target/classes/META-INF/word2vec.db";
     DB db = DBMaker.fileDB(path).readOnly().make();
     BTreeMap<String, String[]> queryNearestNeighbors = getIndexTable(db);
 

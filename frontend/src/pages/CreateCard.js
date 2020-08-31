@@ -21,7 +21,7 @@ function CreateCard(props) {
     <div className='App'>
       <Header id='head' handleClick={handleClick}></Header>
       <div id='main'>
-        <Sidebar bool={sideBarVisibility}></Sidebar>
+        <Sidebar visible={sideBarVisibility}></Sidebar>
         <CreateCardContent word={text}></CreateCardContent>
       </div>
     </div>

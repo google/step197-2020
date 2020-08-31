@@ -19,7 +19,7 @@ function MyFolders(props) {
     <div className='App'>
       <Header id='head' handleClick={handleClick}></Header>
       <div id='main'>
-        <Sidebar bool={sidebarVisibility}></Sidebar>
+        <Sidebar visible={sidebarVisibility}></Sidebar>
         <SimilarWordsContent
           word={word}
           numWords={numWords}></SimilarWordsContent>

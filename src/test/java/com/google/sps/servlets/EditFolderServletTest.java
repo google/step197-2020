@@ -81,7 +81,7 @@ public final class EditFolderServletTest {
     when(mockRequest.getParameter("folderDefaultLanguage")).thenReturn("es");
     when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
 
-    servlet.doPut(mockRequest, mockResponse);
+    servlet.doPost(mockRequest, mockResponse);
 
     Entity editedFolderEntity = datastore.get(KeyFactory.stringToKey(folderKey));
     Folder editedFolder = new Folder(editedFolderEntity);

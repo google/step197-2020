@@ -42,7 +42,8 @@ class InsideFolderContent extends React.Component {
             image={flashcard.imageBlobKey}
             text={flashcard.rawText}
             translation={flashcard.textTranslated}
-          />
+            cardKey={flashcard.key}
+            folderKey={this.props.folderKey}/>
         ));
       })
       .catch((error) => {

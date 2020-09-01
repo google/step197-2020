@@ -39,6 +39,7 @@ public class EditCardServlet extends HttpServlet {
     }
 
     String cardKey = request.getParameter("cardKey");
+    String folderKey = request.getParameter("folderKey");
     String newRawText = request.getParameter("rawText");
     String newTextTranslated = request.getParameter("textTranslated");
     String newImageBlobKey = getImageBlobKey(request);
@@ -55,6 +56,7 @@ public class EditCardServlet extends HttpServlet {
       updateCard(
           response, card, datastore, cardKey, newRawText, newTextTranslated, newImageBlobKey);
     }
+    response.sendRedirect("/InsideFolder?folderKey=" + folderKey);
   }
 
   private void updateCard(

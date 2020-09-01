@@ -14,6 +14,7 @@ import javax.servlet.ServletException;
       "/MyFolders",
       "/CreateCard",
       "/EditCardContent",
+      "/EditFolderContent",
       "/CreateFolder",
       "/ImageInterface",
       "/InsideFolder"

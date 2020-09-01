@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import css from "./CreateFolderContent.css";
 import supportedLang from "../sub-components/SupportedLang.json";
 
-class CreateFolderContent extends Component {
+class EditFolderContent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      folderName: "None",
-      folderLang: "English",
+      folderName: this.props.name,
+      folderLang: this.props.defaultLanguage,
     };
     this.handleFolderName = this.handleFolderName.bind(this);
     this.handleFolderLang = this.handleFolderLang.bind(this);
@@ -35,7 +35,7 @@ class CreateFolderContent extends Component {
           </div>
           <div id="formBox">
             <ul>
-              <form id="myForm" action="/userfolders" method="POST">
+              <form id="myForm" action="/editfolder" method="POST">
                 <li>
                   <label>Folder Name: </label>
                 </li>
@@ -70,6 +70,13 @@ class CreateFolderContent extends Component {
                     </select>
                   </div>
                 </li>
+                <input
+                  id="folderKey"
+                  type="text"
+                  name="folderKey"
+                  value={this.props.folderKey}
+                  type="hidden"
+                ></input>
                 <li>
                   <input id="submission" type="submit" value="Submit" />
                 </li>
@@ -82,4 +89,4 @@ class CreateFolderContent extends Component {
   }
 }
 
-export default CreateFolderContent;
+export default EditFolderContent;

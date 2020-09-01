@@ -21,7 +21,7 @@ import java.util.Map;
 public class EditFolderServlet extends HttpServlet {
 
   @Override
-  public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
       Map<String, String> jsonErrorInfo = ResponseSerializer.getErrorJson("User not logged in");
@@ -46,6 +46,7 @@ public class EditFolderServlet extends HttpServlet {
       updateFolder(
           response, datastore, folderEntity, newFolderName, newFolderDefaultLanguage, folderKey);
     }
+    response.sendRedirect("/myFolders");
   }
 
   private void updateFolder(

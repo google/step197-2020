@@ -2,9 +2,9 @@ import React, { useState, Component } from "react";
 import Header from "../main-components/Header";
 import Sidebar from "../main-components/Sidebar";
 import styled from "@emotion/styled";
-import EditCardContent from "../main-components/EditCardContent";
+import EditFolderContent from "../main-components/EditFolderContent";
 
-function EditCard(props) {
+function EditFolder(props) {
   // Handles mobile menu button and updates sidebar view
   const [sideSetting, setSideSetting] = useState("f");
   const handleClick = (e) => {
@@ -21,16 +21,14 @@ function EditCard(props) {
       <Header id="head" handleClick={handleClick}></Header>
       <div id="main">
         <Sidebar bool={sideSetting}></Sidebar>
-        <EditCardContent
-          cardKey={props.location.state.cardKey}
-          textTranslated={props.location.state.textTranslated}
-          rawText={props.location.state.rawText}
-          imageBlobKey={props.location.state.imageBlobKey}
+        <EditFolderContent
+          defaultLanguage={props.location.state.defaultLanguage}
+          name={props.location.state.name}
           folderKey={props.location.state.folderKey}
-        ></EditCardContent>
+        ></EditFolderContent>
       </div>
     </div>
   );
 }
 
-export default EditCard;
+export default EditFolder;

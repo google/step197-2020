@@ -6,6 +6,7 @@ import YoutubeDetect from "./pages/YoutubeDetect";
 import CreateCard from "./pages/CreateCard";
 import CreateFolder from "./pages/CreateFolder";
 import EditCard from "./pages/EditCard";
+import EditFolder from "./pages/EditFolder";
 import ImageInterface from "./pages/ImageInterface";
 import PageError from "./pages/404";
 import css from "./mainApp.css";
@@ -24,6 +25,7 @@ function App() {
         <Route exact path="/CreateFolder" component={CreateFolder} />
         <Route exact path="/InsideFolder" component={InsideFolder} />
         <Route exact path="/EditCardContent" component={EditCard} />
+        <Route exact path="/EditFolderContent" component={EditFolder} />
         <Route component={PageError} />
       </Switch>
     </div>

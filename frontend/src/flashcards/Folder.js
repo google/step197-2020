@@ -8,13 +8,18 @@ import { motion } from "framer-motion";
 class Folder extends React.Component {
   constructor(props) {
     super(props);
-    this.handleDeleteCard = this.handleDeleteCard.bind(this);
-    this.handleEditCard = this.handleEditCard.bind(this);
+    this.handleDeleteFolder = this.handleDeleteFolder.bind(this);
   }
 
-  handleDeleteCard(e) {}
-
-  handleEditCard(e) {}
+  async handleDeleteFolder() {
+    await fetch("deletefolder", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ folderKey: this.props.folderKey }),
+    });
+  }
 
   render() {
     return (
@@ -27,12 +32,20 @@ class Folder extends React.Component {
           </div>
         </Link>
         <div className="icons">
-          <div className="edit" onClick={this.handleEditCard}>
+          <Link
+            to={{
+              pathname: "/EditFolderContent",
+              state: {
+                name: this.props.name,
+                defaultLanguage: this.props.language,
+                folderKey: this.props.folderKey,
+              },
+            }}>
             <motion.div whileHover={{ scale: 1.2 }}>
               <img src={editIcon} alt="icon option"></img>
             </motion.div>
-          </div>
-          <div className="delete" onClick={this.handleDeleteCard}>
+          </Link>
+          <div className="delete" onClick={this.handleDeleteFolder}>
             <motion.div whileHover={{ scale: 1.2 }}>
               <img src={deleteIcon} alt="icon option"></img>
             </motion.div>

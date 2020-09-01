@@ -37,12 +37,12 @@ public class WordSearch {
     // If exact word could not be found, then generate random words with the same first letter
     if (!wordFound) {
       Random random = new Random();
-      for (int i = 0; i < 3; i++) {
+      int count = 0;
+      while (count < 3) {
         int index = random.nextInt(wordList.size());
         if (!quizWords.contains(wordList.get(index))) {
           quizWords.add(wordList.get(index));
-        } else {
-          i--;
+          count++;
         }
       }
     }
@@ -54,15 +54,15 @@ public class WordSearch {
   private static void getRandomWords(
       Integer origin, ArrayList<String> wordList, ArrayList<String> quizWords) {
     Random random = new Random();
-    for (int i = 0; i < 3; i++) {
+    int count = 0;
+    while (count < 3) {
       int index = origin + random.nextInt(20) - 10;
       index = Math.min(Math.max(index, 0), wordList.size() - 1);
       String possibleWord = wordList.get(index);
       // Ensures that we don't have repeating words
       if (!quizWords.contains(possibleWord)) {
         quizWords.add(possibleWord);
-      } else {
-        i--;
+        count++;
       }
     }
   }
@@ -73,7 +73,7 @@ public class WordSearch {
    */
   private static Boolean initMap() {
     int retries = 5;
-    while (true) {
+    while (retries > 0) {
       try {
         File dictionary = new File("./WEB-INF/classes/META-INF/Dictionary.txt");
         dictionary.setReadable(true);
@@ -89,16 +89,12 @@ public class WordSearch {
         }
 
         reader.close();
-        break;
+        return true;
       } catch (FileNotFoundException e) {
-        if (retries <= 0) {
-          return false;
-        }
-        // If parsing fails try again
         retries--;
         alphabetWordMap.clear();
       }
     }
-    return true;
+    return false;
   }
 }

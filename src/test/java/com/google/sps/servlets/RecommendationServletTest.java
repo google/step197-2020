@@ -1,4 +1,4 @@
-/*package com.google.sps.servlets;
+package com.google.sps.servlets;
 
 import static com.google.sps.tool.Tool.compareJson;
 import static org.junit.Assert.assertTrue;
@@ -92,4 +92,3 @@ public class RecommendationServletTest {
     assertTrue(compareJson(response, expectedResponse));
   }
 }
-*/

@@ -37,7 +37,9 @@ public class DeleteCardServlet extends HttpServlet {
       return;
     } else {
       String imageBlobKey = (String) card.getProperty("imageBlobKey");
-      BlobstoreUtil.deleteBlobWithRetries(imageBlobKey);
+      if (imageBlobKey != null) {
+        BlobstoreUtil.deleteBlobWithRetries(imageBlobKey);
+      }
       Card.deleteCardWithRetries(card);
     }
   }

@@ -35,7 +35,6 @@ public class DeleteFolderServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     String folderKey = request.getParameter("folderKey");
     Entity folder = getExistingFolderInDatastore(datastore, folderKey);
-
     if (folder == null) {
       ResponseSerializer.sendErrorJson(response, "Cannot delete Folder");
       return;
@@ -64,7 +63,7 @@ public class DeleteFolderServlet extends HttpServlet {
     if (results != null) {
       for (Entity card : results.asIterable()) {
         String imageBlobKey = (String) card.getProperty("imageBlobKey");
-        if (imageBlobKey != "null") {
+        if (imageBlobKey != null) {
           BlobstoreUtil.deleteBlobWithRetries(imageBlobKey);
         }
         Card.deleteCardWithRetries(card);

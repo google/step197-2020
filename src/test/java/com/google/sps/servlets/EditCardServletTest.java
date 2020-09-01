@@ -86,7 +86,7 @@ public final class EditCardServletTest {
     when(mockRequest.getParameter("testStatus")).thenReturn("True");
     when(mockRequest.getParameter("textTranslated")).thenReturn("xin chào");
 
-    servlet.doPost(mockRequest, mockResponse);
+    servlet.doPut(mockRequest, mockResponse);
 
     Entity editedCard = datastore.get(KeyFactory.stringToKey(cardKey));
 

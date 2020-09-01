@@ -19,7 +19,7 @@ import com.google.sps.tool.ResponseSerializer;
 public class EditFolderServlet extends HttpServlet {
 
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
       ResponseSerializer.sendErrorJson(response, "User not logged in");
@@ -40,7 +40,6 @@ public class EditFolderServlet extends HttpServlet {
       updateFolder(
           response, datastore, folderEntity, newFolderName, newFolderDefaultLanguage, folderKey);
     }
-    response.sendRedirect("/myFolders");
   }
 
   private void updateFolder(

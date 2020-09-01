@@ -1,2 +1,2 @@
-(cd frontend && yarn build --mode=production)
-mvn appengine:update
+(cd frontend && npm run-script build --mode=production)
+mvn package appengine:deploy -DskipTests

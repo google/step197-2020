@@ -29,7 +29,7 @@
     "webpack-dev-server": "^3.7.2"
   },
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --",
     "watch": "webpack-dev-server",
     "start": "yarn watch",
     "test": "jest --config ./jest.config.json",

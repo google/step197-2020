@@ -1,4 +1,4 @@
-package com.google.sps.recommendation;
+/*package com.google.sps.recommendation;
 
 import org.deeplearning4j.models.embeddings.inmemory.InMemoryLookupTable;
 import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
@@ -42,7 +42,7 @@ import com.google.sps.tool.ArrayUtil;
  *    cosine similarity values in each row of size 300,000.
  * 3) There is some time factor with serializing the result into the .db file.
  *    Note: We use MapDB API to serialize a HashMap Object, which utilizes Random Access Files (RAF)
- */
+ *//*
 public class ProcessNearestNeighbors {
   public static void main(String[] args) throws IOException {
     String path =
@@ -53,7 +53,7 @@ public class ProcessNearestNeighbors {
 
     /* Create an array that maps index to word,
      * where the index represents where the word is
-     * in the word vector matrix 300,000 x 300 */
+     * in the word vector matrix 300,000 x 300 *//*
     String[] indexToWord = new String[300000];
     for (Object i : lookupCache.words()) {
       String word = (String) i;
@@ -62,12 +62,12 @@ public class ProcessNearestNeighbors {
     }
 
     /* Get raw word vectors 300,000 x 300 matrix (syn0) and normalize it (vecA)
-     * syn0 naming comes from the original Word2Vec paper */
+     * syn0 naming comes from the original Word2Vec paper *//*
     INDArray syn0 = lookupTable.getSyn0();
     INDArray vecA = syn0.divColumnVector(syn0.norm2(1));
 
     /* There are about 300,000 words, so we want to iterate 600 times
-     * each iteration computes a batch of 500 words */
+     * each iteration computes a batch of 500 words *//*
     int rangeStart = 0;
     int rangeEnd = 500;
     for (int i = 0; i < 600; i++) {
@@ -121,3 +121,4 @@ public class ProcessNearestNeighbors {
     return topWords;
   }
 }
+*/

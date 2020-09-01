@@ -30,6 +30,7 @@ class ImageInterfaceContent extends React.Component {
 			imageUploadUrl: '',
 			uploadUrlFetched: false,
 			labelsFetched: false,
+			submitURL: "",
 		};
 		this.imageSelected = this.imageSelected.bind(this);
 		this.handleImageUpload = this.handleImageUpload.bind(this);
@@ -93,8 +94,12 @@ class ImageInterfaceContent extends React.Component {
 			console.log('The response is not ok!');
 			throw Error(uploadUrl.statusText);
 		}
-		console.log('It worked!');
-		this.setState({ imageUploadUrl: uploadUrl, uploadUrlFetched: true });
+		const submitResponse = await fetch('/upload');
+		const submitUrl = await submitResponse.text();
+		if (!submitResponse.ok) {
+			throw Error(submitUrl.statusText);
+		}
+		this.setState({ imageUploadUrl: uploadUrl, uploadUrlFetched: true, submitURL: submitURL });
 		/*try {
 			console.log('Trying to upload url...');
 			const uploadUrl = await fetch('/ObjectDetectionUpload').then((response) => response.text());

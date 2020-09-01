@@ -49,9 +49,6 @@ public class UserCardsServlet extends HttpServlet {
 
       if (results != null) {
         for (Entity entity : results.asIterable()) {
-          if ((boolean) entity.getProperty("deleted") == true) {
-            continue;
-          }
           Card card = new Card(entity);
           userCards.add(card);
         }

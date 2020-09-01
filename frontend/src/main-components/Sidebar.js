@@ -12,7 +12,7 @@ import SideIcon from "../sub-components/SideIcon";
 
 const Sidebar = (props) => {
   let sideStyling = "width: 0; border: none;";
-  if (props.visible) {
+  if (props.bool === "t") {
      sideStyling = "width: 20%; border: .3rem solid black; align-items:flex-start;"
   }
   

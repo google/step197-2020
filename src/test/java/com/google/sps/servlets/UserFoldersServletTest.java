@@ -84,8 +84,8 @@ public final class UserFoldersServletTest {
     datastore.put(user);
 
     List<Folder> folders = new ArrayList<>();
-    Folder folderAInDatastore = Folder.storeFolderInDatastore(folderA, datastore, userKey);
-    Folder folderBInDatastore = Folder.storeFolderInDatastore(folderB, datastore, userKey);
+    Folder folderAInDatastore = storeFolderInDatastore(folderA, datastore, userKey);
+    Folder folderBInDatastore = storeFolderInDatastore(folderB, datastore, userKey);
     folders.add(folderAInDatastore);
     folders.add(folderBInDatastore);
 
@@ -162,8 +162,8 @@ public final class UserFoldersServletTest {
     user.setProperty("email", "test@gmail.com");
     datastore.put(user);
 
-    Folder.storeFolderInDatastore(folderA, datastore, userKey);
-    Folder.storeFolderInDatastore(folderB, datastore, userKey);
+    storeFolderInDatastore(folderA, datastore, userKey);
+    storeFolderInDatastore(folderB, datastore, userKey);
 
     when(mockRequest.getParameter("folderName")).thenReturn("Folder1");
     when(mockRequest.getParameter("folderDefaultLanguage")).thenReturn("en");
@@ -174,5 +174,15 @@ public final class UserFoldersServletTest {
         datastore
             .prepare(new Query("Folder").setAncestor(user.getKey()))
             .countEntities(withLimit(10)));
+  }
+
+  private Folder storeFolderInDatastore(Folder folder, DatastoreService datastore, String userKey) {
+    folder.setParentKey(userKey);
+    Entity folderEntity = folder.createEntity();
+    datastore.put(folderEntity);
+
+    folder.setFolderKey(KeyFactory.keyToString(folderEntity.getKey()));
+
+    return folder;
   }
 }

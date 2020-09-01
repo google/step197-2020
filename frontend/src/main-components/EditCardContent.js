@@ -22,7 +22,6 @@ class EditCardContent extends Component {
     this.toLangSelected = this.toLangSelected.bind(this);
     this.imageSelected = this.imageSelected.bind(this);
     this.textChanged = this.textChanged.bind(this);
-    this.deleteCard = this.deleteCard.bind;
   }
 
   /**
@@ -49,6 +48,19 @@ class EditCardContent extends Component {
           return { translation: translated.translation, text };
         });
       })();
+    }
+  }
+
+  async componentDidMount() {
+    try {
+      const uploadResponse = await fetch("/editcardupload");
+      const uploadUrl = await uploadResponse.text();
+      if (!uploadResponse.ok) {
+        throw Error(uploadUrl.statusText);
+      }
+      this.setState({ imageUploadUrl: uploadUrl, uploadUrlFetched: true });
+    } catch (error) {
+      alert("Refresh page to create a card");
     }
   }
 

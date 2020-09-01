@@ -24,26 +24,29 @@ public class LoginServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    UserService userService = UserServiceFactory.getUserService();
-
     String urlToRedirect = "/homePage";
     String userId = "null";
     String logoutUrl = "null";
     String loginUrl = "null";
     String userEmail = "null";
     Boolean showNewTab = false;
+    String error = null;
 
-    if (userService.isUserLoggedIn()) {
+    UserService userService = UserServiceFactory.getUserService();
+    if (userService.isUserLoggedIn()
+        && userService.getCurrentUser().getAuthDomain() == "google.com") {
       userId = userService.getCurrentUser().getUserId();
       userEmail = userService.getCurrentUser().getEmail();
       logoutUrl = userService.createLogoutURL(urlToRedirect);
       showNewTab = true;
+    } else if (userService.isUserLoggedIn()
+        && userService.getCurrentUser().getAuthDomain() != "google.com") {
+      error = "Unauthorized";
     } else {
       loginUrl = userService.createLoginURL(urlToRedirect);
     }
 
     User user = new User(userId, userEmail);
-
     if (userId != "null" && !isUserInDatastore(user)) {
       storeUserToDatastore(user);
     }
@@ -52,6 +55,7 @@ public class LoginServlet extends HttpServlet {
     jsonInfo.put("showTabStatus", showNewTab);
     jsonInfo.put("logoutUrl", logoutUrl);
     jsonInfo.put("loginUrl", loginUrl);
+    jsonInfo.put("error", error);
 
     response.setContentType("application/json;");
     response.getWriter().println(new Gson().toJson(jsonInfo));

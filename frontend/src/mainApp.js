@@ -7,7 +7,6 @@ import CreateCard from "./pages/CreateCard";
 import CreateFolder from "./pages/CreateFolder";
 import ImageInterface from "./pages/ImageInterface";
 import SimilarWords from "./pages/SimilarWords";
-import StudyMode from "./pages/StudyMode";
 import InsideStudyMode from "./pages/InsideStudyMode";
 import PageError from "./pages/404";
 import css from "./mainApp.css";

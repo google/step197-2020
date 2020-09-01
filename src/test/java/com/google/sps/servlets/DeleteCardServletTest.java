@@ -1,17 +1,19 @@
 package com.google.sps.servlets;
 
+import static com.google.appengine.api.datastore.FetchOptions.Builder.withLimit;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.After;
-
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,14 +22,13 @@ import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Entity;
-
-import com.google.gson.Gson;
 import com.google.sps.data.Card;
 
 @RunWith(JUnit4.class)
-public final class EditCardServletTest {
+public final class DeleteCardServletTest {
 
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(
@@ -42,13 +43,13 @@ public final class EditCardServletTest {
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
   private StringWriter responseWriter;
-  private EditCardServlet servlet;
+  private DeleteCardServlet servlet;
   private DatastoreService datastore;
 
   @Before
   public void setUp() throws Exception {
     helper.setUp();
-    servlet = new EditCardServlet();
+    servlet = new DeleteCardServlet();
     mockRequest = mock(HttpServletRequest.class);
     mockResponse = mock(HttpServletResponse.class);
 
@@ -65,8 +66,9 @@ public final class EditCardServletTest {
   }
 
   @Test
-  public void editCard() throws Exception {
-    Card currentCard =
+  public void deleteACardWithOneInDatastore() throws Exception {
+    // Generate testing card to add into datastore
+    Card card =
         new Card.Builder()
             .setImageBlobKey("null")
             .setRawText("hello")
@@ -74,25 +76,59 @@ public final class EditCardServletTest {
             .build();
 
     // Generate a folder entity to obtain a folder key
-    // which would be used to set as the parent of the card entities
+    // which would be used to set as the parent of the card entity
     Entity folder = new Entity("Folder", "testID");
     String folderKey = KeyFactory.keyToString(folder.getKey());
 
-    Card cardInDatastore = Card.storeCardInDatastore(currentCard, datastore, folderKey);
-    String cardKey = cardInDatastore.getCardKey();
+    Card.storeCardInDatastore(card, datastore, folderKey);
+    assertNotNull(datastore.get(KeyFactory.stringToKey(card.getCardKey())));
+    String cardKey = card.getCardKey();
 
     when(mockRequest.getParameter("cardKey")).thenReturn(cardKey);
-    when(mockRequest.getParameter("rawText")).thenReturn("hello");
-    when(mockRequest.getParameter("testStatus")).thenReturn("True");
-    when(mockRequest.getParameter("textTranslated")).thenReturn("xin chào");
 
     servlet.doPost(mockRequest, mockResponse);
+    assertEquals(
+        0,
+        datastore
+            .prepare(new Query("Card").setAncestor(folder.getKey()))
+            .countEntities(withLimit(10)));
+  }
 
-    Entity editedCard = datastore.get(KeyFactory.stringToKey(cardKey));
+  @Test
+  public void deleteACardWithTwoInDatastore() throws Exception {
+    // Generate testing cards to add into datastore
+    Card cardA =
+        new Card.Builder()
+            .setImageBlobKey("null")
+            .setRawText("hello")
+            .setTextTranslated("hola")
+            .build();
+    Card cardB =
+        new Card.Builder()
+            .setImageBlobKey("null")
+            .setRawText("hello")
+            .setTextTranslated("xin chào")
+            .build();
 
-    String response = new Gson().toJson(new Card(editedCard));
-    String expectedResponse =
-        "{\"imageBlobKey\":\"null\",\"rawText\":\"hello\",\"textTranslated\":\"xin chào\",\"key\":\"agR0ZXN0chwLEgZGb2xkZXIiBnRlc3RJRAwLEgRDYXJkGAEM\"}";
-    assertEquals(response, expectedResponse);
+    // Generate a folder entity to obtain a folder key
+    // which would be used to set as the parent of the card entity
+    Entity folder = new Entity("Folder", "testID");
+    String folderKey = KeyFactory.keyToString(folder.getKey());
+
+    Card.storeCardInDatastore(cardB, datastore, folderKey);
+    assertNotNull(datastore.get(KeyFactory.stringToKey(cardB.getCardKey())));
+
+    Card.storeCardInDatastore(cardA, datastore, folderKey);
+    assertNotNull(datastore.get(KeyFactory.stringToKey(cardA.getCardKey())));
+    String cardAKey = cardA.getCardKey();
+
+    when(mockRequest.getParameter("cardKey")).thenReturn(cardAKey);
+
+    servlet.doPost(mockRequest, mockResponse);
+    assertEquals(
+        1,
+        datastore
+            .prepare(new Query("Card").setAncestor(folder.getKey()))
+            .countEntities(withLimit(10)));
   }
 }

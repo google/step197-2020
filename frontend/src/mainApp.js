@@ -8,6 +8,7 @@ import CreateFolder from "./pages/CreateFolder";
 import EditCard from "./pages/EditCard";
 import EditFolder from "./pages/EditFolder";
 import ImageInterface from "./pages/ImageInterface";
+import SimilarWords from "./pages/SimilarWords";
 import PageError from "./pages/404";
 import css from "./mainApp.css";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
@@ -26,6 +27,7 @@ function App() {
         <Route exact path="/InsideFolder" component={InsideFolder} />
         <Route exact path="/EditCardContent" component={EditCard} />
         <Route exact path="/EditFolderContent" component={EditFolder} />
+        <Route exact path='/SimilarWords' component={SimilarWords} />
         <Route component={PageError} />
       </Switch>
     </div>

@@ -14,8 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import com.google.sps.tool.ResponseSerializer;
-import com.google.gson.Gson;
-import java.util.Map;
 
 @WebServlet("/editfolder")
 public class EditFolderServlet extends HttpServlet {
@@ -24,9 +22,7 @@ public class EditFolderServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      Map<String, String> jsonErrorInfo = ResponseSerializer.getErrorJson("User not logged in");
-      response.setContentType("application/json;");
-      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+      ResponseSerializer.sendErrorJson(response, "User not logged in");
       return;
     }
 
@@ -38,10 +34,8 @@ public class EditFolderServlet extends HttpServlet {
     Entity folderEntity = getExistingFolderInDatastore(response, datastore, folderKey);
 
     if (folderEntity == null) {
-      Map<String, String> jsonErrorInfo =
-          ResponseSerializer.getErrorJson("Cannot edit Folder at the moment");
-      response.setContentType("application/json;");
-      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+      ResponseSerializer.sendErrorJson(response, "Cannot edit Folder");
+      return;
     } else {
       updateFolder(
           response, datastore, folderEntity, newFolderName, newFolderDefaultLanguage, folderKey);

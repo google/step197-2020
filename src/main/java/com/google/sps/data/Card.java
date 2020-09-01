@@ -2,6 +2,12 @@ package com.google.sps.data;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.datastore.DatastoreFailureException;
 
 public final class Card {
 
@@ -51,6 +57,7 @@ public final class Card {
     }
   }
 
+  private static final int DEFAULT_NUM_RETRIES = 5;
   private String imageBlobKey = "null";
   private String rawText = "null";
   private String textTranslated = "null";
@@ -107,7 +114,60 @@ public final class Card {
     card.setProperty("imageBlobKey", this.imageBlobKey);
     card.setProperty("rawText", this.rawText);
     card.setProperty("textTranslated", this.textTranslated);
+    card.setProperty("deleted", false);
 
     return card;
+  }
+
+  public static Card storeCardInDatastore(Card card, DatastoreService datastore, String folderKey) {
+    card.setParentKey(folderKey);
+    Entity cardEntity = card.createEntity();
+    datastore.put(cardEntity);
+
+    card.setCardKey(KeyFactory.keyToString(cardEntity.getKey()));
+
+    return card;
+  }
+
+  public static void deleteCard(Entity card) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    markCardAsDeleted(card);
+    try {
+      datastore.delete(card.getKey());
+    } catch (DatastoreFailureException e) {
+      throw e;
+    }
+  }
+
+  public static void deleteCardWithRetries(Entity card) {
+    deleteCardWithRetries(card, DEFAULT_NUM_RETRIES);
+  }
+
+  public static void deleteCardWithRetries(Entity card, int retries) {
+    while (retries != 0) {
+      try {
+        deleteCard(card);
+        break;
+      } catch (Exception e) {
+        --retries;
+      }
+    }
+    if (retries == 0) {
+      addDatastoreDeleteTaskToQueue(card);
+    }
+  }
+
+  public static void markCardAsDeleted(Entity card) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    card.setProperty("deleted", true);
+    datastore.put(card);
+  }
+
+  public static void addDatastoreDeleteTaskToQueue(Entity entity) {
+    Queue queue = QueueFactory.getDefaultQueue();
+    queue.add(
+        TaskOptions.Builder.withUrl("/datastoreEntityDeletionWorker")
+            .param("key", KeyFactory.keyToString(entity.getKey()))
+            .param("accessCode", "s197"));
   }
 }

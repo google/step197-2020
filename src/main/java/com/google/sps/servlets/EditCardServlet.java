@@ -28,7 +28,7 @@ import java.util.List;
 public class EditCardServlet extends HttpServlet {
 
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
       ResponseSerializer.sendErrorJson(response, "User not logged in");
@@ -36,7 +36,6 @@ public class EditCardServlet extends HttpServlet {
     }
 
     String cardKey = request.getParameter("cardKey");
-    String folderKey = request.getParameter("folderKey");
     String newRawText = request.getParameter("rawText");
     String newTextTranslated = request.getParameter("textTranslated");
     String newImageBlobKey = getImageBlobKey(request);
@@ -51,7 +50,6 @@ public class EditCardServlet extends HttpServlet {
       updateCard(
           response, card, datastore, cardKey, newRawText, newTextTranslated, newImageBlobKey);
     }
-    response.sendRedirect("/InsideFolder?folderKey=" + folderKey);
   }
 
   private void updateCard(

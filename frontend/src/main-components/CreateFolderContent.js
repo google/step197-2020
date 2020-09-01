@@ -27,36 +27,35 @@ class CreateFolderContent extends Component {
    */
   render() {
     return (
-      <div id="container">
-        <div id="innerContainer">
-          <div id="folderPreview">
-            <h2 id="previewFolderName">{this.state.folderName}</h2>
-            <h4 id="previewFolderLang">{this.state.folderLang}</h4>
+      <div id='container'>
+        <div id='innerContainer'>
+          <div id='folderPreview'>
+            <h2 id='previewFolderName'>{this.state.folderName}</h2>
+            <h4 id='previewFolderLang'>{this.state.folderLang}</h4>
           </div>
-          <div id="formBox">
+          <div id='formBox'>
             <ul>
-              <form id="myForm" action="/userfolders" method="POST">
+              <form id='myForm' action='/userfolders' method='POST'>
                 <li>
                   <label>Folder Name: </label>
                 </li>
                 <li>
                   <input
-                    id="folderName"
-                    name="folderName"
-                    type="text"
+                    id='folderName'
+                    name='folderName'
+                    type='text'
                     placeholder={this.state.folderName}
                     onBlur={this.handleFolderName}
-                    required
-                  ></input>
+                    required></input>
                 </li>
                 <li>
                   <label>Folder Language:</label>
                 </li>
                 <li>
-                  <div id="scroll">
+                  <div id='scroll'>
                     <select
-                      id="folderDefaultLanguage"
-                      name="folderDefaultLanguage"
+                      id='folderDefaultLanguage'
+                      name='folderDefaultLanguage'
                       value={this.state.folderLang}
                       onChange={this.handleFolderLang}
                       required>
@@ -71,7 +70,7 @@ class CreateFolderContent extends Component {
                   </div>
                 </li>
                 <li>
-                  <input id="submission" type="submit" value="Submit" />
+                  <input id='submission' type='submit' value='Submit' />
                 </li>
               </form>
             </ul>

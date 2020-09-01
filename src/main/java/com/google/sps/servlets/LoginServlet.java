@@ -41,7 +41,7 @@ public class LoginServlet extends HttpServlet {
       showNewTab = true;
     } else if (userService.isUserLoggedIn()
         && userService.getCurrentUser().getAuthDomain() != "google.com") {
-      error = "User need @google.com email address to log in";
+      error = "Unauthorized";
     } else {
       loginUrl = userService.createLoginURL(urlToRedirect);
     }

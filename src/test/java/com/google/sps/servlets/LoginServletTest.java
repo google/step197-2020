@@ -110,7 +110,7 @@ public final class LoginServletTest {
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
     String expectedResponse =
-        "{\"logoutUrl\":\"null\",\"loginUrl\":\"null\",\"showTabStatus\":false,\"error\":\"User need @google.com email address to log in\"}";
+        "{\"logoutUrl\":\"null\",\"loginUrl\":\"null\",\"showTabStatus\":false,\"error\":\"Unauthorized\"}";
     assertTrue(compareJson(response, expectedResponse));
   }
 

@@ -74,7 +74,7 @@ public final class EditFolderServletTest {
     Entity user = new Entity("User", "testId");
     String userKey = KeyFactory.keyToString(user.getKey());
 
-    Folder folderInDatastore = Folder.storeFolderInDatastore(currentFolder, datastore, userKey);
+    Folder folderInDatastore = storeFolderInDatastore(currentFolder, datastore, userKey);
     String folderKey = folderInDatastore.getFolderKey();
 
     when(mockRequest.getParameter("folderName")).thenReturn("Edited Folder");
@@ -91,5 +91,15 @@ public final class EditFolderServletTest {
         "{\"folderName\":\"Edited Folder\",\"folderDefaultLanguage\":\"es\",\"folderKey\":\"agR0ZXN0chwLEgRVc2VyIgZ0ZXN0SWQMCxIGRm9sZGVyGAEM\"}";
 
     assertEquals(response, expectedResponse);
+  }
+
+  private Folder storeFolderInDatastore(Folder folder, DatastoreService datastore, String userKey) {
+    folder.setParentKey(userKey);
+    Entity folderEntity = folder.createEntity();
+    datastore.put(folderEntity);
+
+    folder.setFolderKey(KeyFactory.keyToString(folderEntity.getKey()));
+
+    return folder;
   }
 }

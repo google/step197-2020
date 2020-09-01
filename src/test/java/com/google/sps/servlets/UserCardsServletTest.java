@@ -96,8 +96,8 @@ public final class UserCardsServletTest {
     when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
 
     List<Card> cards = new ArrayList<>();
-    Card cardAInDatastore = Card.storeCardInDatastore(cardA, datastore, folderKey);
-    Card cardBInDatastore = Card.storeCardInDatastore(cardB, datastore, folderKey);
+    Card cardAInDatastore = storeCardInDatastore(cardA, datastore, folderKey);
+    Card cardBInDatastore = storeCardInDatastore(cardB, datastore, folderKey);
     cards.add(cardAInDatastore);
     cards.add(cardBInDatastore);
 
@@ -116,6 +116,8 @@ public final class UserCardsServletTest {
 
   @Test
   public void userHasNoCurrentCard() throws Exception {
+    List<Card> noCardsInDatastore = new ArrayList<>();
+
     // Generate a folder entity to obtain a folder key
     // which would be used to set as the parent of the card entity
     Entity folder = new Entity("Folder", "testID");
@@ -132,6 +134,7 @@ public final class UserCardsServletTest {
   @Test
   public void userNotLoggedIn() throws Exception {
     helper.setEnvIsLoggedIn(false);
+    List<Card> noCardsQueried = new ArrayList<>();
 
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
@@ -192,13 +195,23 @@ public final class UserCardsServletTest {
     when(mockRequest.getParameter("rawText")).thenReturn("hello");
     when(mockRequest.getParameter("translatedText")).thenReturn("hola");
 
-    Card.storeCardInDatastore(cardA, datastore, folderKey);
-    Card.storeCardInDatastore(cardB, datastore, folderKey);
+    storeCardInDatastore(cardA, datastore, folderKey);
+    storeCardInDatastore(cardB, datastore, folderKey);
 
     servlet.doPost(mockRequest, mockResponse);
     PreparedQuery responseEntity =
         datastore.prepare(new Query("Card").setAncestor(folder.getKey()));
 
     assertEquals(3, responseEntity.countEntities(withLimit(10)));
+  }
+
+  public Card storeCardInDatastore(Card card, DatastoreService datastore, String folderKey) {
+    card.setParentKey(folderKey);
+    Entity cardEntity = card.createEntity();
+    datastore.put(cardEntity);
+
+    card.setCardKey(KeyFactory.keyToString(cardEntity.getKey()));
+
+    return card;
   }
 }

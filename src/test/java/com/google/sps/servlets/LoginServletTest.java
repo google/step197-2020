@@ -29,7 +29,7 @@ import com.google.common.collect.ImmutableMap;
 public final class LoginServletTest {
 
   private static final String USER_ID = "testID";
-  private static final User LOGGED_IN_USER = new User(USER_ID, "test@google.com");
+  private static final User LOGGED_IN_USER = new User(USER_ID, "test@gmail.com");
 
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(
@@ -38,8 +38,8 @@ public final class LoginServletTest {
               new LocalUserServiceTestConfig())
           .setEnvIsAdmin(true)
           .setEnvIsLoggedIn(true)
-          .setEnvEmail("test@google.com")
-          .setEnvAuthDomain("google.com")
+          .setEnvEmail("test@gmail.com")
+          .setEnvAuthDomain("gmail.com")
           .setEnvAttributes(
               new HashMap(
                   ImmutableMap.of(
@@ -79,6 +79,7 @@ public final class LoginServletTest {
     String response = responseWriter.toString();
     String expectedResponse =
         "{\"logoutUrl\":\"/_ah/logout?continue\\u003d%2FhomePage\",\"loginUrl\":\"null\",\"showTabStatus\":true}";
+    System.out.println(response);
 
     assertTrue(compareJson(response, expectedResponse));
   }
@@ -89,6 +90,7 @@ public final class LoginServletTest {
     String response = responseWriter.toString();
     String expectedResponse =
         "{\"logoutUrl\":\"/_ah/logout?continue\\u003d%2FhomePage\",\"loginUrl\":\"null\",\"showTabStatus\":true}";
+    System.out.println(response);
 
     assertTrue(compareJson(response, expectedResponse));
   }
@@ -101,16 +103,6 @@ public final class LoginServletTest {
     String expectedResponse =
         "{\"logoutUrl\":\"null\",\"loginUrl\":\"/_ah/login?continue\\u003d%2FhomePage\",\"showTabStatus\":false}";
 
-    assertTrue(compareJson(response, expectedResponse));
-  }
-
-  @Test
-  public void checkUserAuthDomain() throws Exception {
-    helper.setEnvAuthDomain("gmail.com");
-    servlet.doGet(mockRequest, mockResponse);
-    String response = responseWriter.toString();
-    String expectedResponse =
-        "{\"logoutUrl\":\"null\",\"loginUrl\":\"null\",\"showTabStatus\":false,\"error\":\"Unauthorized\"}";
     assertTrue(compareJson(response, expectedResponse));
   }
 

@@ -5,6 +5,8 @@ import InsideFolder from "./pages/InsideFolder";
 import YoutubeDetect from "./pages/YoutubeDetect";
 import CreateCard from "./pages/CreateCard";
 import CreateFolder from "./pages/CreateFolder";
+import EditCard from "./pages/EditCard";
+import EditFolder from "./pages/EditFolder";
 import ImageInterface from "./pages/ImageInterface";
 import SimilarWords from "./pages/SimilarWords";
 import PageError from "./pages/404";
@@ -17,11 +19,14 @@ function App() {
   return (
     <div>
       <Switch>
-        <Route exact path='/CreateCard' component={CreateCard} />
-        <Route exact path='/MyFolders' component={MyFolders} />
-        <Route exact path='/ImageInterface' component={ImageInterface} />
-        <Route exact path='/CreateFolder' component={CreateFolder} />
-        <Route exact path='/InsideFolder' component={InsideFolder} />
+        <Route exact path="/CreateCard" component={CreateCard} />
+        <Route exact path="/MyFolders" component={MyFolders} />
+        <Route exact path="/ImageInterface" component={ImageInterface} />
+        <Route exact path="/YoutubeInterface" component={YoutubeDetect} />
+        <Route exact path="/CreateFolder" component={CreateFolder} />
+        <Route exact path="/InsideFolder" component={InsideFolder} />
+        <Route exact path="/EditCardContent" component={EditCard} />
+        <Route exact path="/EditFolderContent" component={EditFolder} />
         <Route exact path='/SimilarWords' component={SimilarWords} />
         <Route component={PageError} />
       </Switch>

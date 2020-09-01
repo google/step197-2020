@@ -62,7 +62,7 @@ class MyFoldersContent extends React.Component {
                 name={folder.folderName}
                 language={folder.folderDefaultLanguage}
                 key={folder.folderKey}
-              />
+                folderKey={folder.folderKey}/>
             );
           })}
         </div>

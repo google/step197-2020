@@ -15,6 +15,8 @@ import javax.servlet.ServletException;
       "/CreateCard",
       "/CreateFolder",
       "/ImageInterface",
+      "/StudyMode",
+      "/InsideStudyMode",
       "/SimilarWords",
       "/InsideFolder"
     })

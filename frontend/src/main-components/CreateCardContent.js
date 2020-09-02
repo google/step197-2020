@@ -101,9 +101,9 @@ class CreateCardContent extends Component {
       return <h1>Loading</h1>;
     }
     return (
-      <div id='container'>
+      <div className='container'>
         <div id='innerContainer'>
-          <div id='CardPreview'>
+          <div id='cardPreview'>
             <div className='holdCard'>
               <FrontCard
                 image={this.state.imgSrc}

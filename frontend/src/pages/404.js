@@ -1,17 +1,11 @@
 import React from "react";
-import  styled from "@emotion/styled"
-import Sidebar from "../main-components/Sidebar";
-import CreateCardContent from "../main-components/CreateCardContent";
+import ContentWithSidebar from "./ContentWithSidebar";
 
 function PageError() {
-    const Container = styled.div`
-        background-color:white;
-    `;
   return (
-    <Container>
-      <Sidebar></Sidebar>
+    <ContentWithSidebar>
       <h2>404 page not found</h2>
-    </Container>
+    </ContentWithSidebar>
   );
 }
 

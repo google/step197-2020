@@ -33,15 +33,17 @@ public class LoginServlet extends HttpServlet {
     String error = null;
 
     UserService userService = UserServiceFactory.getUserService();
-    if (userService.isUserLoggedIn()
-        && userService.getCurrentUser().getAuthDomain() == "google.com") {
-      userId = userService.getCurrentUser().getUserId();
+    if (userService.isUserLoggedIn()) {
       userEmail = userService.getCurrentUser().getEmail();
-      logoutUrl = userService.createLogoutURL(urlToRedirect);
-      showNewTab = true;
-    } else if (userService.isUserLoggedIn()
-        && userService.getCurrentUser().getAuthDomain() != "google.com") {
-      error = "Unauthorized";
+      if (userEmail.substring(userEmail.lastIndexOf("@") + 1).equals("google.com")) {
+        userId = userService.getCurrentUser().getUserId();
+        userEmail = userService.getCurrentUser().getEmail();
+        logoutUrl = userService.createLogoutURL(urlToRedirect);
+        showNewTab = true;
+      } else {
+        error = "Unauthorized";
+        loginUrl = userService.createLoginURL(urlToRedirect);
+      }
     } else {
       loginUrl = userService.createLoginURL(urlToRedirect);
     }

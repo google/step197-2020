@@ -4,6 +4,12 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.sps.tool.ResponseSerializer;
 
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
+import java.nio.file.Path;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;;
 
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
@@ -40,7 +48,7 @@ public class RecommendationServlet extends HttpServlet {
     }
 
     // Ensures db is opened in read only to avoid data perturbation
-    DB db = DBMaker.fileDB(getPath()).readOnly().make();
+    DB db = DBMaker.fileDB(getFile()).readOnly().make();
     BTreeMap<String, String[]> queryNearestNeighbors = getIndexTable(db);
 
     try {
@@ -63,10 +71,17 @@ public class RecommendationServlet extends HttpServlet {
     db.close();
   }
 
-  private String getPath() {
+  private File getFile() {
+    Storage storage = StorageOptions.newBuilder().setProjectId("framecards").build().getService();
+    Blob blob = storage.get(BlobId.of("framecards.appspot.com", "word2vec.db"));
     ClassLoader classLoader = getClass().getClassLoader();
     File file = new File(classLoader.getResource("META-INF/word2vec.db").getFile());
-    return file.toPath().toString();
+    // Checks if the file has been downloaded
+    if (file.length() > 0) {
+      return file;
+    }
+    blob.downloadTo(file.toPath());
+    return file;
   }
 
   private boolean checkforWordRequestedBound(HttpServletResponse response, int numOfWordsRequested)

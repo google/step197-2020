@@ -106,11 +106,12 @@ public final class LoginServletTest {
 
   @Test
   public void checkUserAuthDomain() throws Exception {
-    helper.setEnvAuthDomain("gmail.com");
+    helper.setEnvEmail("Test@gmail.com");
+    helper.setEnvIsLoggedIn(true);
     servlet.doGet(mockRequest, mockResponse);
     String response = responseWriter.toString();
     String expectedResponse =
-        "{\"logoutUrl\":\"null\",\"loginUrl\":\"null\",\"showTabStatus\":false,\"error\":\"Unauthorized\"}";
+        "{\"logoutUrl\":\"null\",\"loginUrl\":\"/_ah/login?continue\\u003d%2FhomePage\",\"showTabStatus\":false,\"error\":\"Unauthorized\"}";
     assertTrue(compareJson(response, expectedResponse));
   }
 

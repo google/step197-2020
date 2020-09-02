@@ -45,12 +45,12 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.(png|jpg|gif|svg)$/i,
+        test: /\.(png|jpg|gif|svg)$/,
         use: [
           {
             loader: "url-loader",
             options: {
-              limit: 8192,
+              limit: 43000,
             },
           },
         ],

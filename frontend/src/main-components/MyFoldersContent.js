@@ -42,14 +42,20 @@ class MyFoldersContent extends React.Component {
   }
 
   render() {
-    let headingText =
-      "You have no folders at the moment. Please make a new folder by clicking on the side menu.";
     if (!this.state.isDataFetched) {
       return <h1>loading</h1>;
     }
+
+    let headingText =
+      "You have no folders at the moment. Please make a new folder by clicking on the side menu.";
     if (this.state.folders) {
-      headingText = `You have ${this.state.folders.length} Folders`;
+      if (this.props.headingText === "main") {
+        headingText = `You have ${this.state.folders.length} Folders`;
+      } else {
+        headingText = this.props.headingText;
+      }
     }
+
     return (
       <Container>
         <h1>{headingText}</h1>
@@ -58,7 +64,8 @@ class MyFoldersContent extends React.Component {
           {this.state.folders.map((folder) => {
             return (
               <Folder
-                folderURL={folder.folderKey}
+                folderURL={this.props.mainURL}
+                folderKey={folder.folderKey}
                 name={folder.folderName}
                 language={folder.folderDefaultLanguage}
                 key={folder.folderKey}

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import Search from "../sub-components/Search";
-import logo from "../SVG/Logo.jpg";
+import logo from "../SVG/logo.jpg";
 import "material-design-icons";
 
 const Header = (props) => {

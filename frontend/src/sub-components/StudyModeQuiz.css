@@ -1,0 +1,33 @@
+#studyContainer {
+  flex-direction: column;
+}
+
+#rounds {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+#studyMain {
+  display: flex;
+  margin-top: 1%;
+  width: 100%;
+  min-height: 80vh;
+}
+
+#card {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+
+#options {
+  align-content: center;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-evenly;
+}

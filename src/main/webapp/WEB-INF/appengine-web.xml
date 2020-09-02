@@ -26,4 +26,7 @@
     <include path="/WEB-INF/secrets/keys.development.properties" />
     <include path="/**.jsp" />
   </resource-files>
+    <system-properties>
+       <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
+    </system-properties>
 </appengine-web-app>

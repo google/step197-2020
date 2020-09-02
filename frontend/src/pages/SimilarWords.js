@@ -12,7 +12,7 @@ function MyFolders(props) {
    };
 
   const values = queryString.parse(props.location.search);
-  const word = values.queryWord;
+  const word = values.queryWord.toLowerCase();
   const numWords = values.numOfWordsRequested;
 
   return (

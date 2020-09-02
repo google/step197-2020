@@ -18,7 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;;
+import java.net.URISyntaxException;
+import java.nio.file.NoSuchFileException;
 
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
@@ -74,14 +75,17 @@ public class RecommendationServlet extends HttpServlet {
   private File getFile() {
     Storage storage = StorageOptions.newBuilder().setProjectId("framecards").build().getService();
     Blob blob = storage.get(BlobId.of("framecards.appspot.com", "word2vec.db"));
-    ClassLoader classLoader = getClass().getClassLoader();
-    File file = new File(classLoader.getResource("META-INF/word2vec.db").getFile());
-    // Checks if the file has been downloaded
-    if (file.length() > 0) {
+
+    try {
+      File file = new File("/tmp/word2vec.db");
+      // Creates the file and downloads its content if it does not exist
+      if (file.createNewFile()) {
+        blob.downloadTo(file.toPath());
+      }
       return file;
+    } catch (IOException e) {
+      return null;
     }
-    blob.downloadTo(file.toPath());
-    return file;
   }
 
   private boolean checkforWordRequestedBound(HttpServletResponse response, int numOfWordsRequested)

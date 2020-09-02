@@ -4,6 +4,7 @@ import './ImageInterfaceContent.css';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from '../sub-components/CropImage';
 import LabelScroll from '../sub-components/labelScroll';
+import CardForm from '../sub-components/CardForm';
 import { Link } from 'react-router-dom';
 
 const CONTAINER_HEIGHT = 500;
@@ -30,26 +31,20 @@ class ImageInterfaceContent extends React.Component {
 			imageUploadUrl: '',
 			uploadUrlFetched: false,
 			labelsFetched: false,
-			submitURL: "",
+			submitURL: '',
 		};
 		this.imageSelected = this.imageSelected.bind(this);
 		this.handleImageUpload = this.handleImageUpload.bind(this);
-		this.handleSelectedLabel = this.handleSelectedLabel.bind(this);
 		this.handleImageCrop = this.handleImageCrop.bind(this);
 		this.onCropChange = this.onCropChange.bind(this);
 		this.handleZoom = this.handleZoom.bind(this);
 		this.handleReset = this.handleReset.bind(this);
 		this.setCroppedAreaPixels = this.setCroppedAreaPixels.bind(this);
 		this.fetchLabels = this.fetchLabels.bind(this);
-		this.postData = this.postData.bind(this);
 	}
 
 	imageSelected(event) {
 		this.setState({ imageURL: URL.createObjectURL(event.target.files[0]) });
-	}
-	handleSelectedLabel(domEvent) {
-		const selectedValue = domEvent.target[domEvent.target.selectedIndex].value;
-		this.setState({ selectedLabel: selectedValue });
 	}
 
 	handleImageUpload(event) {
@@ -86,12 +81,9 @@ class ImageInterfaceContent extends React.Component {
 	}
 
 	async componentDidMount() {
-		console.log('Fetching upload URL!');
 		const uploadResponse = await fetch('/ObjectDetectionUpload');
 		const uploadUrl = await uploadResponse.text();
-		console.log('Got the response!');
 		if (!uploadResponse.ok) {
-			console.log('The response is not ok!');
 			throw Error(uploadUrl.statusText);
 		}
 		const submitResponse = await fetch('/upload');
@@ -99,6 +91,9 @@ class ImageInterfaceContent extends React.Component {
 		if (!submitResponse.ok) {
 			throw Error(submitUrl.statusText);
 		}
+		console.log('Upload URLS:');
+		console.log(uploadUrl);
+		console.log(submitUrl);
 		this.setState({ imageUploadUrl: uploadUrl, uploadUrlFetched: true, submitURL: submitURL });
 		/*try {
 			console.log('Trying to upload url...');
@@ -116,7 +111,7 @@ class ImageInterfaceContent extends React.Component {
 		*/
 	}
 
-	async postData(url = '', data = {}) {
+	/*async postData(url = '', data = {}) {
 		console.log('Starting Post Data');
 		const response = await fetch(url, {
 			method: 'POST',
@@ -127,18 +122,31 @@ class ImageInterfaceContent extends React.Component {
 		});
 		console.log(response.text());
 		return response.text();
-	}
+	}*/
 
-	fetchLabels() {
+	async fetchLabels() {
+		let formData = new FormData();
+		formData.append('image', this.state.croppedImageURL);
+
 		console.log("It's fetching Time!");
-		this.postData(this.state.imageUploadUrl, { image: this.state.croppedImageURL })
+		await fetch(this.state.imageUploadUrl, { method: 'POST', body: formData })
+			.then((response) => response.text)
+			.then((labels) => {
+				this.setState({ labels: labels });
+			})
+			.catch((error) => {
+				console.log(error);
+				console.log('Fetching Labels did not work!!!');
+			});
+
+		/*this.postData(this.state.imageUploadUrl, { image: this.state.croppedImageURL })
 			.then((labels) => {
 				console.log(labels);
 				this.setState({ labels: labels });
 			})
 			.catch((error) => {
 				console.log('Fetching Labels did not work!!!');
-			});
+			});*/
 	}
 
 	render() {
@@ -149,22 +157,14 @@ class ImageInterfaceContent extends React.Component {
 						<div className="formContainer">
 							<p>Please select a label that best describes the image:</p>
 							{this.state.labelsFetched ? (
-								<form>
-									<LabelScroll
-										labels={this.state.labels}
-										clickFunc={this.handleSelectedLabel}
-										selected={this.state.selectedLabel}
-										name="selectedLabel"
-									></LabelScroll>
-								</form>
+								<CardForm
+									labels={this.state.labels}
+									image={this.state.croppedImageURL}
+									uploadUrl={this.state.submitURL}
+								></CardForm>
 							) : (
 								<p>Loading Labels....</p>
 							)}
-							<Link
-								to={`/CreateCard?image=${this.state.croppedImageURL}?text=${this.state.selectedLabel}`}
-							>
-								<button className="button">Create flashcard with this label</button>
-							</Link>
 						</div>
 					) : (
 						<div className="formContainer">

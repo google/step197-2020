@@ -50,6 +50,7 @@ public class ObjectDetectionServlet extends HttpServlet {
     byte[] blobBytes = getBlobBytes(blobKey);
     List<EntityAnnotation> imageLabels = getImageLabels(blobBytes);
     ArrayList<String> labels = new ArrayList<String>();
+    System.out.print(labels);
 
     for (EntityAnnotation label : imageLabels) {
       if (label.getScore() > .85) {

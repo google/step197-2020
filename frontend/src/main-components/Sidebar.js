@@ -60,7 +60,6 @@ const Sidebar = (props) => {
       </InvisibleSide>
     );
   }
-
 };
 
 export default Sidebar;

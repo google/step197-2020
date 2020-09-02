@@ -1,4 +1,4 @@
-/*package com.google.sps.servlets;
+package com.google.sps.servlets;
 
 import static com.google.sps.tool.Tool.compareJson;
 import static org.junit.Assert.assertTrue;
@@ -36,7 +36,6 @@ public class RecommendationServletTest {
   public void setUp() throws Exception {
     helper.setUp();
     servlet = new RecommendationServlet();
-    servlet.init();
     mockRequest = mock(HttpServletRequest.class);
     mockResponse = mock(HttpServletResponse.class);
 
@@ -48,7 +47,6 @@ public class RecommendationServletTest {
   @After
   public void tearDown() throws Exception {
     helper.setEnvIsLoggedIn(true);
-    servlet.destroy();
     helper.tearDown();
   }
 
@@ -92,4 +90,3 @@ public class RecommendationServletTest {
     assertTrue(compareJson(response, expectedResponse));
   }
 }
-*/

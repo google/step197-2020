@@ -55,11 +55,12 @@ public final class StudyServletTest {
   private StudyServlet servlet;
   private DatastoreService datastore;
   private Card cardA, cardB, cardC;
+  private long HOURS_MILLIS = 60 * 60 * 1000;
 
   @Before
   public void setUp() throws Exception {
     // Freezes time for testing at 45 hours from january first
-    DateTimeUtils.setCurrentMillisFixed(162000000L);
+    DateTimeUtils.setCurrentMillisFixed(45 * HOURS_MILLIS);
     helper.setUp();
     servlet = new StudyServlet();
     mockRequest = mock(HttpServletRequest.class);
@@ -81,7 +82,7 @@ public final class StudyServletTest {
 
   @Test
   public void grabNewStudyModeCards() throws Exception {
-    /**
+    /*
      * Cards have not been initialized and all have the same default familiarity score. Therefore,
      * they will be returned in the order created.
      */
@@ -101,10 +102,10 @@ public final class StudyServletTest {
     Entity folder = new Entity("Folder", "testID");
     String folderKey = KeyFactory.keyToString(folder.getKey());
 
-    when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
     // Response Should generate 2 rounds with 1 card each
-    when(mockRequest.getParameter("numCards")).thenReturn("1");
-    when(mockRequest.getParameter("numRounds")).thenReturn("2");
+    servlet.setTestingNumOfCards(1);
+    servlet.setTestingNumOfRounds(2);
+    when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
 
     List<Card> cards = new ArrayList<>();
     Card cardAInDatastore = storeCardInDatastore(cardA, datastore, folderKey);
@@ -156,10 +157,10 @@ public final class StudyServletTest {
     Entity folder = new Entity("Folder", "testID");
     String folderKey = KeyFactory.keyToString(folder.getKey());
 
-    when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
     // Response Should generate 3 rounds with 1 card each
-    when(mockRequest.getParameter("numCards")).thenReturn("1");
-    when(mockRequest.getParameter("numRounds")).thenReturn("3");
+    servlet.setTestingNumOfCards(1);
+    servlet.setTestingNumOfRounds(3);
+    when(mockRequest.getParameter("folderKey")).thenReturn(folderKey);
 
     List<Card> cards = new ArrayList<>();
     Card cardAInDatastore = storeCardInDatastore(cardA, datastore, folderKey);

@@ -8,50 +8,40 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.nio.file.Paths;
 
-import org.mapdb.*;
+import java.io.File;
+import java.io.IOException;
+
+import org.mapdb.DB;
+import org.mapdb.DBMaker;
+import org.mapdb.BTreeMap;
+import org.mapdb.Serializer;
+
 import com.google.gson.Gson;
 import java.util.Map;
 import java.util.HashMap;
 
 @WebServlet("/recommendation")
 public class RecommendationServlet extends HttpServlet {
-  private DB db;
-  private BTreeMap<String, String[]> queryNearestNeighbors;
-
-  @Override
-  public void init() {
-    String path = Paths.get("").toAbsolutePath().toString() + "/word2vec.db";
-    db = DBMaker.fileDB(path).make();
-    queryNearestNeighbors =
-        db.treeMap("Main")
-            .keySerializer(Serializer.STRING)
-            .valueSerializer(Serializer.JAVA)
-            .createOrOpen();
-  }
-
-  @Override
-  public void destroy() {
-    db.close();
-  }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("application/json;");
-
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      Map<String, String> jsonErrorInfo;
-      jsonErrorInfo = ResponseSerializer.getErrorJson("User not logged in");
-      response.setContentType("application/json;");
-      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+      ResponseSerializer.sendErrorJson(response, "User not logged in");
       return;
     }
 
     String queryWord = request.getParameter("queryWord").toLowerCase();
     int numOfWordsRequested = Integer.parseInt(request.getParameter("numOfWordsRequested"));
+    if (checkforWordRequestedBound(response, numOfWordsRequested)) {
+      ResponseSerializer.sendErrorJson(response, "Number of words requested reaches query limit");
+      return;
+    }
+
+    // Ensures db is opened in read only to avoid data perturbation
+    DB db = DBMaker.fileDB(getPath()).readOnly().make();
+    BTreeMap<String, String[]> queryNearestNeighbors = getIndexTable(db);
 
     try {
       String[] neighbors = queryNearestNeighbors.get(queryWord);
@@ -64,11 +54,33 @@ public class RecommendationServlet extends HttpServlet {
 
       Map<String, String[]> jsonInfo = new HashMap<>();
       jsonInfo.put(queryWord, requestedNeighbors);
+      response.setContentType("application/json;");
       response.getWriter().println(new Gson().toJson(jsonInfo));
     } catch (NullPointerException e) {
-      Map<String, String> jsonErrorInfo;
-      jsonErrorInfo = ResponseSerializer.getErrorJson("Cannot find similar words at the moment");
-      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+      ResponseSerializer.sendErrorJson(response, "Cannot find similar words");
+      return;
     }
+    db.close();
+  }
+
+  private String getPath() {
+    ClassLoader classLoader = getClass().getClassLoader();
+    File file = new File(classLoader.getResource("META-INF/word2vec.db").getFile());
+    return file.toPath().toString();
+  }
+
+  private boolean checkforWordRequestedBound(HttpServletResponse response, int numOfWordsRequested)
+      throws IOException {
+    if (numOfWordsRequested > 49 || numOfWordsRequested < 1) {
+      return true;
+    }
+    return false;
+  }
+
+  private BTreeMap<String, String[]> getIndexTable(DB db) {
+    return db.treeMap("Main")
+        .keySerializer(Serializer.STRING)
+        .valueSerializer(Serializer.JAVA)
+        .createOrOpen();
   }
 }

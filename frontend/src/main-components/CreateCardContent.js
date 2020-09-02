@@ -20,7 +20,7 @@ class CreateCardContent extends Component {
       folder: "",
       uploadUrlFetched: false,
       imageUploadUrl: "",
-      loading:false,
+      loading: false,
     };
     this.translateText = this.translateText.bind(this);
     this.fromLangSelected = this.fromLangSelected.bind(this);
@@ -31,13 +31,18 @@ class CreateCardContent extends Component {
   }
 
   async componentDidMount() {
+    const text = this.props.word;
     try {
       const uploadResponse = await fetch("/upload");
       const uploadUrl = await uploadResponse.text();
       if (!uploadResponse.ok) {
         throw Error(uploadUrl.statusText);
       }
-      this.setState({ imageUploadUrl: uploadUrl, uploadUrlFetched: true });
+      this.setState({
+        imageUploadUrl: uploadUrl,
+        uploadUrlFetched: true,
+        text,
+      });
     } catch (error) {
       alert("Refresh page to create a card");
     }
@@ -61,7 +66,7 @@ class CreateCardContent extends Component {
           this.state.toLang
         );
         this.setState((prevState) => {
-          // Checks if fields have been changed since the request to getTranslation
+          // Checks if fields have been changed since the last request to getTranslation
           if (prevState.toLang != toLang || prevState.text != text) {
             return;
           }
@@ -92,14 +97,14 @@ class CreateCardContent extends Component {
   }
 
   textChanged(event) {
-    this.setState({text: event.target.value})
+    this.setState({ text: event.target.value });
   }
 
   render() {
     if (!this.state.uploadUrlFetched) {
       return (
         <div className='loadingContainer'>
-        <PageLoading></PageLoading>
+          <PageLoading></PageLoading>
         </div>
       );
     }
@@ -145,7 +150,7 @@ class CreateCardContent extends Component {
                     id='mainText'
                     type='text'
                     name='rawText'
-                    placeholder={this.state.text}
+                    value={this.state.text}
                     onBlur={this.translateText}
                     onChange={this.textChanged}
                     required></input>

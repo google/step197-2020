@@ -1,5 +1,5 @@
 /* Add a black background color to the top navigation */
-.NavBar {
+.navBar {
     background-color: #5A90A1;
     overflow: hidden;
     display:flex;
@@ -9,4 +9,3 @@
     top:0;
     width:100%;
   }
-

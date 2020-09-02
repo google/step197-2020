@@ -8,9 +8,6 @@ const EndGame = styled.h1`
   font-size: 10rem;
 `;
 
-const FALSE = "false";
-const TRUE = "true";
-
 class StudyModeContent extends React.Component {
   constructor(props) {
     super(props);
@@ -40,9 +37,9 @@ class StudyModeContent extends React.Component {
 
   optionSelected(event) {
     const selectedValue = event.currentTarget.value;
-    let correct = FALSE;
+    let correct = false;
     if (selectedValue === this.state.correctAnswer) {
-      correct = TRUE;
+      correct = true;
     }
 
     /*

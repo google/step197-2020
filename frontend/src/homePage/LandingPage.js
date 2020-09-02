@@ -18,8 +18,8 @@ class LandingPage extends React.Component {
 
   render() {
     return (
-      <div className='LandingPage'>
-        <h1>Frame.cards learning made easy</h1>
+      <div className='landingPage'>
+        <h1>Frame.Cards learning made easy</h1>
         <motion.div whileHover={{ scale: 1.2 }}>
           <LoginButton
             status={this.message}

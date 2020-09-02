@@ -6,11 +6,11 @@ import StudyMode from "./pages/StudyMode";
 import CreateCard from "./pages/CreateCard";
 import CreateFolder from "./pages/CreateFolder";
 import ImageInterface from "./pages/ImageInterface";
+import SimilarWords from "./pages/SimilarWords";
+import InsideStudyMode from "./pages/InsideStudyMode";
 import PageError from "./pages/404";
 import css from "./mainApp.css";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { match } from "react-router-dom"
-import InsideStudyMode from './pages/InsideStudyMode';
 
 // This file handles all routing for our app pages
 function App() {
@@ -24,6 +24,7 @@ function App() {
         <Route exact path='/InsideStudyMode' component={InsideStudyMode} />
         <Route exact path='/CreateFolder' component={CreateFolder} />
         <Route exact path='/InsideFolder' component={InsideFolder} />
+        <Route exact path='/SimilarWords' component={SimilarWords} />
         <Route component={PageError} />
       </Switch>
     </div>

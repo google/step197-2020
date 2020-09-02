@@ -11,7 +11,7 @@ class About extends React.Component {
   
     render() {
       return (
-        <div className="About">
+        <div className="about">
           <Background></Background>
         </div>
       );

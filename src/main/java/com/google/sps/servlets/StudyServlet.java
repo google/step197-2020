@@ -47,8 +47,16 @@ public class StudyServlet extends HttpServlet {
     }
   }
 
-  private int numOfCardsPerRound = 1;
+  private int numOfCardsPerRound = 3;
   private int maxNumOfRounds = 4;
+
+  public void setTestingNumOfCards(int numCards) {
+    numOfCardsPerRound = numCards;
+  }
+
+  public void setTestingNumOfRounds(int numRounds) {
+    maxNumOfRounds = numRounds;
+  }
 
   // Returns QuizCard's that are sorted by familiarity score as json
   @Override
@@ -97,13 +105,9 @@ public class StudyServlet extends HttpServlet {
     try {
       cardEntity = datastore.get(KeyFactory.stringToKey(cardKey));
     } catch (EntityNotFoundException e) {
-      cardEntity = null;
-    }
-
-    // Handles a null entity
-    if (cardEntity == null) {
       return;
     }
+
     Card card = new Card(cardEntity);
     if (answeredCorrectly) {
       newScore = incFamiliarityScore(time, card.getFamiliarityScore(), card.getTimeTested());
@@ -152,32 +156,9 @@ public class StudyServlet extends HttpServlet {
 
   private Card storeCard(Entity entity) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Transaction txn = datastore.beginTransaction(Builder.withXG(true));
-    try {
-      datastore.put(txn, entity);
-      txn.commit();
-    } finally {
-      if (txn.isActive()) {
-        txn.rollback();
-      }
-    }
+    datastore.put(entity);
     Card card = new Card(entity);
     return card;
-  }
-
-  /** Parses optional parameters that allow for testing on fewer rounds with fewer cards. */
-  private void setOptionalQuizParameters(HttpServletRequest request) {
-    String optNumCards = request.getParameter("numCards");
-    String optNumRounds = request.getParameter("numRounds");
-    if (optNumCards != null && optNumRounds != null) {
-      try {
-        numOfCardsPerRound = Integer.parseInt(optNumCards);
-        maxNumOfRounds = Integer.parseInt(optNumRounds);
-      } catch (NumberFormatException e) {
-        numOfCardsPerRound = 5;
-        maxNumOfRounds = 4;
-      }
-    }
   }
 
   private Double incFamiliarityScore(long time, Double currentScore, long prevTime) {

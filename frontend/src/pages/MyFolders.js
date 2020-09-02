@@ -1,16 +1,9 @@
-import React, { useState, Component, useEffect } from "react";
-import Header from "../main-components/Header";
-import Sidebar from "../main-components/Sidebar";
+import React, { useEffect } from "react";
 import MyFoldersContent from "../main-components/MyFoldersContent";
 import queryString from "query-string";
+import ContentWithSidebar from "./ContentWithSidebar";
 
 function MyFolders(props) {
-  // Handles mobile menu button and updates sidebar view
-  const [sidebarVisibility, setSidebarVisibility] = useState(false);
-  const handleClick = (e) => {
-    setSidebarVisibility((sidebarVisibility) => !sidebarVisibility);
-  };
-
   let userKey;
   useEffect(() => {
     const values = queryString.parse(props.location.search);
@@ -18,17 +11,13 @@ function MyFolders(props) {
   });
 
   return (
-    <div className='App'>
-      <Header id='head' handleClick={handleClick}></Header>
-      <div id='main'>
-        <Sidebar visible={sidebarVisibility}></Sidebar>
-        <MyFoldersContent
-          userKey={userKey}
-          mainURL='/InsideFolder'
-          headingText='main'>
-        </MyFoldersContent>
-      </div>
-    </div>
+    <ContentWithSidebar>
+      <MyFoldersContent
+        userKey={userKey}
+        mainURL='/InsideFolder'
+        headingText='main'>
+      </MyFoldersContent>
+    </ContentWithSidebar>
   );
 }
 

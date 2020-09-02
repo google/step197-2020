@@ -1,5 +1,5 @@
-.About{
-    display:flex;
-    justify-content: center;
-    align-items: center;
+.about {
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }

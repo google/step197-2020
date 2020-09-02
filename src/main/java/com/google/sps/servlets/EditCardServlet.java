@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import com.google.gson.Gson;
 import com.google.sps.tool.ResponseSerializer;
 import java.util.Map;
 import java.util.List;
@@ -32,9 +31,7 @@ public class EditCardServlet extends HttpServlet {
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      Map<String, String> jsonErrorInfo = ResponseSerializer.getErrorJson("User not logged in");
-      response.setContentType("application/json;");
-      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+      ResponseSerializer.sendErrorJson(response, "User not logged in");
       return;
     }
 
@@ -47,10 +44,8 @@ public class EditCardServlet extends HttpServlet {
     Entity card = getExistingCardInDatastore(response, datastore, cardKey);
 
     if (card == null) {
-      Map<String, String> jsonErrorInfo =
-          ResponseSerializer.getErrorJson("Cannot edit Card at the moment");
-      response.setContentType("application/json;");
-      response.getWriter().println(new Gson().toJson(jsonErrorInfo));
+      ResponseSerializer.sendErrorJson(response, "Cannot edit Card");
+      return;
     } else {
       updateCard(
           response, card, datastore, cardKey, newRawText, newTextTranslated, newImageBlobKey);
@@ -84,9 +79,9 @@ public class EditCardServlet extends HttpServlet {
   }
 
   private String getImageBlobKey(HttpServletRequest request) {
-    // Method to determine whether or not this is a unit test or live server
-    // Unit tests will always set blobKey to "null"
-    // There should be no paramater testStatus in the live server thus returns null
+    /* Method to determine whether or not this is a unit test or live server
+     * Unit tests will always set blobKey to "null"
+     * There should be no paramater testStatus in the live server thus returns null */
     if (request.getParameter("testStatus") == null) {
       return getBlobKeyFromBlobstore(request, "image");
     } else {

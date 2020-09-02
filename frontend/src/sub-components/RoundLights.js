@@ -9,29 +9,24 @@ const Dot = styled.div`
   margin-right: 10%;
 `;
 
-class RoundLights extends React.Component {
-  constructor(props) {
-    super(props);
-    this.statusColors = [];
+function RoundLights(props)  {
+    statusColors = [];
     /*
      * Each rounds color status is appended to the status color array,
      * where green represents completed and gray represents rounds
      * that have not yet been completed.
      */
-    for (let i = 0; i < this.props.currentRound; i++) {
-      this.statusColors.push("#1aa260");
+    for (let i = 0; i < props.currentRound; i++) {
+      statusColors.push("#1aa260");
     }
-    const remaining = this.props.totalRounds - this.props.currentRound;
+    const remaining = props.totalRounds - this.props.currentRound;
     for (let i = 0; i < remaining; i++) {
-      this.statusColors.push("#bbb");
+      statusColors.push("#bbb");
     }
-  }
 
-  render() {
-    return this.statusColors.map((color, i) => {
+    return statusColors.map((color, i) => {
       return <Dot style={{ backgroundColor: `${color}` }} key={i}></Dot>;
     });
-  }
 }
 
 export default RoundLights;

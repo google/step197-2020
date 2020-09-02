@@ -24,12 +24,11 @@ class FolderScroll extends Component {
   async componentDidMount() {
     try {
       const folders = await fetch("/userfolders");
-      const foldersData = await (folders.json())
-        .then((res) => res["userFolders"]);
+      const foldersData = await folders.json();
       if (!folders.ok) {
         throw Error(foldersData.statusText);
       }
-      this.setState({ isDataFetched: true, folders: foldersData });
+      this.setState({ isDataFetched: true, folders: foldersData["userFolders"] });
     } catch (error) {
       alert("Could not load folders, try refreshing page");
     }

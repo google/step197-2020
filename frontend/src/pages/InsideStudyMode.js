@@ -48,12 +48,13 @@ class InsideStudyMode extends React.Component {
       <div className='App'>
         <Header id='head' handleClick={this.handleClick}></Header>
         <div id='main'>
-          <Sidebar bool={this.state.sidebarVisibility}></Sidebar>
+          <Sidebar visible={this.state.sidebarVisibility}></Sidebar>
           <StudyModeContent quiz={this.state.quiz}></StudyModeContent>
         </div>
       </div>
     );
   }
+
 }
 
 export default InsideStudyMode;

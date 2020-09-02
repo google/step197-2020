@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
       "/ImageInterface",
       "/StudyMode",
       "/InsideStudyMode",
+      "/SimilarWords",
       "/InsideFolder"
     })
 public class ReactServlet extends HttpServlet {

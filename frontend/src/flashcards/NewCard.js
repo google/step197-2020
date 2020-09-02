@@ -46,7 +46,7 @@ class NewCard extends React.Component {
         <Link to='/CreateCard'>
           <div className='FlashcardFront' style={frontStyle}>
             <img style={imgStyle} src={newCardIcon} />
-            {"+New Card"}
+            "+New Card"
           </div>
         </Link>
       </div>

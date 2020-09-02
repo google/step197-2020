@@ -47,7 +47,7 @@ public class StudyServlet extends HttpServlet {
     }
   }
 
-  private int numOfCardsPerRound = 1;
+  private int numOfCardsPerRound = 3;
   private int maxNumOfRounds = 4;
 
   public void setTestingNumOfCards(int numCards) {

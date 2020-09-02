@@ -1,7 +1,7 @@
 class Quiz {
   constructor(studyService) {
     this.quiz = {};
-    this.currentArray = 0;
+    this.currentIndex = 0;
     this.currentQuizWord = {};
     this.studyService = studyService;
   }
@@ -9,7 +9,7 @@ class Quiz {
   async start(folderKey) {
     const quiz = await this.studyService.getWordsFromFolder(folderKey);
     this.quiz = quiz;
-    this.currentArray = 0;
+    this.currentIndex = 0;
   }
 
   /**
@@ -18,22 +18,22 @@ class Quiz {
    * arrays left then the function returns null.
    */
   nextQuizWord() {
-    while (
-      this.currentArray < this.quiz.length &&
-      this.quiz[this.currentArray].length == 0
-    ) {
-      this.currentArray++;
+
+    while (this.currentIndex < this.quiz.length &&
+      this.quiz[this.currentIndex].length == 0) {
+      this.currentIndex++;
     }
-    if (this.currentArray == this.quiz.length) {
+    if (this.currentIndex == this.quiz.length) {
       return null;
     }
-    this.currentQuizWord = this.quiz[this.currentArray].shift();
+    this.currentQuizWord = this.quiz[this.currentIndex].shift();
     return this.currentQuizWord;
   }
 
+
   async updateWordQueues(correct, cardKey) {
-    if (correct === "false" && this.currentArray < this.quiz.length - 1) {
-      this.quiz[this.currentArray + 1].push(this.currentQuizWord);
+    if (correct === "false" && this.currentIndex < this.quiz.length - 1) {
+      this.quiz[this.currentIndex + 1].push(this.currentQuizWord);
     }
     // Updates the card's familarity score and stores it
     const updated = await fetch("/study", {
@@ -46,7 +46,7 @@ class Quiz {
   }
 
   getCurrentRound() {
-    return this.currentArray + 1;
+    return this.currentIndex + 1;
   }
 
   getTotalRounds() {
@@ -66,4 +66,4 @@ class StudyService {
   }
 }
 
-export { Quiz, StudyService, MockStudyService };
+export { Quiz, StudyService };

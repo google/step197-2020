@@ -11,6 +11,8 @@ public final class Card {
     private String textTranslated = "null";
     private String key;
     private String parentKey;
+    private Double familiarityScore;
+    private Long timeTested;
 
     public Builder() {}
 
@@ -34,6 +36,16 @@ public final class Card {
       return this;
     }
 
+    public Builder setFamiliarityScore(Double newScore) {
+      this.familiarityScore = newScore;
+      return this;
+    }
+
+    public Builder setTimeTested(long time) {
+      this.timeTested = time;
+      return this;
+    }
+
     public Builder setParentKey(String parentkey) {
       this.parentKey = parentkey;
       return this;
@@ -46,7 +58,8 @@ public final class Card {
       card.textTranslated = this.textTranslated;
       card.key = this.key;
       card.parentKey = this.parentKey;
-
+      card.familiarityScore = this.familiarityScore;
+      card.timeTested = this.timeTested;
       return card;
     }
   }
@@ -56,6 +69,8 @@ public final class Card {
   private String textTranslated = "null";
   private String key;
   private String parentKey;
+  private Double familiarityScore;
+  private Long timeTested;
 
   private Card() {}
 
@@ -64,6 +79,12 @@ public final class Card {
     this.rawText = (String) entity.getProperty("rawText");
     this.textTranslated = (String) entity.getProperty("textTranslated");
     this.key = KeyFactory.keyToString(entity.getKey());
+    this.familiarityScore = (Double) entity.getProperty("familiarityScore");
+    this.timeTested = (Long) entity.getProperty("timeTested");
+  }
+
+  public Double getFamiliarityScore() {
+    return this.familiarityScore;
   }
 
   public String getImageBlobKey() {
@@ -78,8 +99,16 @@ public final class Card {
     return this.textTranslated;
   }
 
+  public Long getTimeTested() {
+    return this.timeTested;
+  }
+
   public String getCardKey() {
     return this.key;
+  }
+
+  public void setFamiliarityScore(Double newScore) {
+    this.familiarityScore = newScore;
   }
 
   public void setImageBlobKey(String newImageBlobKey) {
@@ -92,6 +121,10 @@ public final class Card {
 
   public void setTextTranslated(String newText) {
     this.textTranslated = newText;
+  }
+
+  public void setTimeTested(long time) {
+    this.timeTested = time;
   }
 
   public void setCardKey(String key) {
@@ -107,7 +140,10 @@ public final class Card {
     card.setProperty("imageBlobKey", this.imageBlobKey);
     card.setProperty("rawText", this.rawText);
     card.setProperty("textTranslated", this.textTranslated);
-
+    if (this.familiarityScore != null) {
+      card.setProperty("familiarityScore", this.familiarityScore);
+      card.setProperty("timeTested", this.timeTested);
+    }
     return card;
   }
 }

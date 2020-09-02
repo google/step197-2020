@@ -19,7 +19,7 @@ function RoundLights(props)  {
     for (let i = 0; i < props.currentRound; i++) {
       statusColors.push("#1aa260");
     }
-    const remaining = tprops.totalRounds - this.props.currentRound;
+    const remaining = props.totalRounds - this.props.currentRound;
     for (let i = 0; i < remaining; i++) {
       statusColors.push("#bbb");
     }

@@ -17,6 +17,7 @@ class StudyModeContent extends React.Component {
       options: [],
       correctAnswer: "none",
       end: false,
+      cardKey: "",
     };
     this.optionSelected = this.optionSelected.bind(this);
   }
@@ -29,8 +30,9 @@ class StudyModeContent extends React.Component {
       quizWord: word.quizWord,
       options: word.possibleResponses,
       correctAnswer: word.correctAnswer,
+      cardKey: word.cardKey,
       currentRound: round
-     });
+    });
   }
 
   optionSelected(event) {
@@ -44,6 +46,7 @@ class StudyModeContent extends React.Component {
      * If the selected word was incorrect then this function
      * will repeat this word at the end of another round if possible.
      */
+    this.props.quiz.updateWordQueues(correct, this.state.cardKey);
     this.props.quiz.updateWordQueues(correct);
     const word = this.props.quiz.nextQuizWord();
     if (word === null) {
@@ -62,7 +65,7 @@ class StudyModeContent extends React.Component {
   render() {
     if (this.state.end) {
       return (
-        <div className="Container">
+        <div className="container">
           <EndGame>You Finished The Game</EndGame>
         </div>
       );

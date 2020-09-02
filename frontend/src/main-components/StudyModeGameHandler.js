@@ -12,7 +12,13 @@ class Quiz {
     this.currentIndex = 0;
   }
 
+  /**
+   * Checks if the current array has any cards left to return and if
+   * not then it moves onto the next array. If there are no more
+   * arrays left then the function returns null.
+   */
   nextQuizWord() {
+
     while (this.currentIndex < this.quiz.length &&
       this.quiz[this.currentIndex].length == 0) {
       this.currentIndex++;
@@ -24,11 +30,19 @@ class Quiz {
     return this.currentQuizWord;
   }
 
-  updateWordQueues(correct) {
+
+  async updateWordQueues(correct, cardKey) {
     if (correct === "false" && this.currentIndex < this.quiz.length - 1) {
       this.quiz[this.currentIndex + 1].push(this.currentQuizWord);
     }
-    //TODO(esaaracay): Fetch /study to update familarity score
+    // Updates the card's familarity score and stores it
+    const updated = await fetch("/study", {
+      method: "POST",
+      body: `cardKey=${cardKey}&answeredCorrectly=${correct}`,
+      headers: { "Content-type": "application/x-www-form-urlencoded" },
+    });
+
+    return updated;
   }
 
   getCurrentRound() {
@@ -42,9 +56,12 @@ class Quiz {
 
 class StudyService {
   async getWordsFromFolder(folderKey) {
-    const words = fetch(`/study?folderKey=${folderKey}`)
+    const words = await fetch(`/study?folderKey=${folderKey}`)
       .then((result) => result.json())
-      .catch(alert("Could not find words for Study Mode"));
+      .catch((error) => {
+        alert("No cards were found");
+        window.location = "/StudyMode"
+      });
     return words;
   }
 }

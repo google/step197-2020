@@ -10,7 +10,7 @@ const Dot = styled.div`
 `;
 
 function RoundLights(props)  {
-    statusColors = [];
+    let statusColors = [];
     /*
      * Each rounds color status is appended to the status color array,
      * where green represents completed and gray represents rounds
@@ -19,7 +19,7 @@ function RoundLights(props)  {
     for (let i = 0; i < props.currentRound; i++) {
       statusColors.push("#1aa260");
     }
-    const remaining = props.totalRounds - this.props.currentRound;
+    const remaining = props.totalRounds - props.currentRound;
     for (let i = 0; i < remaining; i++) {
       statusColors.push("#bbb");
     }

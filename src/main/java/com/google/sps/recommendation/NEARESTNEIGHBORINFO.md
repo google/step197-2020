@@ -3,7 +3,7 @@
 This function of ProcessNearestNeighbors.java is to only pre-process
 the nearest neigbors of a given Word2Vec model. In this application,
 a Word2Vec model of 300,000 words was used. The file will create/update
-a binary .db file.Note that time results and optimal batch size are based
+a binary .db file. Note that time results and optimal batch size are based
 on running this file on a Google Pixelbook.Time result may change for
 different hardwares.
 

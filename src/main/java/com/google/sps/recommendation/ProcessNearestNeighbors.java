@@ -20,7 +20,14 @@ import java.nio.file.Paths;
 import java.util.stream.IntStream;
 import com.google.sps.tool.ArrayUtil;
 
-// See NEARESTNEIGHBORINFO.md for more information about this file 
+/* 
+ * This function of this file is to only pre-process
+ * the nearest neigbors of a given Word2Vec model. In this application,
+ * a Word2Vec model of 300,000 words was used. The file will create/update
+ * a binary .db file. See NEARESTNEIGHBORINFO.md for more information 
+ * about this file
+ * 
+ */
 public class ProcessNearestNeighbors {
   public static void main(String[] args) throws IOException {
     String path =

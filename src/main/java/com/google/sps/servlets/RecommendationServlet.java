@@ -78,7 +78,6 @@ public class RecommendationServlet extends HttpServlet {
 
     try {
       File file = new File("/tmp/word2vec.db");
-      // Creates the file and downloads its content if it does not exist
       if (file.createNewFile()) {
         blob.downloadTo(file.toPath());
       }

@@ -10,7 +10,7 @@ class LoginButton extends React.Component {
     return (
       <div className="buttonBox">
         <button
-          className="MyButton"
+          className="myButton"
           onClick={this.props.clickFunction}
           style={{
             backgroundColor: this.props.color,

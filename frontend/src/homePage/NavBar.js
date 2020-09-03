@@ -24,7 +24,7 @@ class NavBar extends React.Component {
 
   render() {
     return (
-      <div className="NavBar">
+      <div className="navBar">
         <motion.div whileHover={{ scale: 1.1 }}>{this.html}</motion.div>
         <motion.div whileHover={{ scale: 1.1 }}>
           <LoginButton

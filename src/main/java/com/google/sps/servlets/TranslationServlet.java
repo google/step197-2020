@@ -35,6 +35,7 @@ public class TranslationServlet extends HttpServlet {
     Map<String, String> jsonInfo = new HashMap<>();
     jsonInfo.put("translation", textTranslated);
     response.setContentType("application/json;");
+    response.setCharacterEncoding("UTF-8");
     response.getWriter().println(new Gson().toJson(jsonInfo));
   }
 }

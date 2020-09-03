@@ -45,6 +45,10 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       },
       {
+        test: /\.(webm|mp4)$/i,
+        use: 'file-loader?name=videos/[name].[ext]',
+      },
+      {
         test: /\.(png|jpg|gif|svg)$/i,
         use: [
           {

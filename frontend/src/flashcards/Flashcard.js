@@ -44,7 +44,7 @@ class Flashcard extends React.Component {
   async handleDeleteCard() {
     const params = new URLSearchParams();
     params.append("cardKey", this.props.cardKey);
-    await fetch("/deletecard", { method: "POST", body: params.toString() });
+    await fetch("/deletecard", { method: "POST", body: params });
     window.location.reload(false);
   }
 

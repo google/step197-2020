@@ -62,6 +62,7 @@ public class UserCardsServlet extends HttpServlet {
 
     jsonInfo.put("userCards", userCards);
     response.setContentType("application/json;");
+    response.setCharacterEncoding("UTF-8");
     response.getWriter().println(new Gson().toJson(jsonInfo));
   }
 

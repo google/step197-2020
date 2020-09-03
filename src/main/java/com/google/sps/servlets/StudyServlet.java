@@ -89,6 +89,7 @@ public class StudyServlet extends HttpServlet {
 
     Gson gson = new Gson();
     String jsonResponse = gson.toJson(quiz);
+    response.setCharacterEncoding("UTF-8");
     response.setContentType("application/json;");
     response.getWriter().println(jsonResponse);
   }

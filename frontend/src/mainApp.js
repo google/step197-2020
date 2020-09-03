@@ -25,6 +25,10 @@ function App() {
         <Route exact path='/CreateFolder' component={CreateFolder} />
         <Route exact path='/InsideFolder' component={InsideFolder} />
         <Route exact path='/SimilarWords' component={SimilarWords} />
+        <Route exact path='/homePage' component={() => {
+          window.location = 'https://framecards.uc.r.appspot.com/homePage';
+          return null;
+        }}/>
         <Route component={PageError} />
       </Switch>
     </div>

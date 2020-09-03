@@ -10,8 +10,8 @@ class TranslationLoading extends React.Component {
           <PulseLoader size={7} margin={3} color={"#136F9F"} loading={true} />
         </div>
       );
-    } 
-      return <div></div>;    
+    }
+    return <div></div>;
   }
 }
 

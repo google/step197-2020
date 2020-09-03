@@ -19,7 +19,7 @@ import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalBlobstoreServiceTestConfig;
 
 @RunWith(JUnit4.class)
-public final class UploadOnBlobstoreServletForAnalysisTest {
+public final class UploadOnBlobstoreForAnalysisServletTest {
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(new LocalBlobstoreServiceTestConfig());
 

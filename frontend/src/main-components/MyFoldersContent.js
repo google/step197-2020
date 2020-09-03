@@ -31,15 +31,14 @@ class MyFoldersContent extends React.Component {
   }
 
   async componentDidMount() {
-    //Fetch data from the UserFolders servlets to get the user folders
-    try {
-      const foldersData = await fetch("/userfolders")
-        .then((result) => result.json())
-        .then((data) => data["userFolders"]);
-      this.setState({ isDataFetched: true, folders:foldersData });
-    } catch (err) {
-      logDebugMessage("Folders can not be fetched", debugMessageOn);
-    }
+    const foldersData = await fetch("/userfolders")
+      .then((result) => result.json())
+      .then((data) => data["userFolders"]);
+    this.setState({ isDataFetched: true, folders: foldersData }).catch(
+      (error) => {
+        alert("Could not load cards, please try refreshing the page.");
+      }
+    );
   }
 
   render() {
@@ -65,7 +64,7 @@ class MyFoldersContent extends React.Component {
       <Container>
         <h1>{headingText}</h1>
         <br></br>
-        <div className='folderContainer' style={folderStyle}>
+        <div className="folderContainer" style={folderStyle}>
           {this.state.folders.map((folder) => {
             return (
               <Folder

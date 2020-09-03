@@ -41,8 +41,10 @@ public class ObjectDetectionServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     PrintWriter out = response.getWriter();
+    System.out.println("RETREIVING BLOBKEY");
     BlobKey blobKey = getBlobKey(request, "image");
-
+    System.out.print("BlobKey: ");
+    System.out.println(blobKey);
     if (blobKey == null) {
       return;
     }
@@ -57,9 +59,17 @@ public class ObjectDetectionServlet extends HttpServlet {
         labels.add(label.getDescription());
       }
     }
+    System.out.println("1");
+    System.out.println(new Gson().toJson(labels));
+    /*ArrayList<String> labels = new ArrayList<String>();
+    labels.add("Hello!");
+    labels.add("Goodbye");*/
     Gson gson = new Gson();
+    System.out.print("The Post Method Works!");
     response.setContentType("application/json;");
+
     response.getWriter().println(gson.toJson(labels));
+    System.out.print("Sent Message");
   }
 
   /**
@@ -75,6 +85,8 @@ public class ObjectDetectionServlet extends HttpServlet {
       return null;
     }
     BlobKey blobKey = blobKeys.get(0);
+    System.out.print("Blobkey: ");
+    System.out.println(blobKey);
 
     /** In the case that the user hits submit without picking a file, delete the blobKey. */
     BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);

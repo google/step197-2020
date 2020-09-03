@@ -58,6 +58,8 @@ class ImageInterfaceContent extends React.Component {
 				this.state.croppedAreaPixels,
 				this.state.rotation
 			);
+			console.log('Cropped Image:');
+			console.log(croppedImage);
 			this.setState({ imageCropped: true, croppedImageURL: croppedImage });
 			this.fetchLabels();
 		};
@@ -86,6 +88,7 @@ class ImageInterfaceContent extends React.Component {
 		if (!uploadResponse.ok) {
 			throw Error(uploadUrl.statusText);
 		}
+
 		const submitResponse = await fetch('/upload');
 		const submitUrl = await submitResponse.text();
 		if (!submitResponse.ok) {
@@ -94,7 +97,7 @@ class ImageInterfaceContent extends React.Component {
 		console.log('Upload URLS:');
 		console.log(uploadUrl);
 		console.log(submitUrl);
-		this.setState({ imageUploadUrl: uploadUrl, uploadUrlFetched: true, submitURL: submitURL });
+		this.setState({ imageUploadUrl: uploadUrl, uploadUrlFetched: true, submitURL: submitUrl });
 		/*try {
 			console.log('Trying to upload url...');
 			const uploadUrl = await fetch('/ObjectDetectionUpload').then((response) => response.text());
@@ -125,13 +128,18 @@ class ImageInterfaceContent extends React.Component {
 	}*/
 
 	async fetchLabels() {
+		console.log('Image URL:');
+		console.log(this.state.imageUploadUrl);
 		let formData = new FormData();
 		formData.append('image', this.state.croppedImageURL);
-
+		console.log('Cropped Image URL:');
+		console.log(this.state.croppedImageURL);
 		console.log("It's fetching Time!");
-		await fetch(this.state.imageUploadUrl, { method: 'POST', body: formData })
-			.then((response) => response.text)
+		await fetch(`/ObjectDetectionUpload?image=${this.state.croppedImageURL}`)
+			.then((response) => response.json())
 			.then((labels) => {
+				console.log('Labels:');
+				console.log(labels);
 				this.setState({ labels: labels });
 			})
 			.catch((error) => {
@@ -217,9 +225,23 @@ class ImageInterfaceContent extends React.Component {
 										<button className="button" onClick={this.handleReset}>
 											Reset to Default
 										</button>
-										<button className="button" onClick={this.handleImageCrop}>
-											Crop
-										</button>
+										<form
+											id="myForm"
+											action={this.state.imageUploadUrl}
+											method="POST"
+											encType="multipart/form-data"
+										>
+											<input
+												type="file"
+												id="image"
+												name="image"
+												onChange={this.imageSelected}
+												value={this.croppedImageURL}
+											></input>
+											<button className="button" onClick={this.handleImageCrop}>
+												Crop
+											</button>
+										</form>
 									</div>
 								</div>
 							</div>

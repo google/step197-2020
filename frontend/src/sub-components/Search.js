@@ -4,7 +4,6 @@ import css from "./Search.css";
 
 const Search = (props) => {
   
-
   return (
       <div id="searchContainer">
         <form id="searchForm" method="GET" action="/SimilarWords">

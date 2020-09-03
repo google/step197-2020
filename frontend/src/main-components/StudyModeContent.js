@@ -47,7 +47,6 @@ class StudyModeContent extends React.Component {
      * will repeat this word at the end of another round if possible.
      */
     this.props.quiz.updateWordQueues(correct, this.state.cardKey);
-    this.props.quiz.updateWordQueues(correct);
     const word = this.props.quiz.nextQuizWord();
     if (word === null) {
       this.setState({ end: true });

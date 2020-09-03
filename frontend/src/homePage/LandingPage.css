@@ -1,11 +1,11 @@
-.LandingPage{
-    height:80vh;
+.landingPage {
+    height:60vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-.LandingPage h1{
+.landingPage h1 {
     font-size: 64px;;
 }

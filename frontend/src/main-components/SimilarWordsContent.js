@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
+import PageLoading from "../sub-components/PageLoading";
 
 const Container = styled.div`
   flex: 9;
@@ -10,6 +11,11 @@ const Container = styled.div`
   background-color: white;
   margin: 1%;
   flex-direction: column;
+`;
+
+const LoadingContainer = styled(Container)`
+  justify-content: center;
+  align-items: center;
 `;
 
 const WordContainer = styled.div`
@@ -65,7 +71,11 @@ class MyFoldersContent extends React.Component {
 
   render() {
     if (!this.state.isDataFetched) {
-      return <Container></Container>;
+      return (
+        <LoadingContainer>
+          <PageLoading></PageLoading>
+        </LoadingContainer>
+      );
     }
     if (this.state.error) {
       return (

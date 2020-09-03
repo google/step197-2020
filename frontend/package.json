@@ -42,6 +42,7 @@
     "@google-cloud/translate": "^6.0.2",
     "@material-ui/icons": "^4.9.1",
     "css-loader": "^4.2.2",
+    "file-loader": "^6.1.0",
     "framer": "^1.2.5",
     "framer-motion": "^2.6.5",
     "material-design-icons": "^3.0.1",
@@ -49,6 +50,7 @@
     "react": "^16.8.6",
     "react-card-flip": "^1.0.11",
     "react-dom": "^16.8.6",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "react-spinners": "^0.9.0"
   }
 }

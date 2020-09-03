@@ -28,8 +28,8 @@ class MyFoldersContent extends React.Component {
     };
   }
 
-  async componentDidMount() {
-    const foldersData = await fetch("/userfolders")
+  componentDidMount() {
+    const foldersData = fetch("/userfolders")
       .then((result) => result.json())
       .then((data) => data["userFolders"]);
     this.setState({ isDataFetched: true, folders: foldersData }).catch(

@@ -27,6 +27,8 @@ package com.google.sps.tool;
 import java.util.Comparator;
 import java.util.Arrays;
 
+// Java implementation of Numpy's argsort
+// https://numpy.org/doc/stable/reference/generated/numpy.argsort.html
 public class ArrayUtil {
 
   // Original credit:

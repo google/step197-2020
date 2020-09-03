@@ -8,8 +8,6 @@ import { Link } from "react-router-dom";
  * the folder.
  */
 class Folder extends React.Component {
-<<<<<<< HEAD
-=======
   constructor(props) {
     super(props);
     this.handleDeleteFolder = this.handleDeleteFolder.bind(this);
@@ -22,7 +20,6 @@ class Folder extends React.Component {
     window.location.reload(false);
   }
 
->>>>>>> deleteAndEdit
   render() {
     return (
       <div className="Folder" key={this.props.folderURL}>
@@ -33,8 +30,6 @@ class Folder extends React.Component {
             <p>{this.props.language}</p>
           </div>
         </Link>
-<<<<<<< HEAD
-=======
         <div className="icons">
           <Link
             to={{
@@ -56,7 +51,6 @@ class Folder extends React.Component {
             </motion.div>
           </div>
         </div>
->>>>>>> deleteAndEdit
       </div>
     );
   }

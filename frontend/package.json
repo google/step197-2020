@@ -19,7 +19,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.2.2",
     "json-loader": "^0.5.7",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.7",
     "react-test-renderer": "^16.13.1",
     "style-loader": "^1.2.1",
     "svg-inline-loader": "^0.8.2",
